@@ -8,6 +8,7 @@ import stylistic from '@stylistic/eslint-plugin';
  * @type {import('eslint').Linter.FlatConfig}
  */
 export const customEslintRules = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   rules: {
     'array-callback-return': ['error', { checkForEach: true }],
     'curly': 'error',
@@ -20,7 +21,12 @@ export const customEslintRules = {
 };
 
 export const customIgnores = {
-  ignores: ['**/node_modules', '**/public', '**/vendor', '**/dist', '**/.nuxt'],
+  ignores: [
+    '**/node_modules',
+    '**/public',
+    '**/vendor',
+    '**/dist'
+  ],
 };
 
 const configUnicornRecommended = eslintPluginUnicorn.configs['flat/recommended'];
@@ -29,6 +35,7 @@ const configUnicornRecommended = eslintPluginUnicorn.configs['flat/recommended']
  * @type {import('eslint').Linter.FlatConfig}
  */
 const customUnicornRules = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   rules: {
     'unicorn/consistent-function-scoping': 'off',
     'unicorn/filename-case': 'off',
@@ -36,6 +43,7 @@ const customUnicornRules = {
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/no-null': 'off',
     'unicorn/no-single-promise-in-promise-methods': 'off',
+    'unicorn/import-style': 'off',
   },
 };
 
@@ -43,6 +51,7 @@ const customUnicornRules = {
  * @type {import('eslint').Linter.FlatConfig}
  */
 const configPerfectionist = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   plugins: {
     perfectionist,
   },
@@ -50,7 +59,9 @@ const configPerfectionist = {
     'perfectionist/sort-exports': 'error',
     'perfectionist/sort-imports': ['error', {
       type: 'natural',
-      'custom-groups': { value: { repo: '@repo/**' }},
+      customGroups: {
+        value: { repo: '^@repo/.*' }
+      },
       groups: [
         'builtin',
         'external',
@@ -72,10 +83,10 @@ const configPerfectionist = {
         'index-type',
         'unknown',
       ],
-      'newlines-between': 'always',
-      'internal-pattern': [
-        '@/**',
-        '~/**'
+      newlinesBetween: 'always',
+      internalPattern: [
+        '^@/.*',
+        '^~/.*',
       ],
     }],
     'perfectionist/sort-named-imports': ['error', { type: 'natural' }],
@@ -84,6 +95,7 @@ const configPerfectionist = {
 };
 
 const configOnlyWarn = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   plugins: {
     onlyWarn,
   },
@@ -97,6 +109,7 @@ const configStylistic = stylistic.configs.customize({
  * @type {import('eslint').Linter.FlatConfig}
  */
 const customStylisticRules = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   rules: {
     '@stylistic/array-bracket-newline': ['error', 'consistent'],
     '@stylistic/array-element-newline': ['error', 'consistent'],
@@ -114,7 +127,7 @@ const customStylisticRules = {
   }
 }
 
-export const eslintConfigForNext = [
+export const eslintConfigCustom = [
   customEslintRules,
   customIgnores,
   configUnicornRecommended,
@@ -131,6 +144,7 @@ export const eslintConfigForNext = [
  * @see https://typescript-eslint.io/blog/changes-to-consistent-type-imports-with-decorators/
  */
 const configParser = {
+  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
   languageOptions: {
     parser: typescriptParser,
     parserOptions: {
@@ -140,7 +154,7 @@ const configParser = {
   },
 };
 
-export const eslintConfigForNest = {
-  ...eslintConfigForNext,
+export const eslintConfigForNest = [
+  ...eslintConfigCustom,
   configParser,
-};
+];
