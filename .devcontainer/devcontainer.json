@@ -12,5 +12,5 @@
       ]
     }
   },
-  "postCreateCommand": "pnpm install"
+  "postCreateCommand": "pnpm install && pnpm -F db build"
 }
