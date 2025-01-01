@@ -16,7 +16,7 @@ COPY --chown=node:node ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY --chown=node:node ./apps/backend/package.json ./apps/backend/
 COPY --chown=node:node ./apps/frontend/package.json ./apps/frontend/
 COPY --chown=node:node ./packages/eslint-config/package.json ./packages/eslint-config/
-# COPY --chown=node:node ./packages/db/package.json ./packages/db/
+COPY --chown=node:node ./packages/db/package.json ./packages/db/
 
 RUN pnpm install && \
   chown -R node:node . && \
