@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Post {
+  id           Int      @id @default(autoincrement())
+  imageUrl     String   @unique @map("image_url")
+  postedAt     DateTime @map("posted_at")
+  episodeId    Int?     @map("episode_id")
+  episode      Episode? @relation("EpisodePosts", fields: [episodeId], references: [id])
+  thumbnailFor Episode? @relation("ThumbnailPost")
+
+  @@map("posts")
+}
+
+model Episode {
+  id              Int    @id @default(autoincrement())
+  title           String @unique
+  thumbnailPostId Int    @unique @map("thumbnail_post_id")
+  thumbnailPost   Post   @relation("ThumbnailPost", fields: [thumbnailPostId], references: [id])
+  posts           Post[] @relation("EpisodePosts")
+
+  @@map("episodes")
+}
