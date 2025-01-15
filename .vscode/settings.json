@@ -1,0 +1,30 @@
+{
+  "editor.tabSize": 2,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  // Not show the error messages (yellow squiggly lines)
+  "eslint.rules.customizations": [
+    {
+      "rule": "@stylistic/*",
+      "severity": "off"
+    }
+  ],
+  "[javascript]": {
+    "editor.formatOnSave": false,
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false,
+  },
+  "[jsx]": {
+    "editor.formatOnSave": false,
+  },
+  "[tsx]": {
+    "editor.formatOnSave": false,
+  },
+}

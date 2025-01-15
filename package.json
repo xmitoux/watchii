@@ -1,0 +1,15 @@
+{
+  "name": "watchii",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "deploy:backend": "pnpm install --frozen-lockfile && pnpm -F backend deploy:backend"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./*": "./src/**/*.tsx",
+    "./chakra-ui": "./src/index.ts",
+    "./chakra-ui/*": "./src/components/ui/*.tsx"
+  },
+  "scripts": {
+    "lint": "eslint --fix",
+    "check-types": "tsc --noEmit",
+    "add-chakraui": "pnpm dlx @chakra-ui/cli snippet add"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.2.5",
+    "@emotion/react": "^11.14.0",
+    "next-themes": "^0.4.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "typescript": "^5"
+  }
+}

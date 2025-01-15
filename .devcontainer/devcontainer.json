@@ -1,0 +1,16 @@
+{
+  "name": "Watchii Dev",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "watchii_app",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "prisma.prisma"
+      ]
+    }
+  },
+  "postCreateCommand": "pnpm install && pnpm -F backend db:mg"
+}
