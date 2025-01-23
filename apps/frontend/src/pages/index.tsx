@@ -3,6 +3,8 @@ import useSWR from 'swr';
 
 import { Flex } from '@repo/ui/chakra-ui';
 
+import Layout from '@/components/Layout/Layout';
+
 type PostsFindResponse = {
   id: number;
   imageUrl: string;
@@ -22,22 +24,24 @@ export default function Home() {
   }
 
   return (
-    <Flex
-      flexWrap="wrap"
-      gap={4}
-      justify="center"
-    >
-      {posts?.map(post => (
-        <NextImage
-          key={post.id}
-          style={{ width: 'auto', height: 'auto' }}
-          alt={`post id: ${post.id.toString()}`}
-          height={0}
-          priority
-          src={post.imageUrl}
-          width={250}
-        />
-      ))}
-    </Flex>
+    <Layout title="Watchii">
+      <Flex
+        flexWrap="wrap"
+        gap={4}
+        justify="center"
+      >
+        {posts?.map(post => (
+          <NextImage
+            key={post.id}
+            style={{ width: 'auto', height: 'auto' }}
+            src={post.imageUrl}
+            alt={`post id: ${post.id.toString()}`}
+            width={250}
+            height={0}
+            priority
+          />
+        ))}
+      </Flex>
+    </Layout>
   );
 }
