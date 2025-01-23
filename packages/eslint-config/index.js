@@ -91,7 +91,7 @@ const configPerfectionist = {
     'perfectionist/sort-named-imports': ['error', { type: 'natural' }],
     'perfectionist/sort-named-exports': ['error', { type: 'natural' }],
     'perfectionist/sort-jsx-props': [
-      'error',
+      'off',
       {
         type: 'alphabetical',
         order: 'asc',
