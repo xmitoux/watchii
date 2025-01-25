@@ -43,6 +43,7 @@ const customUnicornRules = {
     'unicorn/no-null': 'off',
     'unicorn/no-single-promise-in-promise-methods': 'off',
     'unicorn/import-style': 'off',
+    'unicorn/prefer-at': 'off',
   },
 };
 
