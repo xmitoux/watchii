@@ -2,7 +2,7 @@ import NextImage from 'next/image';
 import { useState } from 'react';
 import useSWR from 'swr';
 
-import { Flex, Heading, Tabs, useBreakpointValue } from '@repo/ui/chakra-ui';
+import { Center, Flex, Heading, Tabs, useBreakpointValue } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { DialogBody, DialogContent, DialogRoot } from '@repo/ui/chakra-ui/dialog';
 import {
@@ -38,7 +38,8 @@ type DisplayMode = typeof DisplayMode[keyof typeof DisplayMode];
 export default function Home() {
   const { data: posts, error, isLoading } = useSWR<PostsFindResponse>('/api/posts', fetcher);
 
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  /** モバイルデバイス(スマホ・タブレット)か */
+  const isMobile = useBreakpointValue({ base: true, lg: false });
 
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -51,7 +52,7 @@ export default function Home() {
 
   const imageWidth = isMobile
     ? (currentDisplaySetting === 'one-column' ? '80vw' : '40vw')
-    : '300px';
+    : '20vw';
 
   if (error) {
     return <div>エラーが発生しました</div>;
@@ -113,7 +114,7 @@ export default function Home() {
                 <Heading size="sm" marginBottom={2}>画像の表示形式</Heading>
 
                 {/* 表示形式タブ */}
-                <Flex justify="center">
+                <Center>
                   <Tabs.Root
                     value={tempDisplaySetting}
                     defaultValue={DisplayMode.ONE_COLUMN}
@@ -133,7 +134,7 @@ export default function Home() {
                       <Tabs.Indicator rounded="l2" />
                     </Tabs.List>
                   </Tabs.Root>
-                </Flex>
+                </Center>
               </>
             )}
           </DrawerBody>
@@ -173,19 +174,26 @@ export default function Home() {
       <DialogRoot
         open={isImageDialogOpen}
         placement="center"
+        size="xl"
         onOpenChange={e => setIsImageDialogOpen(e.open)}
       >
-        <DialogContent background="transparent" boxShadow="none">
+        <DialogContent background="transparent" boxShadow="none" onClick={() => setIsImageDialogOpen(false)}>
           <DialogBody>
-            <NextImage
-              style={{ width: '500px', height: 'auto' }}
-              src={selectedImage}
-              alt="拡大画像"
-              width={1000}
-              height={0}
-              priority
-              onClick={() => setIsImageDialogOpen(false)}
-            />
+            <Center>
+              <NextImage
+                style={{
+                  // スマホとタブレットの場合は画面幅いっぱいに拡大
+                  width: isMobile ? '90vw' : 'auto',
+                  // PCの場合は画像を画面高さいっぱいに拡大
+                  height: isMobile ? 'auto' : '80vh',
+                }}
+                src={selectedImage}
+                alt="拡大画像"
+                width={1000}
+                height={0}
+                priority
+              />
+            </Center>
           </DialogBody>
         </DialogContent>
       </DialogRoot>
