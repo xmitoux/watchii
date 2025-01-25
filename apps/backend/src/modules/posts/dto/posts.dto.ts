@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsISO8601 } from 'class-validator';
+import { ArrayMinSize, IsArray, IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
 
 type PostsCreateRequest = {
   postedAtList: string[];
@@ -22,4 +22,24 @@ export class PostsCreateRequestDto implements PostsCreateRequest {
     return value;
   })
   postedAtList: string[];
+}
+
+type PostsFindAllRequest = {
+  limit?: number;
+  offset?: number;
+  sort?: 'asc' | 'desc';
+};
+
+export class PostsFindAllRequestDto implements PostsFindAllRequest {
+  @IsNumber()
+  @IsOptional()
+  limit?: number;
+
+  @IsNumber()
+  @IsOptional()
+  offset?: number;
+
+  @IsString()
+  @IsOptional()
+  sort?: 'asc' | 'desc';
 }
