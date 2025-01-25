@@ -59,8 +59,7 @@ export default function Home() {
       <DialogRoot
         open={isImageDialogOpen}
         placement="center"
-        onPointerDownOutside={() => setIsImageDialogOpen(false)}
-        onEscapeKeyDown={() => setIsImageDialogOpen(false)}
+        onOpenChange={e => setIsImageDialogOpen(e.open)}
       >
         <DialogContent background="transparent" boxShadow="none">
           <DialogBody>
