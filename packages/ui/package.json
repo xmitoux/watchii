@@ -6,12 +6,13 @@
   "exports": {
     "./*": "./src/**/*.tsx",
     "./chakra-ui": "./src/index.ts",
-    "./chakra-ui/*": "./src/components/ui/*.tsx"
+    "./chakra-ui/*": "./src/components/ui/*.tsx",
+    "./icons": "./src/icons/index.ts"
   },
   "scripts": {
     "lint": "eslint --fix",
     "check-types": "tsc --noEmit",
-    "add-chakraui": "pnpm dlx @chakra-ui/cli snippet add"
+    "chakra": "pnpm dlx @chakra-ui/cli snippet add"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.2.5",
