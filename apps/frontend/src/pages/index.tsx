@@ -116,7 +116,7 @@ export default function Home() {
                 <Flex justify="center">
                   <Tabs.Root
                     value={tempDisplaySetting}
-                    defaultValue="大きく表示"
+                    defaultValue={DisplayMode.ONE_COLUMN}
                     variant="plain"
                     onValueChange={({ value }) => setTempDisplaySetting(value as DisplayMode)}
                   >
