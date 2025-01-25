@@ -15,9 +15,8 @@ import {
   DrawerHeader,
   DrawerRoot,
   DrawerTitle,
-  DrawerTrigger,
 } from '@repo/ui/chakra-ui/drawer';
-import { MdCropPortrait, MdGridView } from '@repo/ui/icons';
+import { MdCropPortrait, MdGridView, MdTune } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -89,107 +88,107 @@ export default function Home() {
   }
 
   return (
-    <>
-      <Layout title="Watchii">
-        {/* 表示設定ドロワー */}
-        <DrawerRoot open={open} onOpenChange={e => handleDrawerOpenClose(e.open)}>
-          {/* 背景を暗くする */}
-          <DrawerBackdrop />
+    <Layout
+      title="Watchii"
+      // 表示設定ドロワーを開くボタン
+      actionButton={(
+        <Button variant="plain" onClick={() => setOpen(true)}>
+          <MdTune />
+        </Button>
+      )}
+    >
+      {/* 表示設定ドロワー */}
+      <DrawerRoot open={open} onOpenChange={e => handleDrawerOpenClose(e.open)}>
+        {/* 背景を暗くする */}
+        <DrawerBackdrop />
 
-          <DrawerTrigger asChild>
-            <Button variant="outline" size="sm">
-              Open Drawer
-            </Button>
-          </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>表示設定</DrawerTitle>
+          </DrawerHeader>
 
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>表示設定</DrawerTitle>
-            </DrawerHeader>
+          <DrawerBody>
+            {isMobile && (
+              <>
+                <Heading size="sm" marginBottom={2}>画像の表示形式</Heading>
 
-            <DrawerBody>
-              {isMobile && (
-                <>
-                  <Heading size="sm" marginBottom={2}>画像の表示形式</Heading>
+                {/* 表示形式タブ */}
+                <Flex justify="center">
+                  <Tabs.Root
+                    value={tempDisplaySetting}
+                    defaultValue="大きく表示"
+                    variant="plain"
+                    onValueChange={({ value }) => setTempDisplaySetting(value as DisplayMode)}
+                  >
+                    <Tabs.List bg="bg.muted" rounded="l3" p="1">
+                      <Tabs.Trigger value={DisplayMode.ONE_COLUMN}>
+                        <MdCropPortrait />
+                        1列表示
+                      </Tabs.Trigger>
 
-                  {/* 表示形式タブ */}
-                  <Flex justify="center">
-                    <Tabs.Root
-                      value={tempDisplaySetting}
-                      defaultValue="大きく表示"
-                      variant="plain"
-                      onValueChange={({ value }) => setTempDisplaySetting(value as DisplayMode)}
-                    >
-                      <Tabs.List bg="bg.muted" rounded="l3" p="1">
-                        <Tabs.Trigger value={DisplayMode.ONE_COLUMN}>
-                          <MdCropPortrait />
-                          1列表示
-                        </Tabs.Trigger>
+                      <Tabs.Trigger value={DisplayMode.TWO_COLUMN}>
+                        <MdGridView />
+                        2列表示
+                      </Tabs.Trigger>
+                      <Tabs.Indicator rounded="l2" />
+                    </Tabs.List>
+                  </Tabs.Root>
+                </Flex>
+              </>
+            )}
+          </DrawerBody>
 
-                        <Tabs.Trigger value={DisplayMode.TWO_COLUMN}>
-                          <MdGridView />
-                          2列表示
-                        </Tabs.Trigger>
-                        <Tabs.Indicator rounded="l2" />
-                      </Tabs.List>
-                    </Tabs.Root>
-                  </Flex>
-                </>
-              )}
-            </DrawerBody>
+          <DrawerFooter>
+            <DrawerActionTrigger asChild>
+              <Button variant="outline">キャンセル</Button>
+            </DrawerActionTrigger>
 
-            <DrawerFooter>
-              <DrawerActionTrigger asChild>
-                <Button variant="outline">キャンセル</Button>
-              </DrawerActionTrigger>
+            <Button onClick={handleApplySettings}>適用</Button>
+          </DrawerFooter>
+          <DrawerCloseTrigger />
+        </DrawerContent>
+      </DrawerRoot>
 
-              <Button onClick={handleApplySettings}>適用</Button>
-            </DrawerFooter>
-            <DrawerCloseTrigger />
-          </DrawerContent>
-        </DrawerRoot>
+      {/* post一覧 */}
+      <Flex
+        flexWrap="wrap"
+        gap={4}
+        justify="center"
+      >
+        {posts?.map(post => (
+          <NextImage
+            key={post.id}
+            style={{ width: imageWidth, height: 'auto' }}
+            src={post.imageUrl}
+            alt={`post id: ${post.id.toString()}`}
+            width={600}
+            height={0}
+            priority
+            onClick={() => handleImageClick(post.imageUrl)}
+          />
+        ))}
+      </Flex>
 
-        {/* post一覧 */}
-        <Flex
-          flexWrap="wrap"
-          gap={4}
-          justify="center"
-        >
-          {posts?.map(post => (
+      {/* 拡大表示ダイアログ */}
+      <DialogRoot
+        open={isImageDialogOpen}
+        placement="center"
+        onOpenChange={e => setIsImageDialogOpen(e.open)}
+      >
+        <DialogContent background="transparent" boxShadow="none">
+          <DialogBody>
             <NextImage
-              key={post.id}
-              style={{ width: imageWidth, height: 'auto' }}
-              src={post.imageUrl}
-              alt={`post id: ${post.id.toString()}`}
-              width={600}
+              style={{ width: '500px', height: 'auto' }}
+              src={selectedImage}
+              alt="拡大画像"
+              width={1000}
               height={0}
               priority
-              onClick={() => handleImageClick(post.imageUrl)}
+              onClick={() => setIsImageDialogOpen(false)}
             />
-          ))}
-        </Flex>
-
-        {/* 拡大表示ダイアログ */}
-        <DialogRoot
-          open={isImageDialogOpen}
-          placement="center"
-          onOpenChange={e => setIsImageDialogOpen(e.open)}
-        >
-          <DialogContent background="transparent" boxShadow="none">
-            <DialogBody>
-              <NextImage
-                style={{ width: '500px', height: 'auto' }}
-                src={selectedImage}
-                alt="拡大画像"
-                width={1000}
-                height={0}
-                priority
-                onClick={() => setIsImageDialogOpen(false)}
-              />
-            </DialogBody>
-          </DialogContent>
-        </DialogRoot>
-      </Layout>
-    </>
+          </DialogBody>
+        </DialogContent>
+      </DialogRoot>
+    </Layout>
   );
 }

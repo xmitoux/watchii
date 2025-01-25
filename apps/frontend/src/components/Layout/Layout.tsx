@@ -8,12 +8,13 @@ import Header from './Header';
 type LayoutProps = {
   children: ReactNode;
   title?: string;
+  actionButton?: React.ReactNode;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children, title = 'My App' }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title = 'My App', actionButton }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
-      <Header title={title} />
+      <Header title={title} actionButton={actionButton} />
 
       <Box
         className="scroll-container no-scrollbar"

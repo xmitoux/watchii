@@ -4,9 +4,10 @@ import { Box, Flex, Text } from '@repo/ui/chakra-ui';
 
 type HeaderProps = {
   title: string;
+  actionButton?: React.ReactNode;
 };
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC<HeaderProps> = ({ title, actionButton }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   useEffect(() => {
@@ -38,9 +39,6 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <Box
       backgroundColor="blue.300"
-      px={4}
-      py={4}
-      height="60px"
       position="fixed"
       top="0"
       left="0"
@@ -49,8 +47,25 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
       transition="transform 0.3s ease-in-out"
       zIndex="sticky"
     >
-      <Flex justify="center">
-        <Text fontSize="xl">{title}</Text>
+      {/* メインヘッダー部分 */}
+      <Flex
+        px={4}
+        justify="space-between"
+        align="center"
+        height="60px"
+      >
+        {/* アクションボタンと対称にするための余白 */}
+        <Box width="40px" />
+
+        {/* タイトル（中央寄せ） */}
+        <Text fontSize="xl" flex="1" textAlign="center">
+          {title}
+        </Text>
+
+        {/* 右端のアクションボタン */}
+        <Box width="40px">
+          {actionButton}
+        </Box>
       </Flex>
     </Box>
   );
