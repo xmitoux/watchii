@@ -4,7 +4,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const apiUrl = `${process.env.API_BASE_URL}/posts`;
+  // クエリパラメータを URLSearchParams で組み立て 🔨
+  const params = new URLSearchParams();
+
+  // req.query の中身を URLSearchParams に追加
+  for (const [key, value] of Object.entries(req.query)) {
+    if (value) {
+      params.append(key, value.toString());
+    }
+  }
+
+  // クエリパラメータがある場合は '?' をつけて追加
+  const queryString = params.toString() ? `?${params.toString()}` : '';
+  const apiUrl = `${process.env.API_BASE_URL}/posts${queryString}`;
 
   if (!process.env.API_BASE_URL) {
     return res.status(500).json({ message: 'API_BASE_URL is not defined' });

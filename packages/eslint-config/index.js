@@ -43,6 +43,7 @@ const customUnicornRules = {
     'unicorn/no-null': 'off',
     'unicorn/no-single-promise-in-promise-methods': 'off',
     'unicorn/import-style': 'off',
+    'unicorn/prefer-at': 'off',
   },
 };
 
@@ -91,7 +92,7 @@ const configPerfectionist = {
     'perfectionist/sort-named-imports': ['error', { type: 'natural' }],
     'perfectionist/sort-named-exports': ['error', { type: 'natural' }],
     'perfectionist/sort-jsx-props': [
-      'error',
+      'off',
       {
         type: 'alphabetical',
         order: 'asc',

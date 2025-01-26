@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { PostEntity } from './entities/post.entity';
+import { PostsFindAllRequestDto } from './dto/posts.dto';
+import { PostFindAllResponseEntity } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -42,11 +43,33 @@ export class PostsService {
     }
   }
 
-  async findAll() {
-    return this.prisma.post.findMany({
+  async findAll(query: PostsFindAllRequestDto = {}): Promise<PostFindAllResponseEntity> {
+    const {
+      limit = 12,
+      offset = 0,
+      sort = 'desc',
+    } = query;
+
+    // 全体の件数を取得
+    const total = await this.prisma.post.count();
+
+    // 指定された条件で投稿を取得
+    const posts = await this.prisma.post.findMany({
       orderBy: {
-        postedAt: 'desc',
+        postedAt: sort,
+      },
+      take: limit,
+      skip: offset,
+      select: {
+        id: true,
+        imageUrl: true,
+        postedAt: true,
       },
     });
+
+    return {
+      posts,
+      total,
+    };
   }
 }
