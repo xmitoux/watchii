@@ -1,21 +1,11 @@
 import { useCallback, useState } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
-import { Center, Flex, Heading, Tabs, useBreakpointValue } from '@repo/ui/chakra-ui';
+import { Center, Flex, useBreakpointValue } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import {
-  DrawerActionTrigger,
-  DrawerBackdrop,
-  DrawerBody,
-  DrawerCloseTrigger,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerRoot,
-  DrawerTitle,
-} from '@repo/ui/chakra-ui/drawer';
-import { MdCropPortrait, MdGridView, MdTune } from '@repo/ui/icons';
+import { MdTune } from '@repo/ui/icons';
 
+import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
 
 import EpisodeCard from './components/EpisodeCard';
@@ -30,22 +20,6 @@ type EpisodeFindAllResponse = {
 const LIMIT = 12;
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
-
-/** 表示順 */
-const SortOrder = {
-  ASC: 'asc',
-  DESC: 'desc',
-} as const;
-
-type SortOrder = typeof SortOrder[keyof typeof SortOrder];
-
-/** 表示形式 */
-const DisplayMode = {
-  ONE_COLUMN: 'one-column',
-  TWO_COLUMN: 'two-column',
-} as const;
-
-type DisplayMode = typeof DisplayMode[keyof typeof DisplayMode];
 
 export default function Episodes() {
   // 並び順のstate
@@ -99,16 +73,11 @@ export default function Episodes() {
   const isMobile = useBreakpointValue({ base: true, lg: false });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // ドロワー内の適用前の表示設定
-  const [tempSortOrder, setTempSortOrder] = useState<SortOrder>(SortOrder.DESC);
   // 現在の表示設定
-  const [currentDisplaySetting, setCurrentDisplaySetting] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
-  // ドロワー内の適用前の表示設定
-  const [tempDisplaySetting, setTempDisplaySetting] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
 
   const imageWidth = isMobile
-    ? (currentDisplaySetting === 'one-column' ? '90vw' : '40vw')
+    ? (displayMode === 'one-column' ? '90vw' : '40vw')
     : '500px';
 
   if (error) {
@@ -123,30 +92,16 @@ export default function Episodes() {
     console.log('TODO: エピソード詳細に遷移する', episodeId);
   }
 
-  /** ドロワー開閉処理 */
-  function handleDrawerOpenClose(open: boolean) {
-    if (open) {
-      // ドロワーが開いた時に、現在の表示設定を反映
-      setTempSortOrder(sortOrder);
-      setTempDisplaySetting(currentDisplaySetting);
-    }
-
-    // ドロワー開閉状態を更新
-    setDrawerOpen(open);
-  }
-
-  // 表示設定適用処理
-  function handleApplySettings() {
+  /** 表示設定適用処理 */
+  const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
     if (isMobile) {
       // 表示形式を更新
-      setCurrentDisplaySetting(tempDisplaySetting);
+      setDisplayMode(displayMode);
     }
 
     // 表示順を更新
-    handleSortChange(tempSortOrder);
-
-    setDrawerOpen(false);
-  }
+    handleSortChange(sortOrder);
+  };
 
   // 並び順変更時の処理
   const handleSortChange = (newSort: SortOrder) => {
@@ -166,81 +121,13 @@ export default function Episodes() {
       )}
     >
       {/* 表示設定ドロワー */}
-      <DrawerRoot open={drawerOpen} onOpenChange={e => handleDrawerOpenClose(e.open)}>
-        {/* 背景を暗くする */}
-        <DrawerBackdrop />
-
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>表示設定</DrawerTitle>
-          </DrawerHeader>
-
-          <DrawerBody>
-            <Heading size="sm" marginBottom={2}>画像の表示順</Heading>
-
-            {/* 表示順タブ */}
-            <Center>
-              <Tabs.Root
-                value={tempSortOrder}
-                defaultValue={SortOrder.DESC}
-                variant="plain"
-                onValueChange={({ value }) => setTempSortOrder(value as SortOrder)}
-              >
-                <Tabs.List bg="bg.muted" rounded="l3" p="1">
-                  <Tabs.Trigger value={SortOrder.DESC}>
-                    <MdCropPortrait />
-                    新着順
-                  </Tabs.Trigger>
-
-                  <Tabs.Trigger value={SortOrder.ASC}>
-                    <MdGridView />
-                    古い順
-                  </Tabs.Trigger>
-                  <Tabs.Indicator rounded="l2" />
-                </Tabs.List>
-              </Tabs.Root>
-            </Center>
-
-            {isMobile && (
-              <>
-                <Heading size="sm" marginBottom={2}>画像の表示形式</Heading>
-
-                {/* 表示形式タブ */}
-                <Center>
-                  <Tabs.Root
-                    value={tempDisplaySetting}
-                    defaultValue={DisplayMode.ONE_COLUMN}
-                    variant="plain"
-                    onValueChange={({ value }) => setTempDisplaySetting(value as DisplayMode)}
-                  >
-                    <Tabs.List bg="bg.muted" rounded="l3" p="1">
-                      <Tabs.Trigger value={DisplayMode.ONE_COLUMN}>
-                        <MdCropPortrait />
-                        1列表示
-                      </Tabs.Trigger>
-
-                      <Tabs.Trigger value={DisplayMode.TWO_COLUMN}>
-                        <MdGridView />
-                        2列表示
-                      </Tabs.Trigger>
-                      <Tabs.Indicator rounded="l2" />
-                    </Tabs.List>
-                  </Tabs.Root>
-                </Center>
-              </>
-            )}
-          </DrawerBody>
-
-          <DrawerFooter>
-            <DrawerActionTrigger asChild>
-              <Button variant="outline">キャンセル</Button>
-            </DrawerActionTrigger>
-
-            <Button onClick={handleApplySettings}>適用</Button>
-          </DrawerFooter>
-          <DrawerCloseTrigger />
-        </DrawerContent>
-      </DrawerRoot>
+      <DisplaySettingsDrawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        sortOrder={sortOrder}
+        displayMode={displayMode}
+        onApplySettings={handleApplySettings}
+      />
 
       {/* エピソード一覧 */}
       <Flex
