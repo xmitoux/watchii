@@ -7,7 +7,18 @@ type NavigationItem = {
   path: string;
   activeIcon: string;
   inactiveIcon: string;
-  label: string;
+};
+
+const homeNav: NavigationItem = {
+  path: '/',
+  activeIcon: '/icons/home-active.png',
+  inactiveIcon: '/icons/home-inactive.png',
+};
+
+const episodesNav: NavigationItem = {
+  path: '/episodes',
+  activeIcon: '/icons/home-active.png',
+  inactiveIcon: '/icons/home-inactive.png',
 };
 
 const Footer: React.FC = () => {
@@ -15,12 +26,8 @@ const Footer: React.FC = () => {
   const currentPath = router.pathname;
 
   const navigationItems: NavigationItem[] = [
-    {
-      path: '/',
-      activeIcon: '/icons/home-active.png',
-      inactiveIcon: '/icons/home-inactive.png',
-      label: 'Home',
-    },
+    homeNav,
+    episodesNav,
   ];
 
   return (
@@ -44,7 +51,7 @@ const Footer: React.FC = () => {
             onClick={() => router.push(item.path)}
           >
             <NextImage
-              alt={item.label}
+              alt={item.path}
               src={currentPath === item.path ? item.activeIcon : item.inactiveIcon}
               width="24"
               height="24"
