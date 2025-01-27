@@ -254,7 +254,7 @@ export default function Home() {
             style={{ width: imageWidth, height: 'auto' }}
             src={post.imageUrl}
             alt={`post id: ${post.id.toString()}`}
-            width={600}
+            width={800}
             height={0}
             priority
             onClick={() => handleImageClick(post.imageUrl)}
@@ -291,9 +291,8 @@ export default function Home() {
                 }}
                 src={selectedImage}
                 alt="拡大画像"
-                width={1000}
+                width={800}
                 height={0}
-                priority
               />
             </Center>
           </DialogBody>
