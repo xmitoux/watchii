@@ -108,8 +108,8 @@ export default function Episodes() {
   const [tempDisplaySetting, setTempDisplaySetting] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
 
   const imageWidth = isMobile
-    ? (currentDisplaySetting === 'one-column' ? '80vw' : '40vw')
-    : '20vw';
+    ? (currentDisplaySetting === 'one-column' ? '90vw' : '40vw')
+    : '500px';
 
   if (error) {
     return <div>エラーが発生しました</div>;
