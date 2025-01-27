@@ -29,7 +29,7 @@ export default function EpisodeCard({
         style={{ width: imageWidth, height: 'auto' }}
         src={episode.thumbnailPost.imageUrl}
         alt={episode.title}
-        width={800}
+        width={350}
         height={0}
         priority
       />

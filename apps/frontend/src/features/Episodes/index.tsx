@@ -46,7 +46,7 @@ export default function Episodes() {
 
   const imageWidth = isMobile
     ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '500px';
+    : '300px';
 
   if (error) {
     return <div>エラーが発生しました</div>;
