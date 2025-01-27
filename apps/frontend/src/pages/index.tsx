@@ -140,10 +140,12 @@ export default function Home() {
   // 表示設定適用処理
   function handleApplySettings() {
     if (isMobile) {
-      // 現在の表示設定を更新
-      handleSortChange(tempSortOrder);
+      // 表示形式を更新
       setCurrentDisplaySetting(tempDisplaySetting);
     }
+
+    // 表示順を更新
+    handleSortChange(tempSortOrder);
 
     setOpen(false);
   }
