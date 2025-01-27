@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Center, Flex, Heading, Tabs, useBreakpointValue } from '@repo/ui/chakra-ui';
+import { Center, Flex, Heading, Tabs } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import {
   DrawerActionTrigger,
@@ -14,6 +14,8 @@ import {
   DrawerTitle,
 } from '@repo/ui/chakra-ui/drawer';
 import { MdCropPortrait, MdGridView, MdOutlineFiberNew } from '@repo/ui/icons';
+
+import { useDeviceType } from '@/hooks/useDeviceType';
 
 /** 表示順 */
 export const SortOrder = {
@@ -51,8 +53,7 @@ export const DisplaySettingsDrawer: React.FC<DisplaySettingsDrawerProps> = ({
   onOpenChange,
   onApplySettings,
 }) => {
-  /** モバイルデバイスか */
-  const isMobile = useBreakpointValue({ base: true, lg: false });
+  const { isMobile } = useDeviceType();
 
   // ドロワー内の適用前の表示設定
   const [tempSortOrder, setTempSortOrder] = useState<SortOrder>(sortOrder);

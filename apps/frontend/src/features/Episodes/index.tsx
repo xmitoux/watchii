@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
-import { Center, Flex, useBreakpointValue } from '@repo/ui/chakra-ui';
+import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import { useDeviceType } from '@/hooks/useDeviceType';
 
 import EpisodeCard from './components/EpisodeCard';
 import { EpisodeItem } from './types/episodes';
@@ -70,7 +71,7 @@ export default function Episodes() {
   const total = data?.[0]?.total ?? 0;
 
   /** モバイルデバイス(スマホ・タブレット)か */
-  const isMobile = useBreakpointValue({ base: true, lg: false });
+  const { isMobile } = useDeviceType();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   // 現在の表示設定

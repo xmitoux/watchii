@@ -2,13 +2,14 @@ import NextImage from 'next/image';
 import { useCallback, useState } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
-import { Center, Flex, useBreakpointValue } from '@repo/ui/chakra-ui';
+import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { DialogBody, DialogContent, DialogRoot } from '@repo/ui/chakra-ui/dialog';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import { useDeviceType } from '@/hooks/useDeviceType';
 
 type PostFindAllResponse = {
   posts: {
@@ -69,7 +70,7 @@ export default function Home() {
   const total = data?.[0]?.total ?? 0;
 
   /** モバイルデバイス(スマホ・タブレット)か */
-  const isMobile = useBreakpointValue({ base: true, lg: false });
+  const { isMobile } = useDeviceType();
 
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
