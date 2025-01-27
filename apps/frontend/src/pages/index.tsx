@@ -1,6 +1,5 @@
 import NextImage from 'next/image';
-import { useCallback, useState } from 'react';
-import useSWRInfinite from 'swr/infinite';
+import { useState } from 'react';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
@@ -10,6 +9,7 @@ import { MdTune } from '@repo/ui/icons';
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
 import { useDeviceType } from '@/hooks/useDeviceType';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 type PostFindAllResponse = {
   posts: {
@@ -20,54 +20,25 @@ type PostFindAllResponse = {
   total: number;
 };
 
-// 1ページあたりの表示件数
-const LIMIT = 12;
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
-
 export default function Home() {
   // 並び順のstate
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
 
-  const { data, error, size, setSize, isLoading } = useSWRInfinite<PostFindAllResponse>(getKey, fetcher);
-
-  // 各ページ(無限スクロールで取得する画像単位)のURLを生成する関数
-  function getKey(pageIndex: number, previousPageData: PostFindAllResponse | null) {
-    // 前のページが無い、かつtotalよりも多く取得している場合はnullを返して終了
-    if (previousPageData && previousPageData.posts.length < LIMIT) { return null; }
-
-    // 最初のページ以降は、offset を計算して URL に含める
-    const offset = pageIndex * LIMIT;
-    const url = `/api/posts?limit=${LIMIT}&offset=${offset}&sort=${sortOrder}`;
-    return url;
-  }
-
-  // Intersectionを監視するコールバック
-  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
-    const [entry] = entries;
-    if (entry.isIntersecting && !isLoading) {
-      setSize(prev => prev + 1);
-    }
-  }, [isLoading, setSize]);
-
-  // 監視対象の要素をセットするref
-  const observerRef = useCallback((node: HTMLDivElement | null) => {
-    if (!node) { return; }
-
-    const observer = new IntersectionObserver(handleObserver, {
-      rootMargin: '100px', // 少し早めに発火させる
-    });
-
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, [handleObserver]);
+  const {
+    data,
+    error,
+    isLoading,
+    isLoadingMore,
+    setSize,
+    observerRef,
+    total,
+  } = useInfiniteScroll<PostFindAllResponse>({
+    baseUrl: '/api/posts',
+    sortOrder,
+  });
 
   // 全投稿を結合
   const allPosts = data ? data.flatMap(page => page.posts) : [];
-  const isReachingEnd = data && data[data.length - 1]?.posts.length < LIMIT;
-  const isLoadingMore = isLoading || (size > 0 && data && data[size - 1] === undefined && !isReachingEnd);
-  const total = data?.[0]?.total ?? 0;
 
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
