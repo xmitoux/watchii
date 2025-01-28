@@ -1,13 +1,16 @@
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, Flex, Text } from '@repo/ui/chakra-ui';
+import { Box, Button, Flex, Text } from '@repo/ui/chakra-ui';
+import { MdArrowBack } from '@repo/ui/icons';
 
 type HeaderProps = {
   title: string;
   actionButton?: React.ReactNode;
+  canBack?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({ title, actionButton }) => {
+const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   useEffect(() => {
@@ -36,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton }) => {
     }
   }, []);
 
+  const router = useRouter();
+
   return (
     <Box
       backgroundColor="blue.300"
@@ -54,11 +59,17 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton }) => {
         align="center"
         height="60px"
       >
-        {/* アクションボタンと対称にするための余白 */}
-        <Box width="40px" />
+        {/* 戻るボタン */}
+        <Box width="40px">
+          {canBack && (
+            <Button variant="plain" paddingLeft={0} onClick={() => router.back()}>
+              <MdArrowBack />
+            </Button>
+          )}
+        </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text fontSize="xl" flex="1" textAlign="center">
+        <Text fontSize="lg" flex="1" textAlign="center">
           {title}
         </Text>
 

@@ -7,7 +7,29 @@ type NavigationItem = {
   path: string;
   activeIcon: string;
   inactiveIcon: string;
-  label: string;
+};
+
+const homeNav: NavigationItem = {
+  path: '/',
+  activeIcon: '/icons/home-active.png',
+  inactiveIcon: '/icons/home-inactive.png',
+};
+
+const episodesNav: NavigationItem = {
+  path: '/episodes',
+  activeIcon: '/icons/home-active.png',
+  inactiveIcon: '/icons/home-inactive.png',
+};
+
+/** フッターアイコンがアクティブか判定 */
+const isIconActive = (currentPath: string, targetPath: string) => {
+  if (targetPath === '/') {
+    // ホーム画面アイコンは完全一致のみ
+    return currentPath === targetPath;
+  }
+
+  // それ以外は先頭一致で判定('/episodes/[id]'など)
+  return currentPath.startsWith(targetPath);
 };
 
 const Footer: React.FC = () => {
@@ -15,12 +37,8 @@ const Footer: React.FC = () => {
   const currentPath = router.pathname;
 
   const navigationItems: NavigationItem[] = [
-    {
-      path: '/',
-      activeIcon: '/icons/home-active.png',
-      inactiveIcon: '/icons/home-inactive.png',
-      label: 'Home',
-    },
+    homeNav,
+    episodesNav,
   ];
 
   return (
@@ -44,8 +62,8 @@ const Footer: React.FC = () => {
             onClick={() => router.push(item.path)}
           >
             <NextImage
-              alt={item.label}
-              src={currentPath === item.path ? item.activeIcon : item.inactiveIcon}
+              alt={item.path}
+              src={isIconActive(currentPath, item.path) ? item.activeIcon : item.inactiveIcon}
               width="24"
               height="24"
             />

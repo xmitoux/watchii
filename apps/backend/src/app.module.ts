@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { EpisodesModule } from './modules/episodes/episodes.module';
 
 const pinoHttp = {
   level: process.env.PINO_LOG_LEVEL || 'trace',
@@ -24,6 +25,7 @@ const pinoHttp = {
     LoggerModule.forRoot({ pinoHttp }),
     PostsModule,
     HealthCheckModule,
+    EpisodesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
