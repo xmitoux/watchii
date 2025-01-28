@@ -8,6 +8,8 @@ import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 
 import Layout from '@/components/Layout/Layout';
 
+import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
+
 type EpisodeCreateRequest = {
   title: string;
   postIds: number[];
@@ -30,6 +32,8 @@ async function createEpisode(
 export default function EpisodesCreate() {
   const [episodeTitle, setEpisodeTitle] = useState('');
   const { trigger, isMutating } = useSWRMutation('/api/episodes/create', createEpisode);
+
+  const [isEpisodeSelectDialogOpen, setIsEpisodeSelectDialogOpen] = useState(false);
 
   async function handleSubmit() {
     try {
@@ -66,7 +70,7 @@ export default function EpisodesCreate() {
           </Field>
 
           <Field label="エピソードPost設定">
-            <Button>選択する</Button>
+            <Button onClick={() => setIsEpisodeSelectDialogOpen(true)}>選択する</Button>
             {/* TODO: 選択ダイアログ(コンポーネント内で無限スクロール？) */}
           </Field>
 
@@ -85,6 +89,11 @@ export default function EpisodesCreate() {
       </Fieldset.Root>
 
       <Toaster />
+
+      <EpisodePostSelectDialog
+        isOpen={isEpisodeSelectDialogOpen}
+        onOpenChange={e => setIsEpisodeSelectDialogOpen(e.open)}
+      />
     </Layout>
   );
 }
