@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
         </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text fontSize="xl" flex="1" textAlign="center">
+        <Text fontSize="lg" flex="1" textAlign="center">
           {title}
         </Text>
 
