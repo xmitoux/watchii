@@ -1,24 +1,26 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import { useDeviceType } from '@/hooks/useDeviceType';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { SimplePost } from '@/types/post';
 
-import EpisodeCard from './components/EpisodeCard';
-import { EpisodeItem } from './types/episodes';
+import { PostGallery } from '../PostGallery/PostGallery';
 
-type EpisodeFindAllResponse = {
-  episodes: EpisodeItem[];
+type EpisodeFindOneResponse = {
+  episodeTitle: string;
+  posts: SimplePost[];
   total: number;
 };
 
-export default function Episodes() {
+export default function EpisodeDetail() {
+  const router = useRouter();
+  const { id } = router.query;
+
   // 並び順のstate
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
 
@@ -30,38 +32,23 @@ export default function Episodes() {
     setSize,
     observerRef,
     total,
-  } = useInfiniteScroll<EpisodeFindAllResponse>({
-    baseUrl: '/api/episodes',
+  } = useInfiniteScroll<EpisodeFindOneResponse>({
+    baseUrl: `/api/episodes/${id}`,
     sortOrder,
   });
 
-  // 全投稿を結合
-  const allEpisodes = data ? data.flatMap(page => page.episodes) : [];
-
-  /** モバイルデバイス(スマホ・タブレット)か */
-  const { isMobile } = useDeviceType();
+  const allPosts = data ? data.flatMap(page => page.posts) : [];
+  const episodeTitle = data ? data.flatMap(page => page.episodeTitle)[0] : '';
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+
   // 現在の表示設定
   const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
 
-  const imageWidth = isMobile
-    ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '300px';
-
-  const router = useRouter();
-
-  function handleImageClick(episodeId: number) {
-    router.push(`/episodes/${episodeId}`);
-  }
-
   /** 表示設定適用処理 */
   const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
-    if (isMobile) {
-      // 表示形式を更新
-      setDisplayMode(displayMode);
-    }
-
+    // 表示形式を更新
+    setDisplayMode(displayMode);
     // 表示順を更新
     handleSortChange(sortOrder);
   };
@@ -83,7 +70,7 @@ export default function Episodes() {
 
   return (
     <Layout
-      title="エピソード一覧"
+      title={episodeTitle}
       // 表示設定ドロワーを開くボタン
       actionButton={(
         <Button variant="plain" onClick={() => setDrawerOpen(true)}>
@@ -100,31 +87,14 @@ export default function Episodes() {
         onApplySettings={handleApplySettings}
       />
 
-      {/* エピソード一覧 */}
-      <Flex
-        flexWrap="wrap"
-        gap={4}
-        justify="center"
-      >
-        {allEpisodes?.map(episode => (
-          <EpisodeCard
-            key={episode.id}
-            episode={episode}
-            imageWidth={imageWidth}
-            onClick={() => handleImageClick(episode.id)}
-          />
-        ))}
-      </Flex>
-
-      {/* ローディング状態の表示 */}
-      {isLoadingMore && (
-        <Center p={4}>読み込み中...🔄</Center>
-      )}
-
-      {/* 無限スクロール用の監視対象要素 */}
-      {allEpisodes.length < total && (
-        <div ref={observerRef} style={{ height: '10px' }} />
-      )}
+      {/* post一覧 */}
+      <PostGallery
+        posts={allPosts}
+        displayMode={displayMode}
+        isLoadingMore={isLoadingMore}
+        observerRef={observerRef}
+        hasMore={allPosts.length < total}
+      />
     </Layout>
   );
 }
