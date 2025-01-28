@@ -9,7 +9,8 @@
     "./chakra-ui/*": "./src/components/ui/*.tsx",
     "./icons": "./src/icons/index.ts",
     "./components": "./src/components/index.ts",
-    "./hooks": "./src/hooks/index.ts"
+    "./hooks": "./src/hooks/index.ts",
+    "./types": "./src/types/index.ts"
   },
   "scripts": {
     "lint": "eslint --fix",

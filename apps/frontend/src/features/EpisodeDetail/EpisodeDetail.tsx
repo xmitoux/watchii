@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useInfiniteScroll } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
+import { SimplePost } from '@repo/ui/types';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import { SimplePost } from '@/types/post';
 
 import { PostGallery } from '../PostGallery/PostGallery';
 
