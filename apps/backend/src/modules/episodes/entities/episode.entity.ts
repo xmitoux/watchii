@@ -11,3 +11,14 @@ export class EpisodeFindAllResponseEntity {
   episodes: EpisodeEntity[];
   total: number;
 }
+
+export class EpisodeFindOneResponseEntity {
+  episodeTitle: string;
+  posts: Pick<
+    Post,
+    'id'
+    | 'imageUrl'
+  >[];
+
+  total: number;
+}

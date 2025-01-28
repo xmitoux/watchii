@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { EpisodesFindAllRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity } from './entities/episode.entity';
+import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 
 @Injectable()
 export class EpisodesService {
@@ -55,6 +55,45 @@ export class EpisodesService {
     return {
       episodes: mappedEpisodes,
       total,
+    };
+  }
+
+  async findOne(id: number, query: EpisodesFindAllRequestDto = {}): Promise<EpisodeFindOneResponseEntity> {
+    const {
+      limit = 12,
+      offset = 0,
+      sort = 'desc',
+    } = query;
+
+    const episode = await this.prisma.episode.findFirstOrThrow({
+      select: {
+        id: true,
+        title: true,
+        posts: {
+          select: {
+            id: true,
+            imageUrl: true,
+          },
+          orderBy: {
+            postedAt: sort,
+          },
+          take: limit,
+          skip: offset,
+        },
+        // postsの件数を取得(無限スクロール用)
+        _count: {
+          select: { posts: true },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+
+    return {
+      episodeTitle: episode.title,
+      posts: episode.posts,
+      total: episode._count.posts,
     };
   }
 }
