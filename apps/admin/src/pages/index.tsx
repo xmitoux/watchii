@@ -41,7 +41,7 @@ async function uploadImages(
 export default function Admin() {
   const [images, setImages] = useState<ImageData[]>([]);
 
-  const { trigger, isMutating } = useSWRMutation('/api/posts', uploadImages);
+  const { trigger, isMutating } = useSWRMutation('/api/posts/create', uploadImages);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
