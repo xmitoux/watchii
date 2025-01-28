@@ -1,4 +1,4 @@
-import Episodes from '@/features/Episodes';
+import Episodes from '@/features/Episodes/Episodes';
 
 export default function EpisodesPage() {
   return <Episodes />;
