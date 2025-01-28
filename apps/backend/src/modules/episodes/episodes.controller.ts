@@ -2,6 +2,7 @@ import { Body, Controller, Get, Logger, Param, Post, Query } from '@nestjs/commo
 
 import { IdParam } from '@/common/dto/IdParam';
 
+import { EpisodeCreateRequestDto } from './dto/episodes.dto';
 import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 import { EpisodesService } from './episodes.service';
 
@@ -42,5 +43,13 @@ export class EpisodesController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Post()
+  async create(@Body() dto: EpisodeCreateRequestDto): Promise<void> {
+    this.logger.log('create');
+    this.logger.log('%o', { dto });
+
+    return await this.episodesService.create(dto);
   }
 }

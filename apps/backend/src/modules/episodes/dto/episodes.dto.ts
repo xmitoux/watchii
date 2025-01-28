@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
 
 type EpisodesFindAllRequest = {
   limit?: number;
@@ -19,4 +19,17 @@ export class EpisodesFindAllRequestDto implements EpisodesFindAllRequest {
   @IsString()
   @IsOptional()
   sort?: 'asc' | 'desc';
+}
+
+export class EpisodeCreateRequestDto {
+  @IsString()
+  title: string;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
+  postIds: number[];
+
+  @IsNumber()
+  thumbnailPostId: number;
 }
