@@ -3,8 +3,7 @@ import NextImage from 'next/image';
 
 import { Center } from '@repo/ui/chakra-ui';
 import { DialogBody, DialogContent, DialogRoot } from '@repo/ui/chakra-ui/dialog';
-
-import { useDeviceType } from '@/hooks/useDeviceType';
+import { useDeviceType } from '@repo/ui/hooks';
 
 type ImageViewerDialogProps = {
   isOpen: boolean;

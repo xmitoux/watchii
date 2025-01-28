@@ -3,12 +3,12 @@ import { useState } from 'react';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
+import { useInfiniteScroll } from '@repo/ui/hooks';
+import { useDeviceType } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import { useDeviceType } from '@/hooks/useDeviceType';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 import EpisodeCard from './components/EpisodeCard';
 import { EpisodeItem } from './types/episodes';

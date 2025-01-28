@@ -2,11 +2,11 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { Button } from '@repo/ui/chakra-ui/button';
+import { useInfiniteScroll } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { SimplePost } from '@/types/post';
 
 import { PostGallery } from '../PostGallery/PostGallery';

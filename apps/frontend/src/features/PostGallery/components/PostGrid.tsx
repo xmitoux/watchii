@@ -2,9 +2,9 @@
 import NextImage from 'next/image';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
+import { useDeviceType } from '@repo/ui/hooks';
 
 import { DisplayMode } from '@/components/Drawer/DisplaySettingsDrawer';
-import { useDeviceType } from '@/hooks/useDeviceType';
 import { SimplePost } from '@/types/post';
 
 type PostGridProps = {
