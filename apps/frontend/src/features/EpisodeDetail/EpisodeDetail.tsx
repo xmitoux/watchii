@@ -71,7 +71,7 @@ export default function EpisodeDetail() {
   return (
     <Layout
       title={episodeTitle}
-      // 表示設定ドロワーを開くボタン
+      canBack
       actionButton={(
         <Button variant="plain" onClick={() => setDrawerOpen(true)}>
           <MdTune />

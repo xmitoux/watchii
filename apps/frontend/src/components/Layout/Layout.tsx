@@ -9,12 +9,17 @@ type LayoutProps = {
   children: ReactNode;
   title?: string;
   actionButton?: React.ReactNode;
+  canBack?: boolean;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children, title = 'My App', actionButton }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title = 'My App', actionButton, canBack }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
-      <Header title={title} actionButton={actionButton} />
+      <Header
+        title={title}
+        actionButton={actionButton}
+        canBack={canBack}
+      />
 
       <Box
         className="scroll-container no-scrollbar"
