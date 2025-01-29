@@ -134,7 +134,7 @@ export const EpisodePostSelectDialog = ({
                     justifyContent="center"
                   >
                     {isSelected && (
-                      <Icon fontSize="4xl" color="green.600">
+                      <Icon fontSize="4xl" color="green.600" bg="white" borderRadius="full">
                         <MdCheckCircle />
                       </Icon>
                     )}
