@@ -13,6 +13,8 @@ import {
 import { Button } from '@repo/ui/chakra-ui/button';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 
+import Layout from '@/components/Layout/Layout';
+
 interface ImageData {
   file: File;
   preview: string;
@@ -38,7 +40,7 @@ async function uploadImages(
   );
 }
 
-export default function Admin() {
+export default function Home() {
   const [images, setImages] = useState<ImageData[]>([]);
 
   const { trigger, isMutating } = useSWRMutation('/api/posts/create', uploadImages);
@@ -88,7 +90,7 @@ export default function Admin() {
   };
 
   return (
-    <>
+    <Layout title="Watchii Admin">
       <Container maxW="container.md" py={8}>
         <VStack spaceX={6}>
           <span>画像を選択</span>
@@ -125,6 +127,6 @@ export default function Admin() {
       </Container>
 
       <Toaster />
-    </>
+    </Layout>
   );
 }
