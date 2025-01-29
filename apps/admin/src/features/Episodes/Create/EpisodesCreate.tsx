@@ -1,11 +1,10 @@
 import NextImage from 'next/image';
 import { useState } from 'react';
-import { MdCheckCircle } from 'react-icons/md';
+import { MdBook, MdCheckCircle, MdMenuBook, MdPhotoAlbum } from 'react-icons/md';
 import useSWRMutation from 'swr/mutation';
 
-import { Box, Fieldset, Flex, Icon, Input, Show, Text } from '@repo/ui/chakra-ui';
+import { Box, Field, Fieldset, Flex, HStack, Icon, Input, Show, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import { Field } from '@repo/ui/chakra-ui/field';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { useDeviceType } from '@repo/ui/hooks';
 import { SimplePost } from '@repo/ui/types';
@@ -102,17 +101,32 @@ export default function EpisodesCreate() {
     <Layout title="エピソード登録" canBack>
       <Fieldset.Root size="lg">
         <Fieldset.Content>
-          <Field label="エピソード名">
+          <Field.Root>
+            <Field.Label>
+              <HStack>
+                <MdBook />
+                エピソード名
+              </HStack>
+            </Field.Label>
             <Input value={episodeTitle} onChange={e => setEpisodeTitle(e.target.value)} />
-          </Field>
+          </Field.Root>
 
-          <Field label="エピソードPost設定">
+          <Field.Root>
+            <Field.Label>
+              <HStack>
+                <MdMenuBook />
+                エピソードPost設定
+              </HStack>
+            </Field.Label>
             <Button onClick={() => setIsEpisodeSelectDialogOpen(true)}>選択する</Button>
-          </Field>
+          </Field.Root>
 
           {/* 選択Postのプレビュー表示 */}
           <Show when={selectedPosts.length > 0}>
-            <Text fontSize="sm">サムネイルに設定するPostを選択する</Text>
+            <HStack>
+              <MdPhotoAlbum />
+              <Text fontSize="sm">サムネイルに設定するPostを選択する</Text>
+            </HStack>
 
             <Box height="50vh" overflow="auto">
               <Flex justify={{ base: 'center', lg: 'start' }} gap={2} wrap="wrap">
@@ -124,6 +138,10 @@ export default function EpisodesCreate() {
                       key={post.id}
                       position="relative"
                       cursor="pointer"
+                      transition="transform 0.2s"
+                      _hover={{
+                        transform: 'scale(1.01)',
+                      }}
                       onClick={() => handlePreviewClick(post.id)}
                     >
                       <NextImage
@@ -136,23 +154,24 @@ export default function EpisodesCreate() {
                       />
 
                       {/* サムネイル設定選択状態のオーバーレイ */}
-                      <Show when={isSelected}>
-                        <Box
-                          position="absolute"
-                          top={0}
-                          left={0}
-                          right={0}
-                          bottom={0}
-                          bg="cyan.500/30"
-                          display="flex"
-                          alignItems="start"
-                          justifyContent="end"
-                        >
+                      <Box
+                        position="absolute"
+                        top={0}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        bg={isSelected ? 'cyan.500/30' : ''}
+                        _hover={isSelected ? {} : { bg: 'blue.600/40' }}
+                        display="flex"
+                        alignItems="start"
+                        justifyContent="end"
+                      >
+                        {isSelected && (
                           <Icon fontSize="4xl" color="green.600">
                             <MdCheckCircle />
                           </Icon>
-                        </Box>
-                      </Show>
+                        )}
+                      </Box>
                     </Box>
                   );
                 })}

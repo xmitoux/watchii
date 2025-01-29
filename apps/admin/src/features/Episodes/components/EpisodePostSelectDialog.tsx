@@ -1,7 +1,7 @@
 import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
 
-import { Box, Center, Flex, HStack, Icon, Show } from '@repo/ui/chakra-ui';
+import { Box, Center, Flex, HStack, Icon } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import {
   DialogBody,
@@ -105,6 +105,10 @@ export const EpisodePostSelectDialog = ({
                   key={post.id}
                   position="relative"
                   cursor="pointer"
+                  transition="transform 0.2s"
+                  _hover={{
+                    transform: 'scale(1.02)',
+                  }}
                   onClick={() => togglePostSelection({ id: post.id, imageUrl: post.imageUrl })}
                 >
                   <NextImage
@@ -117,23 +121,24 @@ export const EpisodePostSelectDialog = ({
                   />
 
                   {/* 選択状態のオーバーレイ */}
-                  <Show when={isSelected}>
-                    <Box
-                      position="absolute"
-                      top={0}
-                      left={0}
-                      right={0}
-                      bottom={0}
-                      bg="blue.500/30"
-                      display="flex"
-                      alignItems="start"
-                      justifyContent="end"
-                    >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    bg={isSelected ? 'cyan.500/30' : ''}
+                    _hover={isSelected ? {} : { bg: 'blue.600/40' }}
+                    display="flex"
+                    alignItems="start"
+                    justifyContent="end"
+                  >
+                    {isSelected && (
                       <Icon fontSize="4xl" color="green.600">
                         <MdCheckCircle />
                       </Icon>
-                    </Box>
-                  </Show>
+                    )}
+                  </Box>
                 </Box>
               );
             })}
