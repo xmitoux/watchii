@@ -130,8 +130,8 @@ export const EpisodePostSelectDialog = ({
                     bg={isSelected ? 'cyan.500/30' : ''}
                     _hover={isSelected ? {} : { bg: 'blue.600/40' }}
                     display="flex"
-                    alignItems="start"
-                    justifyContent="end"
+                    alignItems="center"
+                    justifyContent="center"
                   >
                     {isSelected && (
                       <Icon fontSize="4xl" color="green.600">

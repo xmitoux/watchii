@@ -1,6 +1,6 @@
 import NextImage from 'next/image';
 import { useState } from 'react';
-import { MdBook, MdCheckCircle, MdMenuBook, MdPhotoAlbum } from 'react-icons/md';
+import { MdBook, MdCheckCircle, MdClose, MdMenuBook, MdPhotoAlbum } from 'react-icons/md';
 import useSWRMutation from 'swr/mutation';
 
 import { Box, Field, Fieldset, Flex, HStack, Icon, Input, Show, Text } from '@repo/ui/chakra-ui';
@@ -52,16 +52,28 @@ export default function EpisodesCreate() {
     }
   }
 
+  /** 選択中のエピソードPostを削除 */
+  function removeSelectedPost(postId: number, e: React.MouseEvent<HTMLButtonElement>) {
+    setSelectedPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+
+    if (postId === selectedThumbanailPostId) {
+      // 削除された画像がサムネイル設定選択されていた場合はその選択状態も解除
+      setSelectedThumbanailPostId(null);
+    }
+
+    e.stopPropagation();
+  }
+
   /** プレビュー画像クリック処理 */
-  const handlePreviewClick = (postId: number) => {
+  function handlePreviewClick(postId: number) {
     // サムネイル設定選択状態をトグル
     setSelectedThumbanailPostId(prevId => prevId === postId ? null : postId);
-  };
+  }
 
   /** フォームバリデーション */
-  const validateForm = () => {
+  function validateForm() {
     return !!episodeTitle.trim() && selectedPosts.length > 0 && selectedThumbanailPostId !== null;
-  };
+  }
 
   const { trigger, isMutating } = useSWRMutation('/api/episodes/create', createEpisode);
 
@@ -161,16 +173,40 @@ export default function EpisodesCreate() {
                         right={0}
                         bottom={0}
                         bg={isSelected ? 'cyan.500/30' : ''}
-                        _hover={isSelected ? {} : { bg: 'blue.600/40' }}
+                        _hover={!isSelected ? { bg: 'blue.600/40' } : {}}
                         display="flex"
-                        alignItems="start"
-                        justifyContent="end"
+                        alignItems="center"
+                        justifyContent="center"
                       >
                         {isSelected && (
                           <Icon fontSize="4xl" color="green.600">
                             <MdCheckCircle />
                           </Icon>
                         )}
+                      </Box>
+
+                      {/* エピソードPost削除ボタン */}
+                      <Box
+                        width="20px"
+                        height="20px"
+                        position="absolute"
+                        top={0}
+                        right={11}
+                      >
+                        <Button
+                          size="lg"
+                          variant="plain"
+                          color="red.500"
+                          transition="transform 0.2s"
+                          _hover={{
+                            transform: 'scale(1.4)',
+                          }}
+                          onClick={e => removeSelectedPost(post.id, e)}
+                        >
+                          <Icon size="xl">
+                            <MdClose />
+                          </Icon>
+                        </Button>
                       </Box>
                     </Box>
                   );
