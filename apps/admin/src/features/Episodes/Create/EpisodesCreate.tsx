@@ -81,7 +81,7 @@ export default function EpisodesCreate() {
         type: 'success',
       });
 
-      setEpisodeTitle('');
+      resetForm();
     }
     catch {
       toaster.create({
@@ -89,6 +89,13 @@ export default function EpisodesCreate() {
         type: 'error',
       });
     }
+  }
+
+  /** フォームをリセットする */
+  function resetForm() {
+    setEpisodeTitle('');
+    setSelectedPosts([]);
+    setSelectedThumbanailPostId(null);
   }
 
   return (
