@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { PostsFindAllRequestDto } from './dto/posts.dto';
-import { PostFindAllResponseEntity } from './entities/post.entity';
+import { PostsFindAllRequestDto, PostsFindEpisodeTargetsRequestDto } from './dto/posts.dto';
+import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -65,6 +65,39 @@ export class PostsService {
         imageUrl: true,
         postedAt: true,
       },
+    });
+
+    return {
+      posts,
+      total,
+    };
+  }
+
+  async findEpisodeTargets(query: PostsFindEpisodeTargetsRequestDto = {}): Promise<PostsFindEpisodeTargetsResponseEntity> {
+    const {
+      limit = 12,
+      offset = 0,
+      sort = 'desc',
+    } = query;
+
+    // エピソード未設定posts全体の件数を取得(無限スクロール用)
+    const total = await this.prisma.post.count({ where: { episodeId: null } });
+
+    // エピソード未設定postsをoffset取得
+    const posts = await this.prisma.post.findMany({
+      select: {
+        id: true,
+        imageUrl: true,
+        postedAt: true,
+      },
+      where: {
+        episodeId: null,
+      },
+      orderBy: {
+        postedAt: sort,
+      },
+      take: limit,
+      skip: offset,
     });
 
     return {

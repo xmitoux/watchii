@@ -10,3 +10,5 @@ export class PostFindAllResponseEntity {
 
   total: number;
 }
+
+export class PostsFindEpisodeTargetsResponseEntity extends PostFindAllResponseEntity {}

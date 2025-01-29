@@ -43,3 +43,5 @@ export class PostsFindAllRequestDto implements PostsFindAllRequest {
   @IsOptional()
   sort?: 'asc' | 'desc';
 }
+
+export class PostsFindEpisodeTargetsRequestDto extends PostsFindAllRequestDto {}
