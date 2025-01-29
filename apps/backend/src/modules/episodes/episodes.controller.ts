@@ -3,7 +3,7 @@ import { Body, Controller, Get, Logger, Param, Post, Query } from '@nestjs/commo
 import { IdParam } from '@/common/dto/IdParam';
 
 import { EpisodeCreateRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 import { EpisodesService } from './episodes.service';
 
 @Controller('/api/episodes')
@@ -51,5 +51,13 @@ export class EpisodesController {
     this.logger.log('%o', { dto });
 
     return await this.episodesService.create(dto);
+  }
+
+  @Get('/edit-data/:id')
+  async findEditData(@Param() { id }: IdParam): Promise<EpisodeFindEditDataResponseEntity> {
+    this.logger.log('findEditData');
+    this.logger.log('%o', { id });
+
+    return this.episodesService.findEditData(id);
   }
 }

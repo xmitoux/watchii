@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { EpisodeCreateRequestDto, EpisodesFindAllRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 
 @Injectable()
 export class EpisodesService {
@@ -138,5 +138,34 @@ export class EpisodesService {
         },
       });
     });
+  }
+
+  // 編集対象データを取得する
+  async findEditData(id: number): Promise<EpisodeFindEditDataResponseEntity> {
+    const episode = await this.prisma.episode.findFirstOrThrow({
+      select: {
+        id: true,
+        title: true,
+        thumbnailPostId: true,
+        posts: {
+          select: {
+            id: true,
+            imageUrl: true,
+          },
+          orderBy: {
+            postedAt: 'desc',
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+
+    return {
+      episodeTitle: episode.title,
+      posts: episode.posts,
+      thumbnailPostId: episode.thumbnailPostId,
+    };
   }
 }
