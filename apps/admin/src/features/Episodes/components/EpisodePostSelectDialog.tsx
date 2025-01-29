@@ -44,7 +44,7 @@ export const EpisodePostSelectDialog = ({
     observerRef,
     total,
   } = useInfiniteScroll<PostFindAllResponse>({
-    baseUrl: '/api/posts/find-episode-target',
+    baseUrl: '/api/posts/episode-targets',
   });
 
   // 全投稿を結合

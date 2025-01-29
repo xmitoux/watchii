@@ -5,9 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // TODO: テストAPI
-  const apiUrl = `${process.env.API_BASE_URL}/posts`;
-  // const apiUrl = `${process.env.API_BASE_URL}/posts/find-episode-target`;
+  const apiUrl = `${process.env.API_BASE_URL}/posts/episode-targets`;
 
   const params = new URLSearchParams();
   params.append('limit', req.query.limit!.toString());
