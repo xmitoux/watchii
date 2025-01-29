@@ -2,7 +2,7 @@ import NextImage from 'next/image';
 
 import { Box, Flex, Text, VStack } from '@repo/ui/chakra-ui';
 
-import { EpisodeItem } from '../types/episodes';
+import { EpisodeItem } from '../../types/episodes';
 
 type EpisodeCardProps = {
   episode: EpisodeItem;
@@ -10,7 +10,7 @@ type EpisodeCardProps = {
   onClick: () => void;
 };
 
-export default function EpisodeCard({
+export function EpisodeCard({
   episode,
   imageWidth,
   onClick,

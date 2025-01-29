@@ -1,14 +1,12 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { EpisodeCard } from '@repo/ui/components';
 import { useInfiniteScroll } from '@repo/ui/hooks';
 import { useDeviceType } from '@repo/ui/hooks';
-import { MdTune } from '@repo/ui/icons';
+import { MdAdd } from '@repo/ui/icons';
 
-import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
 
 import type { EpisodeItem } from '@repo/ui/types';
@@ -19,20 +17,15 @@ type EpisodeFindAllResponse = {
 };
 
 export default function Episodes() {
-  // 並び順のstate
-  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
-
   const {
     data,
     error,
     isLoading,
     isLoadingMore,
-    setSize,
     observerRef,
     total,
   } = useInfiniteScroll<EpisodeFindAllResponse>({
     baseUrl: '/api/episodes',
-    sortOrder,
   });
 
   // 全投稿を結合
@@ -40,38 +33,13 @@ export default function Episodes() {
 
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  // 現在の表示設定
-  const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
-
-  const imageWidth = isMobile
-    ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '300px';
+  const imageWidth = isMobile ? '40vw' : '300px';
 
   const router = useRouter();
 
   function handleImageClick(episodeId: number) {
     router.push(`/episodes/${episodeId}`);
   }
-
-  /** 表示設定適用処理 */
-  const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
-    if (isMobile) {
-      // 表示形式を更新
-      setDisplayMode(displayMode);
-    }
-
-    // 表示順を更新
-    handleSortChange(sortOrder);
-  };
-
-  // 並び順変更時の処理
-  const handleSortChange = (newSort: SortOrder) => {
-    setSortOrder(newSort);
-    // データをリセットして最初から取得し直す
-    setSize(1);
-  };
 
   if (error) {
     return <div>エラーが発生しました</div>;
@@ -84,22 +52,13 @@ export default function Episodes() {
   return (
     <Layout
       title="エピソード一覧"
-      // 表示設定ドロワーを開くボタン
+      // 登録画面を開くボタン
       actionButton={(
-        <Button variant="plain" onClick={() => setDrawerOpen(true)}>
-          <MdTune />
+        <Button variant="plain" onClick={() => router.push('/episodes/create')}>
+          <MdAdd />
         </Button>
       )}
     >
-      {/* 表示設定ドロワー */}
-      <DisplaySettingsDrawer
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        sortOrder={sortOrder}
-        displayMode={displayMode}
-        onApplySettings={handleApplySettings}
-      />
-
       {/* エピソード一覧 */}
       <Flex
         flexWrap="wrap"
