@@ -11,6 +11,13 @@ export default async function handler(
   params.append('limit', req.query.limit!.toString());
   params.append('offset', req.query.offset!.toString());
   params.append('sort', req.query.sort!.toString());
+
+  const episodeId = req.query.episodeId;
+  if (episodeId) {
+    // episodeIdが指定されている場合(編集時)は追加
+    params.append('episodeId', episodeId.toString());
+  }
+
   const queryString = params.toString();
 
   const endpoint = `${apiUrl}?${queryString}`;

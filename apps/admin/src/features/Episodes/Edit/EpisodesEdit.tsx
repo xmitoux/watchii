@@ -194,6 +194,7 @@ export default function EpisodesEdit() {
                         width={600}
                         height={0}
                         alt="選択された画像"
+                        priority
                       />
 
                       {/* サムネイル設定選択状態のオーバーレイ */}
@@ -259,6 +260,7 @@ export default function EpisodesEdit() {
         isOpen={isEpisodeSelectDialogOpen}
         onOpenChange={e => setIsEpisodeSelectDialogOpen(e.open)}
         initialSelectedPosts={selectedPosts}
+        episodeId={Number(id)}
         onSelect={posts => handleSelectPosts(posts)}
       />
     </Layout>

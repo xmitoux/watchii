@@ -27,6 +27,7 @@ type EpisodePostSelectDialogProps = {
   isOpen: boolean;
   onOpenChange: (e: { open: boolean }) => void;
   initialSelectedPosts?: SelectedPost[];
+  episodeId?: number;
   onSelect: (selectedPosts: SelectedPost[]) => void;
 };
 
@@ -34,6 +35,7 @@ export const EpisodePostSelectDialog = ({
   isOpen,
   onOpenChange,
   initialSelectedPosts = [],
+  episodeId,
   onSelect,
 }: EpisodePostSelectDialogProps) => {
   const {
@@ -45,13 +47,14 @@ export const EpisodePostSelectDialog = ({
     total,
   } = useInfiniteScroll<PostFindAllResponse>({
     baseUrl: '/api/posts/episode-targets',
+    queryString: episodeId ? `episodeId=${episodeId}` : '',
   });
 
   // 全投稿を結合
   const allPosts = data ? data.flatMap(page => page.posts) : [];
 
   // 選択状態を管理するstate
-  const [selectedPosts, setSelectedPosts] = useState<SelectedPost[]>(initialSelectedPosts);
+  const [selectedPosts, setSelectedPosts] = useState<SelectedPost[]>([]);
 
   // ダイアログが開かれるたびに初期選択状態を反映
   useEffect(() => {
