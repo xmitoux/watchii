@@ -23,18 +23,18 @@ type EpisodeFindEditDataResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-type EpisodeCreateRequest = {
+type EpisodeUpdateRequest = {
   title: string;
   postIds: number[];
   thumbnailPostId: number;
 };
 
-async function createEpisode(
+async function updateEpisode(
   url: string,
-  { arg }: { arg: EpisodeCreateRequest },
+  { arg }: { arg: EpisodeUpdateRequest },
 ) {
   await fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -98,11 +98,11 @@ export default function EpisodesEdit() {
     return !!episodeTitle.trim() && selectedPosts.length > 0 && selectedThumbanailPostId !== null;
   }
 
-  const { trigger, isMutating } = useSWRMutation('/api/episodes/create', createEpisode);
+  const { trigger, isMutating } = useSWRMutation(`/api/episodes/update/${id}`, updateEpisode);
 
   async function handleSubmit() {
     try {
-      const request: EpisodeCreateRequest = {
+      const request: EpisodeUpdateRequest = {
         title: episodeTitle,
         postIds: selectedPosts.map(post => post.id),
         thumbnailPostId: selectedThumbanailPostId!,
@@ -111,11 +111,9 @@ export default function EpisodesEdit() {
       await trigger(request);
 
       toaster.create({
-        title: 'エピソード登録完了！🎉',
+        title: 'エピソード更新完了！🎉',
         type: 'success',
       });
-
-      resetForm();
     }
     catch {
       toaster.create({
@@ -123,13 +121,6 @@ export default function EpisodesEdit() {
         type: 'error',
       });
     }
-  }
-
-  /** フォームをリセットする */
-  function resetForm() {
-    setEpisodeTitle('');
-    setSelectedPosts([]);
-    setSelectedThumbanailPostId(null);
   }
 
   if (error) {
