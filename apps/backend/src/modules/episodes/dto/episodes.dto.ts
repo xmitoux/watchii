@@ -33,3 +33,5 @@ export class EpisodeCreateRequestDto {
   @IsNumber()
   thumbnailPostId: number;
 }
+
+export class EpisodeUpdateRequestDto extends EpisodeCreateRequestDto {}

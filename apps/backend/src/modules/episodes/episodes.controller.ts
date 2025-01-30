@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Logger, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Put, Query } from '@nestjs/common';
 
 import { IdParam } from '@/common/dto/IdParam';
 
-import { EpisodeCreateRequestDto } from './dto/episodes.dto';
+import { EpisodeCreateRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
 import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 import { EpisodesService } from './episodes.service';
 
@@ -59,5 +59,16 @@ export class EpisodesController {
     this.logger.log('%o', { id });
 
     return this.episodesService.findEditData(id);
+  }
+
+  @Put(':id')
+  async update(
+    @Param() { id }: IdParam,
+    @Body() dto: EpisodeUpdateRequestDto,
+  ): Promise<void> {
+    this.logger.log('update');
+    this.logger.log('%o', { id, dto });
+
+    return await this.episodesService.update(id, dto);
   }
 }

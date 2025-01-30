@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { EpisodeCreateRequestDto, EpisodesFindAllRequestDto } from './dto/episodes.dto';
+import { EpisodeCreateRequestDto, EpisodesFindAllRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
 import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 
 @Injectable()
@@ -167,5 +167,60 @@ export class EpisodesService {
       posts: episode.posts,
       thumbnailPostId: episode.thumbnailPostId,
     };
+  }
+
+  async update(episodeId: number, dto: EpisodeUpdateRequestDto): Promise<void> {
+    // 指定されたpostのチェック
+    const posts = await this.prisma.post.findMany({
+      where: {
+        // postIdsとthumbnailPostIdに指定されたpostが存在するかチェック
+        id: { in: [...dto.postIds, dto.thumbnailPostId] },
+        OR: [
+          // 当該エピソード以外に紐付いているpostは設定できない
+          { episodeId },
+          { episodeId: null },
+        ],
+      },
+    });
+
+    // リクエストとチェック結果の数が不一致ならエラー
+    // (存在しないpostがあるか、すでにエピソードに紐付いているpostが指定された)
+    if (posts.length !== new Set([...dto.postIds, dto.thumbnailPostId]).size) {
+      throw new Error('指定されたPostが不正です！😱');
+    }
+
+    // トランザクション内で更新処理を実行
+    await this.prisma.$transaction(async (tx) => {
+      // まずはpostとエピソードの紐付けを解除
+      await tx.post.updateMany({
+        where: {
+          episodeId,
+        },
+        data: {
+          episodeId: null,
+        },
+      });
+
+      // postとエピソードを紐付け
+      await tx.post.updateMany({
+        where: {
+          id: { in: dto.postIds },
+        },
+        data: {
+          episodeId,
+        },
+      });
+
+      // エピソードのtitleとサムネイルpostを更新
+      await tx.episode.update({
+        where: {
+          id: episodeId,
+        },
+        data: {
+          title: dto.title,
+          thumbnailPostId: dto.thumbnailPostId,
+        },
+      });
+    });
   }
 }
