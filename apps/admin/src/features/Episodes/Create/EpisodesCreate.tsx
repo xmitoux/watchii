@@ -7,7 +7,7 @@ import { Box, Field, Fieldset, Flex, HStack, Icon, Input, Show, Text } from '@re
 import { Button } from '@repo/ui/chakra-ui/button';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { useDeviceType } from '@repo/ui/hooks';
-import { SimplePost } from '@repo/ui/types';
+import { PostEntity } from '@repo/ui/types';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -36,14 +36,14 @@ export default function EpisodesCreate() {
   const [episodeTitle, setEpisodeTitle] = useState('');
 
   const [isEpisodeSelectDialogOpen, setIsEpisodeSelectDialogOpen] = useState(false);
-  const [selectedPosts, setSelectedPosts] = useState<SimplePost[]>([]);
+  const [selectedPosts, setSelectedPosts] = useState<PostEntity[]>([]);
   const [selectedThumbanailPostId, setSelectedThumbanailPostId] = useState<number | null>(null);
 
   const { isMobile } = useDeviceType();
   const imageWidth = isMobile ? '40vw' : '200px';
 
   /** エピソードPost選択処理 */
-  function handleSelectPosts(posts: SimplePost[]) {
+  function handleSelectPosts(posts: PostEntity[]) {
     setSelectedPosts(posts);
 
     if (selectedThumbanailPostId && posts.every(p => p.id !== selectedThumbanailPostId)) {

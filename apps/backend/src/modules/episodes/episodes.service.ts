@@ -151,9 +151,10 @@ export class EpisodesService {
           select: {
             id: true,
             imageUrl: true,
+            postedAt: true,
           },
           orderBy: {
-            postedAt: 'desc',
+            postedAt: 'asc',
           },
         },
       },

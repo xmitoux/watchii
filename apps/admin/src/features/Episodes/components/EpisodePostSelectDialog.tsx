@@ -14,14 +14,14 @@ import {
 import { useDeviceType } from '@repo/ui/hooks';
 import { useInfiniteScroll } from '@repo/ui/hooks';
 import { MdCheckCircle } from '@repo/ui/icons';
-import { SimplePost } from '@repo/ui/types';
+import { PostEntity } from '@repo/ui/types';
 
 type PostFindAllResponse = {
-  posts: SimplePost[];
+  posts: PostEntity[];
   total: number;
 };
 
-type SelectedPost = SimplePost;
+type SelectedPost = PostEntity;
 
 type EpisodePostSelectDialogProps = {
   isOpen: boolean;
@@ -71,7 +71,9 @@ export const EpisodePostSelectDialog = ({
   const togglePostSelection = (post: SelectedPost) => {
     setSelectedPosts((prev) => {
       const isSelected = prev.some(p => p.id === post.id);
-      return isSelected ? prev.filter(p => p.id !== post.id) : [...prev, post];
+      const filtered = isSelected ? prev.filter(p => p.id !== post.id) : [...prev, post];
+      // 選択したあとは上から投稿順に表示したいので昇順ソートする
+      return filtered.sort((a, b) => a.postedAt.localeCompare(b.postedAt));
     });
   };
 
@@ -112,7 +114,7 @@ export const EpisodePostSelectDialog = ({
                   _hover={{
                     transform: 'scale(1.02)',
                   }}
-                  onClick={() => togglePostSelection({ id: post.id, imageUrl: post.imageUrl })}
+                  onClick={() => togglePostSelection(post)}
                 >
                   <NextImage
                     style={{ width: imageWidth, height: 'auto' }}
