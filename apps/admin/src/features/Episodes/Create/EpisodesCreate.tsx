@@ -1,31 +1,17 @@
 import NextImage from 'next/image';
 import { useState } from 'react';
 import { MdBook, MdCheckCircle, MdClose, MdMenuBook, MdPhotoAlbum } from 'react-icons/md';
-import useSWRMutation from 'swr/mutation';
 
 import { Box, Field, Fieldset, Flex, HStack, Icon, Input, Show, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
+import { Toaster } from '@repo/ui/chakra-ui/toaster';
 import { useDeviceType } from '@repo/ui/hooks';
 
 import Layout from '@/components/Layout/Layout';
 
 import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
+import { useEpisodeApi } from '../hooks/useEpisodeApi';
 import { useEpisodeForm } from '../hooks/useEpisodeForm';
-import { EpisodeForm } from '../types';
-
-async function createEpisode(
-  url: string,
-  { arg }: { arg: EpisodeForm },
-) {
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-  });
-}
 
 export default function EpisodesCreate() {
   const {
@@ -46,26 +32,12 @@ export default function EpisodesCreate() {
   const { isMobile } = useDeviceType();
   const imageWidth = isMobile ? '40vw' : '200px';
 
-  const { trigger, isMutating } = useSWRMutation('/api/episodes/create', createEpisode);
+  const { saveEpisode, isSaving } = useEpisodeApi();
 
   async function handleSubmit() {
-    try {
-      const request = getFormData();
-
-      await trigger(request);
-
-      toaster.create({
-        title: 'エピソード登録完了！🎉',
-        type: 'success',
-      });
-
+    const success = await saveEpisode(getFormData());
+    if (success) {
       reset();
-    }
-    catch {
-      toaster.create({
-        title: 'エラーが発生しました…🥲',
-        type: 'error',
-      });
     }
   }
 
@@ -176,7 +148,7 @@ export default function EpisodesCreate() {
           </Show>
         </Fieldset.Content>
 
-        <Button disabled={!isValid} loading={isMutating} onClick={handleSubmit}>
+        <Button disabled={!isValid} loading={isSaving} onClick={handleSubmit}>
           登録する
         </Button>
       </Fieldset.Root>
