@@ -7,21 +7,16 @@ import { Box, Field, Fieldset, Flex, HStack, Icon, Input, Show, Text } from '@re
 import { Button } from '@repo/ui/chakra-ui/button';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { useDeviceType } from '@repo/ui/hooks';
-import { PostEntity } from '@repo/ui/types';
 
 import Layout from '@/components/Layout/Layout';
 
 import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
-
-type EpisodeCreateRequest = {
-  title: string;
-  postIds: number[];
-  thumbnailPostId: number;
-};
+import { useEpisodeForm } from '../hooks/useEpisodeForm';
+import { EpisodeForm } from '../types';
 
 async function createEpisode(
   url: string,
-  { arg }: { arg: EpisodeCreateRequest },
+  { arg }: { arg: EpisodeForm },
 ) {
   await fetch(url, {
     method: 'POST',
@@ -33,57 +28,29 @@ async function createEpisode(
 }
 
 export default function EpisodesCreate() {
-  const [episodeTitle, setEpisodeTitle] = useState('');
+  const {
+    episodeTitle,
+    setEpisodeTitle,
+    selectedPosts,
+    selectedThumbnailPostId,
+    handleSelectPosts,
+    removeSelectedPost,
+    handlePreviewClick,
+    isValid,
+    reset,
+    getFormData,
+  } = useEpisodeForm();
 
   const [isEpisodeSelectDialogOpen, setIsEpisodeSelectDialogOpen] = useState(false);
-  const [selectedPosts, setSelectedPosts] = useState<PostEntity[]>([]);
-  const [selectedThumbanailPostId, setSelectedThumbanailPostId] = useState<number | null>(null);
 
   const { isMobile } = useDeviceType();
   const imageWidth = isMobile ? '40vw' : '200px';
-
-  /** エピソードPost選択処理 */
-  function handleSelectPosts(posts: PostEntity[]) {
-    setSelectedPosts(posts);
-
-    if (selectedThumbanailPostId && posts.every(p => p.id !== selectedThumbanailPostId)) {
-      // エピソードPost選択解除された画像がサムネイル設定選択されていた場合はその選択状態も解除
-      setSelectedThumbanailPostId(null);
-    }
-  }
-
-  /** 選択中のエピソードPostを削除 */
-  function removeSelectedPost(postId: number, e: React.MouseEvent<HTMLButtonElement>) {
-    setSelectedPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
-
-    if (postId === selectedThumbanailPostId) {
-      // 削除された画像がサムネイル設定選択されていた場合はその選択状態も解除
-      setSelectedThumbanailPostId(null);
-    }
-
-    e.stopPropagation();
-  }
-
-  /** プレビュー画像クリック処理 */
-  function handlePreviewClick(postId: number) {
-    // サムネイル設定選択状態をトグル
-    setSelectedThumbanailPostId(prevId => prevId === postId ? null : postId);
-  }
-
-  /** フォームバリデーション */
-  function validateForm() {
-    return !!episodeTitle.trim() && selectedPosts.length > 0 && selectedThumbanailPostId !== null;
-  }
 
   const { trigger, isMutating } = useSWRMutation('/api/episodes/create', createEpisode);
 
   async function handleSubmit() {
     try {
-      const request: EpisodeCreateRequest = {
-        title: episodeTitle,
-        postIds: selectedPosts.map(post => post.id),
-        thumbnailPostId: selectedThumbanailPostId!,
-      };
+      const request = getFormData();
 
       await trigger(request);
 
@@ -92,7 +59,7 @@ export default function EpisodesCreate() {
         type: 'success',
       });
 
-      resetForm();
+      reset();
     }
     catch {
       toaster.create({
@@ -100,13 +67,6 @@ export default function EpisodesCreate() {
         type: 'error',
       });
     }
-  }
-
-  /** フォームをリセットする */
-  function resetForm() {
-    setEpisodeTitle('');
-    setSelectedPosts([]);
-    setSelectedThumbanailPostId(null);
   }
 
   return (
@@ -143,7 +103,7 @@ export default function EpisodesCreate() {
             <Box height="50vh" overflow="auto">
               <Flex justify={{ base: 'center', lg: 'start' }} gap={2} wrap="wrap">
                 {selectedPosts.map((post) => {
-                  const isSelected = post.id === selectedThumbanailPostId;
+                  const isSelected = post.id === selectedThumbnailPostId;
 
                   return (
                     <Box
@@ -216,7 +176,7 @@ export default function EpisodesCreate() {
           </Show>
         </Fieldset.Content>
 
-        <Button disabled={!validateForm()} loading={isMutating} onClick={handleSubmit}>
+        <Button disabled={!isValid} loading={isMutating} onClick={handleSubmit}>
           登録する
         </Button>
       </Fieldset.Root>

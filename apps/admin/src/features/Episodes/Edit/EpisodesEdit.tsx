@@ -14,6 +14,8 @@ import { PostEntity } from '@repo/ui/types';
 import Layout from '@/components/Layout/Layout';
 
 import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
+import { useEpisodeForm } from '../hooks/useEpisodeForm';
+import { EpisodeForm } from '../types';
 
 type EpisodeFindEditDataResponse = {
   episodeTitle: string;
@@ -23,15 +25,9 @@ type EpisodeFindEditDataResponse = {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-type EpisodeUpdateRequest = {
-  title: string;
-  postIds: number[];
-  thumbnailPostId: number;
-};
-
 async function updateEpisode(
   url: string,
-  { arg }: { arg: EpisodeUpdateRequest },
+  { arg }: { arg: EpisodeForm },
 ) {
   await fetch(url, {
     method: 'PUT',
@@ -43,11 +39,21 @@ async function updateEpisode(
 }
 
 export default function EpisodesEdit() {
-  const [episodeTitle, setEpisodeTitle] = useState('');
+  const {
+    episodeTitle,
+    setEpisodeTitle,
+    selectedPosts,
+    setSelectedPosts,
+    selectedThumbnailPostId,
+    setSelectedThumbnailPostId,
+    handleSelectPosts,
+    removeSelectedPost,
+    handlePreviewClick,
+    isValid,
+    getFormData,
+  } = useEpisodeForm();
 
   const [isEpisodeSelectDialogOpen, setIsEpisodeSelectDialogOpen] = useState(false);
-  const [selectedPosts, setSelectedPosts] = useState<PostEntity[]>([]);
-  const [selectedThumbanailPostId, setSelectedThumbanailPostId] = useState<number | null>(null);
 
   const { isMobile } = useDeviceType();
   const imageWidth = isMobile ? '40vw' : '200px';
@@ -61,52 +67,16 @@ export default function EpisodesEdit() {
     if (episode) {
       setEpisodeTitle(episode.episodeTitle);
       setSelectedPosts(episode.posts);
-      setSelectedThumbanailPostId(episode.thumbnailPostId);
+      setSelectedThumbnailPostId(episode.thumbnailPostId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episode]);
-
-  /** エピソードPost選択処理 */
-  function handleSelectPosts(posts: PostEntity[]) {
-    setSelectedPosts(posts);
-
-    if (selectedThumbanailPostId && posts.every(p => p.id !== selectedThumbanailPostId)) {
-      // エピソードPost選択解除された画像がサムネイル設定選択されていた場合はその選択状態も解除
-      setSelectedThumbanailPostId(null);
-    }
-  }
-
-  /** 選択中のエピソードPostを削除 */
-  function removeSelectedPost(postId: number, e: React.MouseEvent<HTMLButtonElement>) {
-    setSelectedPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
-
-    if (postId === selectedThumbanailPostId) {
-      // 削除された画像がサムネイル設定選択されていた場合はその選択状態も解除
-      setSelectedThumbanailPostId(null);
-    }
-
-    e.stopPropagation();
-  }
-
-  /** プレビュー画像クリック処理 */
-  function handlePreviewClick(postId: number) {
-    // サムネイル設定選択状態をトグル
-    setSelectedThumbanailPostId(prevId => prevId === postId ? null : postId);
-  }
-
-  /** フォームバリデーション */
-  function validateForm() {
-    return !!episodeTitle.trim() && selectedPosts.length > 0 && selectedThumbanailPostId !== null;
-  }
 
   const { trigger, isMutating } = useSWRMutation(`/api/episodes/update/${id}`, updateEpisode);
 
   async function handleSubmit() {
     try {
-      const request: EpisodeUpdateRequest = {
-        title: episodeTitle,
-        postIds: selectedPosts.map(post => post.id),
-        thumbnailPostId: selectedThumbanailPostId!,
-      };
+      const request = getFormData();
 
       await trigger(request);
 
@@ -165,7 +135,7 @@ export default function EpisodesEdit() {
             <Box height="50vh" overflow="auto">
               <Flex justify={{ base: 'center', lg: 'start' }} gap={2} wrap="wrap">
                 {selectedPosts.map((post) => {
-                  const isSelected = post.id === selectedThumbanailPostId;
+                  const isSelected = post.id === selectedThumbnailPostId;
 
                   return (
                     <Box
@@ -239,7 +209,7 @@ export default function EpisodesEdit() {
           </Show>
         </Fieldset.Content>
 
-        <Button disabled={!validateForm()} loading={isMutating} onClick={handleSubmit}>
+        <Button disabled={!isValid} loading={isMutating} onClick={handleSubmit}>
           更新する
         </Button>
       </Fieldset.Root>
