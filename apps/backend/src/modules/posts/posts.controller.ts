@@ -43,14 +43,16 @@ export class PostsController {
     @Query('limit') limit?: number,
     @Query('offset') offset?: number,
     @Query('sort') sort?: 'asc' | 'desc',
+    @Query('episodeId') episodeId?: number,
   ): Promise<PostsFindEpisodeTargetsResponseEntity> {
     this.logger.log('findEpisodeTargets');
-    this.logger.log('%o', { limit, offset, sort });
+    this.logger.log('%o', { limit, offset, sort, episodeId });
 
     return this.postsService.findEpisodeTargets({
       limit: limit ? Number(limit) : undefined,
       offset: offset ? Number(offset) : undefined,
       sort,
+      episodeId,
     });
   }
 }

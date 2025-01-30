@@ -78,12 +78,13 @@ export class PostsService {
       limit = 12,
       offset = 0,
       sort = 'desc',
+      episodeId = 0,
     } = query;
 
-    // エピソード未設定posts全体の件数を取得(無限スクロール用)
+    // エピソード対象posts全体の件数を取得(無限スクロール用)
     const total = await this.prisma.post.count({ where: { episodeId: null } });
 
-    // エピソード未設定postsをoffset取得
+    // エピソード対象postsをoffset取得
     const posts = await this.prisma.post.findMany({
       select: {
         id: true,
@@ -91,7 +92,12 @@ export class PostsService {
         postedAt: true,
       },
       where: {
-        episodeId: null,
+        OR: [
+        // エピソードに未設定post
+          { episodeId: null },
+          // Post編集ダイアログに含めるため、編集対象エピソードのpostも取得
+          { episodeId },
+        ],
       },
       orderBy: {
         postedAt: sort,

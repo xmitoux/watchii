@@ -28,6 +28,7 @@ type PostsFindAllRequest = {
   limit?: number;
   offset?: number;
   sort?: 'asc' | 'desc';
+  episodeId?: number;
 };
 
 export class PostsFindAllRequestDto implements PostsFindAllRequest {
@@ -42,6 +43,10 @@ export class PostsFindAllRequestDto implements PostsFindAllRequest {
   @IsString()
   @IsOptional()
   sort?: 'asc' | 'desc';
+
+  @IsNumber()
+  @IsOptional()
+  episodeId?: number;
 }
 
 export class PostsFindEpisodeTargetsRequestDto extends PostsFindAllRequestDto {}
