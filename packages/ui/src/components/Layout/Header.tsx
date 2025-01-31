@@ -1,8 +1,7 @@
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { Box, Button, Flex, Text } from '@repo/ui/chakra-ui';
-import { MdArrowBack } from '@repo/ui/icons';
+import { MdArrowBack } from 'react-icons/md';
 
 type HeaderProps = {
   title: string;

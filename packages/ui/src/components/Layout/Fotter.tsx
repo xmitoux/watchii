@@ -1,24 +1,11 @@
+import { Box, Flex } from '@chakra-ui/react';
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 
-import { Box, Flex } from '@repo/ui/chakra-ui';
-
-type NavigationItem = {
+export type NavigationItem = {
   path: string;
   activeIcon: string;
   inactiveIcon: string;
-};
-
-const homeNav: NavigationItem = {
-  path: '/',
-  activeIcon: '/icons/home-active.png',
-  inactiveIcon: '/icons/home-inactive.png',
-};
-
-const episodesNav: NavigationItem = {
-  path: '/episodes',
-  activeIcon: '/icons/home-active.png',
-  inactiveIcon: '/icons/home-inactive.png',
 };
 
 /** フッターアイコンがアクティブか判定 */
@@ -32,14 +19,13 @@ const isIconActive = (currentPath: string, targetPath: string) => {
   return currentPath.startsWith(targetPath);
 };
 
-const Footer: React.FC = () => {
+type FooterProps = {
+  navigationItems: NavigationItem[];
+};
+
+const Footer = ({ navigationItems }: FooterProps) => {
   const router = useRouter();
   const currentPath = router.pathname;
-
-  const navigationItems: NavigationItem[] = [
-    homeNav,
-    episodesNav,
-  ];
 
   return (
     <Box

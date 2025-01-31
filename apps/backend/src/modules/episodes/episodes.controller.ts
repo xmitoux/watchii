@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Logger, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Put, Query } from '@nestjs/common';
 
 import { IdParam } from '@/common/dto/IdParam';
 
-import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import { EpisodeCreateRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
+import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 import { EpisodesService } from './episodes.service';
 
 @Controller('/api/episodes')
@@ -42,5 +43,32 @@ export class EpisodesController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Post()
+  async create(@Body() dto: EpisodeCreateRequestDto): Promise<void> {
+    this.logger.log('create');
+    this.logger.log('%o', { dto });
+
+    return await this.episodesService.create(dto);
+  }
+
+  @Get('/edit-data/:id')
+  async findEditData(@Param() { id }: IdParam): Promise<EpisodeFindEditDataResponseEntity> {
+    this.logger.log('findEditData');
+    this.logger.log('%o', { id });
+
+    return this.episodesService.findEditData(id);
+  }
+
+  @Put(':id')
+  async update(
+    @Param() { id }: IdParam,
+    @Body() dto: EpisodeUpdateRequestDto,
+  ): Promise<void> {
+    this.logger.log('update');
+    this.logger.log('%o', { id, dto });
+
+    return await this.episodesService.update(id, dto);
   }
 }

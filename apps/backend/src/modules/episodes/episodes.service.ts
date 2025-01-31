@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { EpisodesFindAllRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import { EpisodeCreateRequestDto, EpisodesFindAllRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
+import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
 
 @Injectable()
 export class EpisodesService {
@@ -95,5 +95,133 @@ export class EpisodesService {
       posts: episode.posts,
       total: episode._count.posts,
     };
+  }
+
+  async create(dto: EpisodeCreateRequestDto): Promise<void> {
+    // 指定されたpostのチェック
+    const posts = await this.prisma.post.findMany({
+      where: {
+        // postIdsとthumbnailPostIdに指定されたpostが存在するかチェック
+        id: {
+          in: [...dto.postIds, dto.thumbnailPostId],
+        },
+        // すでにエピソードに紐付いているpostは設定できない
+        episodeId: null,
+      },
+    });
+
+    // リクエストとチェック結果の数が不一致ならエラー
+    // (存在しないpostがあるか、すでにエピソードに紐付いているpostが指定された)
+    if (posts.length !== new Set([...dto.postIds, dto.thumbnailPostId]).size) {
+      throw new Error('指定されたpostが不正です！😱');
+    }
+
+    // トランザクション内で作成処理を実行
+    await this.prisma.$transaction(async (tx) => {
+      // エピソードを作成
+      const createdEpisode = await tx.episode.create({
+        data: {
+          title: dto.title,
+          thumbnailPostId: dto.thumbnailPostId,
+        },
+      });
+
+      // postとエピソードを紐付け
+      await tx.post.updateMany({
+        where: {
+          id: {
+            in: dto.postIds,
+          },
+        },
+        data: {
+          episodeId: createdEpisode.id,
+        },
+      });
+    });
+  }
+
+  // 編集対象データを取得する
+  async findEditData(id: number): Promise<EpisodeFindEditDataResponseEntity> {
+    const episode = await this.prisma.episode.findFirstOrThrow({
+      select: {
+        id: true,
+        title: true,
+        thumbnailPostId: true,
+        posts: {
+          select: {
+            id: true,
+            imageUrl: true,
+            postedAt: true,
+          },
+          orderBy: {
+            postedAt: 'asc',
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+
+    return {
+      episodeTitle: episode.title,
+      posts: episode.posts,
+      thumbnailPostId: episode.thumbnailPostId,
+    };
+  }
+
+  async update(episodeId: number, dto: EpisodeUpdateRequestDto): Promise<void> {
+    // 指定されたpostのチェック
+    const posts = await this.prisma.post.findMany({
+      where: {
+        // postIdsとthumbnailPostIdに指定されたpostが存在するかチェック
+        id: { in: [...dto.postIds, dto.thumbnailPostId] },
+        OR: [
+          // 当該エピソード以外に紐付いているpostは設定できない
+          { episodeId },
+          { episodeId: null },
+        ],
+      },
+    });
+
+    // リクエストとチェック結果の数が不一致ならエラー
+    // (存在しないpostがあるか、すでにエピソードに紐付いているpostが指定された)
+    if (posts.length !== new Set([...dto.postIds, dto.thumbnailPostId]).size) {
+      throw new Error('指定されたPostが不正です！😱');
+    }
+
+    // トランザクション内で更新処理を実行
+    await this.prisma.$transaction(async (tx) => {
+      // まずはpostとエピソードの紐付けを解除
+      await tx.post.updateMany({
+        where: {
+          episodeId,
+        },
+        data: {
+          episodeId: null,
+        },
+      });
+
+      // postとエピソードを紐付け
+      await tx.post.updateMany({
+        where: {
+          id: { in: dto.postIds },
+        },
+        data: {
+          episodeId,
+        },
+      });
+
+      // エピソードのtitleとサムネイルpostを更新
+      await tx.episode.update({
+        where: {
+          id: episodeId,
+        },
+        data: {
+          title: dto.title,
+          thumbnailPostId: dto.thumbnailPostId,
+        },
+      });
+    });
   }
 }

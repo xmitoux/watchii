@@ -5,6 +5,7 @@ type UseInfiniteScrollOptions = {
   limit?: number;
   sortOrder?: string;
   baseUrl: string;
+  queryString?: string;
 };
 
 export function useInfiniteScroll<T>(
@@ -14,6 +15,7 @@ export function useInfiniteScroll<T>(
     limit = 12,
     sortOrder = 'desc',
     baseUrl,
+    queryString,
   } = options;
 
   // キー生成関数
@@ -24,7 +26,7 @@ export function useInfiniteScroll<T>(
       return null;
     }
     const offset = pageIndex * limit;
-    return `${baseUrl}?limit=${limit}&offset=${offset}&sort=${sortOrder}`;
+    return `${baseUrl}?${queryString ? `${queryString}&` : ''}limit=${limit}&offset=${offset}&sort=${sortOrder}`;
   };
 
   const fetcher = (url: string) => fetch(url).then(res => res.json());
@@ -41,7 +43,7 @@ export function useInfiniteScroll<T>(
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-      if (entry.isIntersecting && !isLoading) {
+      if (entry!.isIntersecting && !isLoading) {
         setSize(prev => prev + 1);
       }
     },

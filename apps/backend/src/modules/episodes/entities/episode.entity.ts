@@ -22,3 +22,14 @@ export class EpisodeFindOneResponseEntity {
 
   total: number;
 }
+
+export class EpisodeFindEditDataResponseEntity {
+  episodeTitle: string;
+  posts: Pick<
+    Post,
+    'id'
+    | 'imageUrl'
+  >[];
+
+  thumbnailPostId: number;
+}

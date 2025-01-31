@@ -13,9 +13,8 @@ import {
   DrawerRoot,
   DrawerTitle,
 } from '@repo/ui/chakra-ui/drawer';
+import { useDeviceType } from '@repo/ui/hooks';
 import { MdCropPortrait, MdGridView, MdOutlineFiberNew } from '@repo/ui/icons';
-
-import { useDeviceType } from '@/hooks/useDeviceType';
 
 /** 表示順 */
 export const SortOrder = {
