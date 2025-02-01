@@ -64,9 +64,10 @@ export default function Home() {
     const validFiles: File[] = [];
     const invalidFiles: File[] = [];
 
-    // ファイル名バリデーション
+    // ファイルバリデーション
     files.forEach((file) => {
-      if (regex.test(file.name)) {
+      if (regex.test(file.name) && images.every(img => img.file.name !== file.name)) {
+        // ファイル名が正しい形式、かつ選択済みのファイルと重複していなければOK
         validFiles.push(file);
       }
       else {
@@ -86,7 +87,7 @@ export default function Home() {
 
       toaster.create({
         id,
-        title: `ファイル名が不正な画像が選択されました🤔(${file.name})`,
+        title: `ファイル名が不正、または重複する画像が選択されました🚫(${file.name})`,
         type: 'error',
         action: {
           label: 'OK',
