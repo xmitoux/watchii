@@ -216,6 +216,10 @@ export default function Home() {
                   position="absolute"
                   top={1}
                   right={1}
+                  transition="transform 0.2s"
+                  _hover={{
+                    transform: 'scale(1.2)',
+                  }}
                   // 削除ボタンだけイベント有効
                   pointerEvents="auto"
                   onClick={(e) => {
