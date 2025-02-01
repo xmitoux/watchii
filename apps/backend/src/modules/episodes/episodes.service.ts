@@ -24,7 +24,7 @@ export class EpisodesService {
         title: true,
         thumbnailPost: {
           select: {
-            imageUrl: true,
+            filename: true,
           },
         },
         // エピソードに含まれるpostの件数を取得
@@ -72,7 +72,7 @@ export class EpisodesService {
         posts: {
           select: {
             id: true,
-            imageUrl: true,
+            filename: true,
           },
           orderBy: {
             postedAt: sort,
@@ -150,7 +150,7 @@ export class EpisodesService {
         posts: {
           select: {
             id: true,
-            imageUrl: true,
+            filename: true,
             postedAt: true,
           },
           orderBy: {

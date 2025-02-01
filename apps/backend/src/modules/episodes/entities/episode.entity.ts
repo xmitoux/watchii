@@ -3,7 +3,7 @@ import { Episode, Post } from '@prisma/client';
 type EpisodeEntity =
   Pick<Episode, 'id' | 'title'> &
   {
-    thumbnailPost: Pick<Post, 'imageUrl'>;
+    thumbnailPost: Pick<Post, 'filename'>;
     totalPosts: number;
   };
 
@@ -17,7 +17,7 @@ export class EpisodeFindOneResponseEntity {
   posts: Pick<
     Post,
     'id'
-    | 'imageUrl'
+    | 'filename'
   >[];
 
   total: number;
@@ -28,7 +28,7 @@ export class EpisodeFindEditDataResponseEntity {
   posts: Pick<
     Post,
     'id'
-    | 'imageUrl'
+    | 'filename'
   >[];
 
   thumbnailPostId: number;

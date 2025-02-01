@@ -29,7 +29,7 @@ export class PostsService {
           // DBに画像URLとpostedAtを登録
           return this.prisma.post.create({
             data: {
-              imageUrl: uploadedFileURL,
+              filename: uploadedFileURL,
               postedAt: new Date(postedAtList[index]),
             },
           });
@@ -62,13 +62,25 @@ export class PostsService {
       skip: offset,
       select: {
         id: true,
-        imageUrl: true,
+        filename: true,
         postedAt: true,
       },
     });
 
+    const convPost = posts.map((post) => {
+      return {
+        id: post.id,
+        filename: post.filename.replace(
+          'https://nllcsgowbqddoussovlt.supabase.co/storage/v1/object/public/post-images/',
+          '',
+        ),
+        // filename: post.filename,
+        postedAt: post.postedAt,
+      };
+    });
+
     return {
-      posts,
+      posts: convPost,
       total,
     };
   }
@@ -88,7 +100,7 @@ export class PostsService {
     const posts = await this.prisma.post.findMany({
       select: {
         id: true,
-        imageUrl: true,
+        filename: true,
         postedAt: true,
       },
       where: {

@@ -4,7 +4,7 @@ export class PostFindAllResponseEntity {
   posts: Pick<
     Post,
     'id'
-    | 'imageUrl'
+    | 'filename'
     | 'postedAt'
   >[];
 

@@ -31,6 +31,7 @@ export class FileUploadService {
         .upload(fileName, file.buffer, {
           contentType: file.mimetype,
           upsert: false,
+          cacheControl: '7200',
         });
 
       if (error) {
