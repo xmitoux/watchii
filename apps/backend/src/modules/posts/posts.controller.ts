@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Logger, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { PostsCreateRequestDto } from './dto/posts.dto';
 import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
@@ -15,11 +14,8 @@ export class PostsController {
 
   @Post()
   @UseInterceptors(FilesInterceptor('files'))
-  async create(
-    @UploadedFiles() files: Express.Multer.File[],
-    @Body() postsCreateRequestDto: PostsCreateRequestDto,
-  ) {
-    return this.postsService.create(files, postsCreateRequestDto.postedAtList);
+  async create(@UploadedFiles() files: Express.Multer.File[]) {
+    return this.postsService.create(files);
   }
 
   @Get()
