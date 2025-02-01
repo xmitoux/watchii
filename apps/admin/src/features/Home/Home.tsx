@@ -152,7 +152,7 @@ export default function Home() {
       await trigger(request);
 
       toaster.create({
-        title: 'アップロード完了',
+        title: 'Post登録完了！💾',
         type: 'success',
       });
 
@@ -160,7 +160,7 @@ export default function Home() {
     }
     catch {
       toaster.create({
-        title: 'エラーが発生しました',
+        title: 'エラーが発生しました…😫',
         type: 'error',
       });
     }
