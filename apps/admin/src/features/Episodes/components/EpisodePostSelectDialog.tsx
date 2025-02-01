@@ -118,7 +118,7 @@ export const EpisodePostSelectDialog = ({
                 >
                   <NextImage
                     src={post.filename}
-                    width={600}
+                    width={310}
                     styleWidth={imageWidth}
                     alt={post.filename}
                     priority

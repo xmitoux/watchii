@@ -28,7 +28,7 @@ export function PostGrid({
 
   const imageWidth = isMobile
     ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '300px';
+    : '350px';
 
   return (
     <>
@@ -37,7 +37,7 @@ export function PostGrid({
           <NextImage
             key={post.id}
             src={post.filename}
-            width={800}
+            width={400}
             styleWidth={imageWidth}
             alt={post.filename}
             priority

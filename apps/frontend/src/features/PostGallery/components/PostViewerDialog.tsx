@@ -29,7 +29,7 @@ export const PostViewerDialog = ({
           <Center>
             <NextImage
               src={filename}
-              width={800}
+              width={400}
               styleWidth={imageWidth}
               styleHeight={imageHeight}
               alt="拡大画像"
