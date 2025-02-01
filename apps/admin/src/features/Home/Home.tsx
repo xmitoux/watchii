@@ -192,7 +192,13 @@ export default function Home() {
       >
         {isImageSelected ? (
           // プレビュー表示
-          <Flex justify="center" gap={4} wrap="wrap">
+          <Flex
+            justify="center"
+            gap={4}
+            wrap="wrap"
+            // ドラッグ時の色変更が消えないよう子要素のイベントを無効化
+            pointerEvents="none"
+          >
             {images.map((image, index) => (
               <Box key={index} position="relative">
                 <Image
@@ -210,6 +216,8 @@ export default function Home() {
                   position="absolute"
                   top={1}
                   right={1}
+                  // 削除ボタンだけイベント有効
+                  pointerEvents="auto"
                   onClick={(e) => {
                     e.stopPropagation(); // 親要素のクリックイベントを止める
                     handleRemoveImage(index);
@@ -222,7 +230,7 @@ export default function Home() {
           </Flex>
         ) : (
           // ファイル未選択時の表示
-          <VStack>
+          <VStack pointerEvents="none">
             <HStack>
               <Icon size="lg">
                 <MdAddPhotoAlternate />
