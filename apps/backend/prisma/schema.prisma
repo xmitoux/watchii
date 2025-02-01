@@ -10,7 +10,7 @@ datasource db {
 
 model Post {
   id           Int      @id @default(autoincrement())
-  imageUrl     String   @unique @map("image_url")
+  filename     String   @unique
   postedAt     DateTime @map("posted_at")
   episodeId    Int?     @map("episode_id")
   episode      Episode? @relation("EpisodePosts", fields: [episodeId], references: [id])
