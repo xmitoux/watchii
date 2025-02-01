@@ -46,7 +46,7 @@ export function EpisodeImagePreview({
                 width={310}
                 styleWidth={imageWidth}
                 alt="選択された画像"
-                priority={isSelected} // サムネイルに選択された画像は優先的に読み込む！
+                priority
               />
 
               {/* サムネイル選択状態のオーバーレイ */}
