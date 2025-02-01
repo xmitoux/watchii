@@ -2,14 +2,23 @@
 import Image from 'next/image';
 import { CSSProperties } from 'react';
 
-export type ImageLoaderProps = {
+const isProduction = process.env.NODE_ENV === 'production';
+// CDNのベースURL(本番環境用)
+const CDN_BASE_URL = process.env.NEXT_PUBLIC_CDN_BASE_URL;
+// supabaseのストレージURL(開発環境用)
+const SUPABASE_STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
+
+type ImageLoaderProps = {
   src: string;
   width: number;
 };
 
-function imageLoader({ src, width }: ImageLoaderProps) {
-  return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/w=${width},f=webp/${src}`;
-}
+// custom loader(CDNによる画像最適化URLを返す)(本番環境のみ使用)
+const imageLoader = isProduction
+  ? ({ src, width }: ImageLoaderProps) => {
+    return `${CDN_BASE_URL}/w=${width},f=webp/${src}`;
+  }
+  : undefined;
 
 export type NextImageProps = {
   src: string;
@@ -36,6 +45,10 @@ export function NextImage({
   style,
   onClick,
 }: NextImageProps) {
+  // 画像のURL
+  // (本番環境はファイル名をそのままloaderに渡しCDNのURLを作成、開発環境はsupabase URLを付与する)
+  const imageSrc = isProduction ? src : `${SUPABASE_STORAGE_URL}/${src}`;
+
   return (
     <Image
       style={{
@@ -44,13 +57,13 @@ export function NextImage({
         ...style,
       }}
       className={className}
-      src={src}
+      src={imageSrc}
       loader={imageLoader}
       width={width}
       height={height}
       alt={alt}
       priority={priority}
-      onClick={() => onClick?.(src)}
+      onClick={() => onClick?.(imageSrc)}
     />
   );
 }
