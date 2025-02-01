@@ -18,19 +18,15 @@ import Layout from '@/components/Layout/Layout';
 interface ImageData {
   file: File;
   preview: string;
-  postedAt: string;
 }
 
 async function uploadImages(
   url: string,
-  { arg }: { arg: { files: File[]; postedAtList: string[] } },
+  { arg }: { arg: { files: File[] } },
 ) {
   const formData = new FormData();
   for (const file of arg.files) {
     formData.append('files', file);
-  }
-  for (const postedAt of arg.postedAtList) {
-    formData.append('postedAtList[]', postedAt);
   }
 
   await axios.post(
@@ -51,25 +47,15 @@ export default function Home() {
       const newImages: ImageData[] = newFiles.map(file => ({
         file,
         preview: URL.createObjectURL(file),
-        postedAt: new Date().toISOString(),
       }));
       setImages(prev => [...prev, ...newImages]);
     }
-  };
-
-  const handleDateChange = (index: number, date: string) => {
-    setImages((prev) => {
-      const newImages = [...prev];
-      newImages[index].postedAt = new Date(date).toISOString();
-      return newImages;
-    });
   };
 
   const handleSubmit = async () => {
     try {
       const request = {
         files: images.map(img => img.file),
-        postedAtList: images.map(img => img.postedAt),
       };
 
       await trigger(request);
@@ -105,12 +91,6 @@ export default function Home() {
             {images.map((image, index) => (
               <Box key={index} borderRadius="md" borderWidth={1} p={4}>
                 <Image alt={`Preview ${index}`} src={image.preview} />
-                <span>投稿日時</span>
-                <Input
-                  type="datetime-local"
-                  value={new Date(image.postedAt).toISOString().slice(0, 16)}
-                  onChange={e => handleDateChange(index, e.target.value)}
-                />
               </Box>
             ))}
           </Grid>
