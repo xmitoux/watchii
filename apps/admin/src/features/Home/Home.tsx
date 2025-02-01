@@ -44,11 +44,43 @@ export default function Home() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = [...e.target.files];
-      const newImages: ImageData[] = newFiles.map(file => ({
+      const validFiles: File[] = [];
+      const invalidFiles: File[] = [];
+
+      // ファイル名バリデーション
+      const regex = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})-.*\..+$/;
+      newFiles.forEach((file) => {
+        if (regex.test(file.name)) {
+          validFiles.push(file);
+        }
+        else {
+          invalidFiles.push(file);
+        }
+      });
+
+      const newImages: ImageData[] = validFiles.map(file => ({
         file,
         preview: URL.createObjectURL(file),
       }));
       setImages(prev => [...prev, ...newImages]);
+
+      invalidFiles.forEach((file) => {
+        // トースト表示制御用ID
+        const id = 'toast' + file.name;
+
+        toaster.create({
+          id,
+          title: `ファイル名が不正な画像が選択されました！(${file.name})`,
+          type: 'error',
+          action: {
+            label: 'OK',
+            onClick: () => (console.warn(file.name)),
+          },
+        });
+
+        // トーストを表示し続ける
+        toaster.pause(id);
+      });
     }
   };
 
