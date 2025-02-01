@@ -1,6 +1,6 @@
 export type EpisodeItem = {
   id: number;
   title: string;
-  thumbnailPost: { imageUrl: string };
+  thumbnailPost: { filename: string };
   totalPosts: number;
 };

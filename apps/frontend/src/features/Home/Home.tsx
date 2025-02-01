@@ -11,7 +11,7 @@ import { PostGallery } from '@/features/PostGallery/PostGallery';
 type PostFindAllResponse = {
   posts: {
     id: number;
-    imageUrl: string;
+    filename: string;
   }[];
   total: number;
 };

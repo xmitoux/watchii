@@ -1,4 +1,3 @@
-import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { Box, Center, Flex, HStack, Icon } from '@repo/ui/chakra-ui';
@@ -11,6 +10,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@repo/ui/chakra-ui/dialog';
+import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 import { useInfiniteScroll } from '@repo/ui/hooks';
 import { MdCheckCircle } from '@repo/ui/icons';
@@ -117,11 +117,10 @@ export const EpisodePostSelectDialog = ({
                   onClick={() => togglePostSelection(post)}
                 >
                   <NextImage
-                    style={{ width: imageWidth, height: 'auto' }}
-                    src={post.imageUrl}
+                    src={post.filename}
                     width={600}
-                    height={0}
-                    alt={post.imageUrl}
+                    styleWidth={imageWidth}
+                    alt={post.filename}
                     priority
                   />
 

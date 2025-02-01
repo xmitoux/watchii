@@ -1,8 +1,8 @@
-import NextImage from 'next/image';
 import { MdCheckCircle, MdClose } from 'react-icons/md';
 
 import { Box, Flex, Icon } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
+import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 import { PostEntity } from '@repo/ui/types';
 
@@ -42,10 +42,9 @@ export function EpisodeImagePreview({
               onClick={() => onThumbnailSelect(post.id)}
             >
               <NextImage
-                style={{ width: imageWidth, height: 'auto' }}
-                src={post.imageUrl}
+                src={post.filename}
                 width={600}
-                height={0}
+                styleWidth={imageWidth}
                 alt="選択された画像"
                 priority={isSelected} // サムネイルに選択された画像は優先的に読み込む！
               />

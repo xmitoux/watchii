@@ -31,7 +31,7 @@ export class FileUploadService {
         .upload(fileName, file.buffer, {
           contentType: file.mimetype,
           upsert: false,
-          cacheControl: '7200',
+          cacheControl: '31536000', // 1年間キャッシュ
         });
 
       if (error) {

@@ -1,6 +1,5 @@
-import NextImage from 'next/image';
-
 import { Box, Flex, Text, VStack } from '@repo/ui/chakra-ui';
+import { NextImage } from '@repo/ui/components';
 
 import { EpisodeItem } from '../../types/episodes';
 
@@ -26,11 +25,10 @@ export function EpisodeCard({
       onClick={onClick}
     >
       <NextImage
-        style={{ width: imageWidth, height: 'auto' }}
-        src={episode.thumbnailPost.imageUrl}
+        src={episode.thumbnailPost.filename}
         alt={episode.title}
         width={350}
-        height={0}
+        styleWidth={imageWidth}
         priority
       />
 

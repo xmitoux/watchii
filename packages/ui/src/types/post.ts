@@ -1,10 +1,10 @@
 export type SimplePost = {
   id: number;
-  imageUrl: string;
+  filename: string;
 };
 
 export type PostEntity = {
   id: number;
-  imageUrl: string;
+  filename: string;
   postedAt: string;
 };
