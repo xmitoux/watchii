@@ -8,7 +8,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'nllcsgowbqddoussovlt.supabase.co',
+        // hostname: 'nllcsgowbqddoussovlt.supabase.co',
+        hostname: 'p2-67f1ef2b.imageflux.jp',
         port: '',
         search: '',
       },
