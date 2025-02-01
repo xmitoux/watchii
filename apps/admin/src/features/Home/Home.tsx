@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { MdAddPhotoAlternate, MdClose } from 'react-icons/md';
 import useSWRMutation from 'swr/mutation';
 
@@ -108,7 +108,7 @@ export default function Home() {
   }
 
   /** ファイルドロップイベントハンドラ */
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  function handleDrop(e: React.DragEvent) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -117,24 +117,24 @@ export default function Home() {
     if (files) {
       selectFiles([...files]);
     }
-  }, []);
+  }
 
-  const handleDrag = useCallback((e: React.DragEvent) => {
+  function handleDrag(e: React.DragEvent) {
     e.preventDefault();
     e.stopPropagation();
-  }, []);
+  }
 
-  const handleDragIn = useCallback((e: React.DragEvent) => {
+  function handleDragIn(e: React.DragEvent) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
-  }, []);
+  }
 
-  const handleDragOut = useCallback((e: React.DragEvent) => {
+  function handleDragOut(e: React.DragEvent) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-  }, []);
+  }
 
   /** ファイル削除処理 */
   function handleRemoveImage(index: number) {
