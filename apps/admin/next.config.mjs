@@ -1,5 +1,7 @@
 import withPWA from 'next-pwa';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
@@ -8,7 +10,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'nllcsgowbqddoussovlt.supabase.co',
+        hostname: isProd ? process.env.CDN_HOST : process.env.SUPABASE_HOST,
         port: '',
         search: '',
       },
@@ -22,7 +24,7 @@ const nextConfig = {
   },
   transpilePackages: ['@repo/ui'],
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: isProd,
   },
 };
 

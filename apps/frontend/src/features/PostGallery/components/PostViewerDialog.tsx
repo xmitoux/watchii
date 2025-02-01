@@ -1,23 +1,26 @@
-// post拡大表示ダイアログ
-import NextImage from 'next/image';
-
 import { Center } from '@repo/ui/chakra-ui';
 import { DialogBody, DialogContent, DialogRoot } from '@repo/ui/chakra-ui/dialog';
+// post拡大表示ダイアログ
+import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 
 type ImageViewerDialogProps = {
   isOpen: boolean;
   onOpenChange: (e: { open: boolean }) => void;
-  imageUrl: string;
+  filename: string;
 };
 
 export const PostViewerDialog = ({
   isOpen,
   onOpenChange,
-  imageUrl,
+  filename,
 }: ImageViewerDialogProps) => {
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
+  // スマホとタブレットの場合は画面幅いっぱいに拡大
+  const imageWidth = isMobile ? '90vw' : 'auto';
+  // PCの場合は画像を画面高さいっぱいに拡大
+  const imageHeight = isMobile ? 'auto' : '80vh';
 
   return (
     <DialogRoot open={isOpen} placement="center" size="xl" onOpenChange={onOpenChange}>
@@ -25,15 +28,10 @@ export const PostViewerDialog = ({
         <DialogBody>
           <Center>
             <NextImage
-              style={{
-                // スマホとタブレットの場合は画面幅いっぱいに拡大
-                width: isMobile ? '90vw' : 'auto',
-                // PCの場合は画像を画面高さいっぱいに拡大
-                height: isMobile ? 'auto' : '80vh',
-              }}
-              src={imageUrl}
-              width={800}
-              height={0}
+              src={filename}
+              width={400}
+              styleWidth={imageWidth}
+              styleHeight={imageHeight}
               alt="拡大画像"
             />
           </Center>

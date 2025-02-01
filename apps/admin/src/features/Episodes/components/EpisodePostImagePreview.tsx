@@ -1,8 +1,7 @@
-import NextImage from 'next/image';
 import { MdCheckCircle, MdClose } from 'react-icons/md';
 
-import { Box, Flex, Icon } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { Box, Flex, Icon, IconButton } from '@repo/ui/chakra-ui';
+import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 import { PostEntity } from '@repo/ui/types';
 
@@ -42,12 +41,11 @@ export function EpisodeImagePreview({
               onClick={() => onThumbnailSelect(post.id)}
             >
               <NextImage
-                style={{ width: imageWidth, height: 'auto' }}
-                src={post.imageUrl}
-                width={600}
-                height={0}
+                src={post.filename}
+                width={310}
+                styleWidth={imageWidth}
                 alt="選択された画像"
-                priority={isSelected} // サムネイルに選択された画像は優先的に読み込む！
+                priority
               />
 
               {/* サムネイル選択状態のオーバーレイ */}
@@ -71,28 +69,21 @@ export function EpisodeImagePreview({
               </Box>
 
               {/* 削除ボタン */}
-              <Box
-                width="20px"
-                height="20px"
+              <IconButton
+                rounded="full"
+                colorPalette="red"
+                size="2xs"
                 position="absolute"
-                top={0}
-                right={11}
+                top={1}
+                right={1}
+                transition="transform 0.2s"
+                _hover={{
+                  transform: 'scale(1.2)',
+                }}
+                onClick={e => onPostRemove(post.id, e)}
               >
-                <Button
-                  size="lg"
-                  variant="plain"
-                  color="red.500"
-                  transition="transform 0.2s"
-                  _hover={{
-                    transform: 'scale(1.4)',
-                  }}
-                  onClick={e => onPostRemove(post.id, e)}
-                >
-                  <Icon size="xl">
-                    <MdClose />
-                  </Icon>
-                </Button>
-              </Box>
+                <MdClose />
+              </IconButton>
             </Box>
           );
         })}

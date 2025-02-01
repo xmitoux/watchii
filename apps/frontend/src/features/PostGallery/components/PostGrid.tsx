@@ -1,7 +1,6 @@
 // post一覧グリッド
-import NextImage from 'next/image';
-
 import { Center, Flex } from '@repo/ui/chakra-ui';
+import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 import { SimplePost } from '@repo/ui/types';
 
@@ -10,7 +9,7 @@ import { DisplayMode } from '@/components/Drawer/DisplaySettingsDrawer';
 type PostGridProps = {
   posts: SimplePost[];
   displayMode: DisplayMode;
-  onImageClick: (imageUrl: string) => void;
+  onImageClick: (filename: string) => void;
   isLoadingMore?: boolean;
   observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
   hasMore?: boolean;
@@ -29,7 +28,7 @@ export function PostGrid({
 
   const imageWidth = isMobile
     ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '300px';
+    : '350px';
 
   return (
     <>
@@ -37,13 +36,12 @@ export function PostGrid({
         {posts.map(post => (
           <NextImage
             key={post.id}
-            style={{ width: imageWidth, height: 'auto' }}
-            src={post.imageUrl}
-            width={800}
-            height={0}
-            alt={post.imageUrl}
+            src={post.filename}
+            width={400}
+            styleWidth={imageWidth}
+            alt={post.filename}
             priority
-            onClick={() => onImageClick(post.imageUrl)}
+            onClick={() => onImageClick(post.filename)}
           />
         ))}
       </Flex>

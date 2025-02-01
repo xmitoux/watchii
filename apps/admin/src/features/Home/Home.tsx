@@ -1,36 +1,41 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { MdAddPhotoAlternate, MdClose } from 'react-icons/md';
 import useSWRMutation from 'swr/mutation';
 
 import {
   Box,
-  Container,
-  Grid,
+  Center,
+  Flex,
+  HStack,
+  Icon,
+  IconButton,
   Image,
   Input,
+  Text,
   VStack,
 } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
+import { useDeviceType } from '@repo/ui/hooks';
 
 import Layout from '@/components/Layout/Layout';
+
+// ファイル名バリデーション用正規表現
+const regex = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})-.*\..+$/;
 
 interface ImageData {
   file: File;
   preview: string;
-  postedAt: string;
 }
 
 async function uploadImages(
   url: string,
-  { arg }: { arg: { files: File[]; postedAtList: string[] } },
+  { arg }: { arg: { files: File[] } },
 ) {
   const formData = new FormData();
   for (const file of arg.files) {
     formData.append('files', file);
-  }
-  for (const postedAt of arg.postedAtList) {
-    formData.append('postedAtList[]', postedAt);
   }
 
   await axios.post(
@@ -41,41 +46,114 @@ async function uploadImages(
 }
 
 export default function Home() {
-  const [images, setImages] = useState<ImageData[]>([]);
-
   const { trigger, isMutating } = useSWRMutation('/api/posts/create', uploadImages);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = [...e.target.files];
-      const newImages: ImageData[] = newFiles.map(file => ({
-        file,
-        preview: URL.createObjectURL(file),
-        postedAt: new Date().toISOString(),
-      }));
-      setImages(prev => [...prev, ...newImages]);
-    }
-  };
+  const { isMobile } = useDeviceType();
+  const imageWidth = isMobile ? '40vw' : '200px';
 
-  const handleDateChange = (index: number, date: string) => {
-    setImages((prev) => {
-      const newImages = [...prev];
-      newImages[index].postedAt = new Date(date).toISOString();
-      return newImages;
+  const [images, setImages] = useState<ImageData[]>([]);
+  const isImageSelected = images.length > 0;
+
+  // ドラッグ状態管理(スタイル変更用)
+  const [isDragging, setIsDragging] = useState(false);
+  // ファイルインプット操作用ref
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /** ファイル選択処理(ファイル変更・ドロップ時) */
+  function selectFiles(files: File[]) {
+    const validFiles: File[] = [];
+    const invalidFiles: File[] = [];
+
+    // ファイルバリデーション
+    files.forEach((file) => {
+      if (regex.test(file.name) && images.every(img => img.file.name !== file.name)) {
+        // ファイル名が正しい形式、かつ選択済みのファイルと重複していなければOK
+        validFiles.push(file);
+      }
+      else {
+        invalidFiles.push(file);
+      }
     });
-  };
 
-  const handleSubmit = async () => {
+    const newImages: ImageData[] = validFiles.map(file => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+    setImages(prev => [...prev, ...newImages]);
+
+    invalidFiles.forEach((file) => {
+      // トースト表示制御用ID
+      const id = 'toast' + file.name;
+
+      toaster.create({
+        id,
+        title: `ファイル名が不正、または重複する画像が選択されました🚫(${file.name})`,
+        type: 'error',
+        action: {
+          label: 'OK',
+          onClick: () => (console.warn(file.name)),
+        },
+      });
+
+      // トーストを表示し続ける
+      toaster.pause(id);
+    });
+  }
+
+  /** ファイル変更イベントハンドラ */
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) {
+      selectFiles([...files]);
+    }
+  }
+
+  /** ファイルドロップイベントハンドラ */
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files) {
+      selectFiles([...files]);
+    }
+  }
+
+  function handleDrag(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function handleDragIn(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }
+
+  function handleDragOut(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }
+
+  /** ファイル削除処理 */
+  function handleRemoveImage(index: number) {
+    const newImages = images.filter((_, i) => i !== index);
+    setImages(newImages);
+  }
+
+  /** Post登録処理 */
+  async function handleSubmit() {
     try {
       const request = {
         files: images.map(img => img.file),
-        postedAtList: images.map(img => img.postedAt),
       };
 
       await trigger(request);
 
       toaster.create({
-        title: 'アップロード完了',
+        title: 'Post登録完了！💾',
         type: 'success',
       });
 
@@ -83,49 +161,113 @@ export default function Home() {
     }
     catch {
       toaster.create({
-        title: 'エラーが発生しました',
+        title: 'エラーが発生しました…😫',
         type: 'error',
       });
     }
-  };
-
+  }
   return (
     <Layout title="Watchii Admin">
-      <Container maxW="container.md" py={8}>
-        <VStack spaceX={6}>
-          <span>画像を選択</span>
-          <Input
-            accept="image/*"
-            multiple
-            type="file"
-            onChange={handleFileChange}
-          />
-
-          <Grid gap={4} templateColumns="repeat(2, 1fr)">
+      {/* ファイル入力エリア */}
+      <Box
+        bg={isDragging ? 'blue.400' : 'gray.500'}
+        border={isImageSelected ? 'solid' : 'dashed'}
+        borderWidth="2px"
+        borderColor={isDragging ? 'blue.300' : 'gray.200'}
+        borderRadius="md"
+        minH="30vh"
+        maxH="70vh"
+        overflow="auto"
+        p={3}
+        mb={5}
+        transition="all 0.2s"
+        cursor="pointer"
+        onDragEnter={handleDragIn}
+        onDragLeave={handleDragOut}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        {isImageSelected ? (
+          // プレビュー表示
+          <Flex
+            justify="center"
+            gap={4}
+            wrap="wrap"
+            // ドラッグ時の色変更が消えないよう子要素のイベントを無効化
+            pointerEvents="none"
+          >
             {images.map((image, index) => (
-              <Box key={index} borderRadius="md" borderWidth={1} p={4}>
-                <Image alt={`Preview ${index}`} src={image.preview} />
-                <span>投稿日時</span>
-                <Input
-                  type="datetime-local"
-                  value={new Date(image.postedAt).toISOString().slice(0, 16)}
-                  onChange={e => handleDateChange(index, e.target.value)}
+              <Box key={index} position="relative">
+                <Image
+                  src={image.preview}
+                  w={imageWidth}
+                  alt={`Preview ${index}`}
+                  borderRadius="sm"
                 />
+
+                {/* 削除ボタン */}
+                <IconButton
+                  rounded="full"
+                  colorPalette="red"
+                  size="2xs"
+                  position="absolute"
+                  top={1}
+                  right={1}
+                  transition="transform 0.2s"
+                  _hover={{
+                    transform: 'scale(1.2)',
+                  }}
+                  // 削除ボタンだけイベント有効
+                  pointerEvents="auto"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 親要素のクリックイベントを止める
+                    handleRemoveImage(index);
+                  }}
+                >
+                  <MdClose />
+                </IconButton>
               </Box>
             ))}
-          </Grid>
+          </Flex>
+        ) : (
+          // ファイル未選択時の表示
+          <Center h="30vh">
+            <VStack pointerEvents="none">
+              <HStack>
+                <Icon size="lg">
+                  <MdAddPhotoAlternate />
+                </Icon>
+                <Text fontSize="lg">ここに画像をドラッグ＆ドロップ</Text>
+              </HStack>
+              <Text fontSize="sm">または クリックしてファイルを選択</Text>
+            </VStack>
+          </Center>
+        )}
 
-          <Button
-            colorScheme="blue"
-            disabled={images.length === 0}
-            loading={isMutating}
-            onClick={handleSubmit}
-          >
-            投稿する
-          </Button>
-        </VStack>
-      </Container>
+        {/* ファイル入力用の隠し要素 */}
+        <Input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          onChange={handleFileChange}
+        />
+      </Box>
 
+      <Center>
+        <Button
+          disabled={!isImageSelected}
+          loading={isMutating}
+          w="sm"
+          onClick={handleSubmit}
+        >
+          登録する
+        </Button>
+      </Center>
+
+      {/* トースト用 */}
       <Toaster />
     </Layout>
   );

@@ -8,7 +8,7 @@ import { usePostViewerDialog } from './hooks/usePostViewerDialog';
 type PostGalleryProps = {
   posts: Array<{
     id: number;
-    imageUrl: string;
+    filename: string;
   }>;
   displayMode: DisplayMode;
   isLoadingMore?: boolean;
@@ -44,7 +44,7 @@ export const PostGallery = ({
       <PostViewerDialog
         isOpen={isViewerDialogOpen}
         onOpenChange={e => setIsImageDialogOpen(e.open)}
-        imageUrl={selectedImage}
+        filename={selectedImage}
       />
     </>
   );

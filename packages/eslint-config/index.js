@@ -44,7 +44,8 @@ const customUnicornRules = {
     'unicorn/no-single-promise-in-promise-methods': 'off',
     'unicorn/import-style': 'off',
     'unicorn/prefer-at': 'off',
-    'unicorn/no-negated-condition': 'off',    
+    'unicorn/no-negated-condition': 'off',
+    'unicorn/no-array-for-each': 'off',    
   },
 };
 

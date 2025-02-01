@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
@@ -13,34 +13,81 @@ export class PostsService {
     private fileUploadService: FileUploadService,
   ) {}
 
-  async create(files: Express.Multer.File[], postedAtList: string[]) {
+  private readonly logger = new Logger(PostsService.name);
+
+  async create(files: Express.Multer.File[]) {
+    // Supabaseにアップロードしたファイルの情報を保持する配列
+    const uploadedFiles: { filename: string; path: string }[] = [];
+
     try {
-      if (files.length !== postedAtList.length) {
-        // ファイル数と投稿日時リストの数は同じでなければならない
-        throw new Error('Files and postedAt times must have the same length');
-      }
+      const result = await this.prisma.$transaction(async (tx) => {
+        // まず全てのファイル名の形式をチェック
+        for (const file of files) {
+          this.extractPostedAtFromFilename(file.originalname);
+        }
 
-      const posts = await Promise.all(
-        files.map(async (file, index) => {
-          // Supabaseに画像をアップロード
-          const bucket = 'post-images';
-          const uploadedFileURL = await this.fileUploadService.uploadFile(file, bucket);
-
-          // DBに画像URLとpostedAtを登録
-          return this.prisma.post.create({
-            data: {
-              imageUrl: uploadedFileURL,
-              postedAt: new Date(postedAtList[index]),
-            },
+        // 全ファイルをSupabaseにアップロード
+        for (const file of files) {
+          const path = await this.fileUploadService.uploadFile(file);
+          uploadedFiles.push({
+            filename: file.originalname,
+            path,
           });
-        }),
-      );
+        }
 
-      return posts;
+        // DBに登録
+        const posts = await Promise.all(
+          uploadedFiles.map(async (uploadedFile) => {
+            const postedAt = this.extractPostedAtFromFilename(uploadedFile.filename);
+
+            return tx.post.create({
+              data: {
+                filename: uploadedFile.filename,
+                postedAt,
+              },
+            });
+          }),
+        );
+
+        return posts;
+      });
+
+      return result;
     }
     catch (error) {
-      throw new Error(`Failed to create posts: ${error.message}`);
+      // エラー発生時は、アップロード済みのファイルを一括削除！🧹
+      if (uploadedFiles.length > 0) {
+        this.logger.log('Post登録中にエラーが発生...😨 半端にアップロードされたファイルを削除します🚮');
+
+        try {
+          const paths = uploadedFiles.map(file => file.path);
+          await this.fileUploadService.deleteFiles(paths);
+
+          this.logger.log('ファイルの削除に成功しました✨️');
+        }
+        catch (cleanupError) {
+          this.logger.error(cleanupError);
+          this.logger.error('ファイルの削除に失敗しました😱 以下のファイルの手動削除が必要です…🧹');
+          this.logger.error('%o', uploadedFiles.map(f => f.path).join(', '));
+        }
+      }
+
+      throw new Error(`Post登録処理に失敗しました…🥹: ${error.message}`);
     }
+  }
+
+  // ファイル名からpostedAtを抽出する関数
+  private extractPostedAtFromFilename(filename: string): Date {
+    // ファイル名(YYYYMMDD_HHmmss-<identifier>.ext)の形式をチェック
+    const regex = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})-.*\..+$/;
+    const match = filename.match(regex);
+
+    if (!match) {
+      throw new Error(`Invalid filename format: ${filename}`);
+    }
+
+    const [_, year, month, day, hour, minute, second] = match;
+    return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
   }
 
   async findAll(query: PostsFindAllRequestDto = {}): Promise<PostFindAllResponseEntity> {
@@ -62,13 +109,25 @@ export class PostsService {
       skip: offset,
       select: {
         id: true,
-        imageUrl: true,
+        filename: true,
         postedAt: true,
       },
     });
 
+    const convPost = posts.map((post) => {
+      return {
+        id: post.id,
+        filename: post.filename.replace(
+          'https://nllcsgowbqddoussovlt.supabase.co/storage/v1/object/public/post-images/',
+          '',
+        ),
+        // filename: post.filename,
+        postedAt: post.postedAt,
+      };
+    });
+
     return {
-      posts,
+      posts: convPost,
       total,
     };
   }
@@ -88,7 +147,7 @@ export class PostsService {
     const posts = await this.prisma.post.findMany({
       select: {
         id: true,
-        imageUrl: true,
+        filename: true,
         postedAt: true,
       },
       where: {

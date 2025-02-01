@@ -4,8 +4,8 @@ export const usePostViewerDialog = () => {
   const [isViewerDialogOpen, setIsImageDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
 
-  const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+  const handleImageClick = (filename: string) => {
+    setSelectedImage(filename);
     setIsImageDialogOpen(true);
   };
 
