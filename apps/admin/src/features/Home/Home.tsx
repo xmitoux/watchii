@@ -182,9 +182,6 @@ export default function Home() {
         mb={5}
         transition="all 0.2s"
         cursor="pointer"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
         onDragEnter={handleDragIn}
         onDragLeave={handleDragOut}
         onDragOver={handleDrag}
@@ -235,15 +232,17 @@ export default function Home() {
           </Flex>
         ) : (
           // ファイル未選択時の表示
-          <VStack pointerEvents="none">
-            <HStack>
-              <Icon size="lg">
-                <MdAddPhotoAlternate />
-              </Icon>
-              <Text fontSize="lg">ここに画像をドラッグ＆ドロップ</Text>
-            </HStack>
-            <Text fontSize="sm">または クリックしてファイルを選択</Text>
-          </VStack>
+          <Center h="30vh">
+            <VStack pointerEvents="none">
+              <HStack>
+                <Icon size="lg">
+                  <MdAddPhotoAlternate />
+                </Icon>
+                <Text fontSize="lg">ここに画像をドラッグ＆ドロップ</Text>
+              </HStack>
+              <Text fontSize="sm">または クリックしてファイルを選択</Text>
+            </VStack>
+          </Center>
         )}
 
         {/* ファイル入力用の隠し要素 */}
