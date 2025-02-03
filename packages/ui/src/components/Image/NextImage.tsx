@@ -54,6 +54,7 @@ export function NextImage({
       style={{
         width: styleWidth,
         height: styleHeight,
+        objectFit: 'contain',
         ...style,
       }}
       className={className}
