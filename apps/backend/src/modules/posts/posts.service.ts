@@ -20,21 +20,21 @@ export class PostsService {
     const uploadedFiles: { filename: string; path: string }[] = [];
 
     try {
+      // まず全てのファイル名の形式をチェック
+      for (const file of files) {
+        this.extractPostedAtFromFilename(file.originalname);
+      }
+
+      // 全ファイルをSupabaseにアップロード
+      for (const file of files) {
+        const path = await this.fileUploadService.uploadFile(file);
+        uploadedFiles.push({
+          filename: file.originalname,
+          path,
+        });
+      }
+
       const result = await this.prisma.$transaction(async (tx) => {
-        // まず全てのファイル名の形式をチェック
-        for (const file of files) {
-          this.extractPostedAtFromFilename(file.originalname);
-        }
-
-        // 全ファイルをSupabaseにアップロード
-        for (const file of files) {
-          const path = await this.fileUploadService.uploadFile(file);
-          uploadedFiles.push({
-            filename: file.originalname,
-            path,
-          });
-        }
-
         // DBに登録
         const posts = await Promise.all(
           uploadedFiles.map(async (uploadedFile) => {
@@ -50,6 +50,9 @@ export class PostsService {
         );
 
         return posts;
+      }, {
+        // トランザクションがタイムアウトするようなら伸ばす(未設定だと5秒っぽい)
+        // timeout: 10000,
       });
 
       return result;
