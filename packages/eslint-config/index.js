@@ -45,7 +45,8 @@ const customUnicornRules = {
     'unicorn/import-style': 'off',
     'unicorn/prefer-at': 'off',
     'unicorn/no-negated-condition': 'off',
-    'unicorn/no-array-for-each': 'off',    
+    'unicorn/no-array-for-each': 'off',
+    'unicorn/numeric-separators-style': 'off',
   },
 };
 
