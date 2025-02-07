@@ -22,7 +22,7 @@ export default function EpisodeDetail() {
   const { id } = router.query;
 
   // 並び順のstate
-  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
 
   const {
     data,

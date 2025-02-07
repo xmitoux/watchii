@@ -20,7 +20,7 @@ type EpisodeFindAllResponse = {
 
 export default function Episodes() {
   // 並び順のstate
-  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
 
   const {
     data,
