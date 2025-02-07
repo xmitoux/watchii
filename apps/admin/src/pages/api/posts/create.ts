@@ -17,7 +17,13 @@ export default async function handler(
       const { data } = await axios.post(
         apiUrl,
         req,
-        { headers: { 'Content-Type': req.headers['content-type'] } },
+        {
+          headers: {
+            'Content-Type': req.headers['content-type'],
+          },
+          // タイムアウト時間を長めに設定(Post登録APIに上げる枚数が多いとタイムアウトするため)
+          timeout: 30000,
+        },
       );
 
       return res.status(201).json(data);

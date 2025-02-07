@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import * as express from 'express';
 import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app.module';
@@ -28,6 +29,14 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalFilters(new HttpExceptionFilter(), new PrismaClientValidationFilter());
+
+  // リクエストボディのサイズ制限を10MBに設定
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+  // タイムアウト時間を長めに設定(Post登録APIに上げる枚数が多いとタイムアウトするため)
+  const server = app.getHttpServer();
+  server.setTimeout(30000);
 
   const port = process.env.PORT ?? 3001;
 
