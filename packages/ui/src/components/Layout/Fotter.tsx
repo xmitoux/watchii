@@ -30,7 +30,7 @@ const Footer = ({ navigationItems }: FooterProps) => {
   return (
     <Box
       backgroundColor="blue.300"
-      height="60px"
+      height="70px"
       position="fixed"
       bottom="0"
       left="0"

@@ -33,7 +33,7 @@ export const Layout: React.FC<LayoutProps> = ({
         position="absolute"
         top="0"
         // フッターの高さ分上げる(iPhoneのホームバーを考慮)
-        bottom={{ base: 'calc(60px + env(safe-area-inset-bottom))', md: '60px' }}
+        bottom={{ base: 'calc(90px + env(safe-area-inset-bottom))', md: '90px' }}
         left="0"
         right="0"
         overflowY="auto"
