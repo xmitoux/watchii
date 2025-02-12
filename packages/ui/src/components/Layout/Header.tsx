@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 
+import { hachi_maru_pop } from '../../utils/fonts';
+
 type HeaderProps = {
   title: string;
   actionButton?: React.ReactNode;
@@ -42,6 +44,8 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
 
   return (
     <Box
+      className={hachi_maru_pop.className}
+      fontWeight={600}
       backgroundColor="blue.300"
       position="fixed"
       top="0"

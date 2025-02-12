@@ -2,6 +2,7 @@ import { Box, Flex, Text, VStack } from '@repo/ui/chakra-ui';
 import { NextImage } from '@repo/ui/components';
 
 import { EpisodeItem } from '../../types/episodes';
+import { hachi_maru_pop } from '../../utils/fonts';
 
 type EpisodeCardProps = {
   episode: EpisodeItem;
@@ -47,9 +48,10 @@ export function EpisodeCard({
         <Flex justify="center" align="center" h="full">
           <VStack>
             <Text
+              className={hachi_maru_pop.className}
               color="white"
               fontSize="md"
-              fontWeight="bold"
+              fontWeight="600"
               textDecoration="underline"
               textDecorationThickness="2px"
               textUnderlineOffset="3px"
@@ -57,9 +59,10 @@ export function EpisodeCard({
               {episode.title}
             </Text>
             <Text
+              className={hachi_maru_pop.className}
               color="white"
               fontSize="sm"
-              fontWeight="bold"
+              fontWeight="600"
             >
               {`(全${episode.totalPosts}話)`}
             </Text>
