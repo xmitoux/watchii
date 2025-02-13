@@ -8,6 +8,7 @@ import { SimplePost } from '@repo/ui/types';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import LoadingAnimation from '@/components/Loading/LoadingAnimation';
 
 import { PostGallery } from '../PostGallery/PostGallery';
 
@@ -64,10 +65,6 @@ export default function EpisodeDetail() {
     return <div>エラーが発生しました</div>;
   }
 
-  if (isLoading) {
-    return <div>読み込み中...</div>;
-  }
-
   return (
     <Layout
       title={episodeTitle}
@@ -88,13 +85,17 @@ export default function EpisodeDetail() {
       />
 
       {/* post一覧 */}
-      <PostGallery
-        posts={allPosts}
-        displayMode={displayMode}
-        isLoadingMore={isLoadingMore}
-        observerRef={observerRef}
-        hasMore={allPosts.length < total}
-      />
+      {isLoading
+        ? <LoadingAnimation />
+        : (
+          <PostGallery
+            posts={allPosts}
+            displayMode={displayMode}
+            isLoadingMore={isLoadingMore}
+            observerRef={observerRef}
+            hasMore={allPosts.length < total}
+          />
+        )}
     </Layout>
   );
 }
