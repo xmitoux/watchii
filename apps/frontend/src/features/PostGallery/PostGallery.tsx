@@ -11,7 +11,6 @@ type PostGalleryProps = {
     filename: string;
   }>;
   displayMode: DisplayMode;
-  isLoadingMore?: boolean;
   observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
   hasMore?: boolean;
 };
@@ -19,7 +18,6 @@ type PostGalleryProps = {
 export const PostGallery = ({
   posts,
   displayMode,
-  isLoadingMore,
   observerRef,
   hasMore,
 }: PostGalleryProps) => {
@@ -36,7 +34,6 @@ export const PostGallery = ({
         posts={posts}
         displayMode={displayMode}
         onImageClick={handleImageClick}
-        isLoadingMore={isLoadingMore}
         observerRef={observerRef}
         hasMore={hasMore}
       />

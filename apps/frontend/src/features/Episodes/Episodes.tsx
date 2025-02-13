@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Center, Flex } from '@repo/ui/chakra-ui';
+import { Flex } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { EpisodeCard } from '@repo/ui/components';
 import { useInfiniteScroll } from '@repo/ui/hooks';
@@ -27,7 +27,6 @@ export default function Episodes() {
     data,
     error,
     isLoading,
-    isLoadingMore,
     setSize,
     observerRef,
     total,
@@ -116,11 +115,6 @@ export default function Episodes() {
             ))}
           </Flex>
         )}
-
-      {/* ローディング状態の表示 */}
-      {isLoadingMore && (
-        <Center p={4}>読み込み中...🔄</Center>
-      )}
 
       {/* 無限スクロール用の監視対象要素 */}
       {allEpisodes.length < total && (
