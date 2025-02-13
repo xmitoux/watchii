@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 type UseInfiniteScrollOptions = {
@@ -6,6 +6,8 @@ type UseInfiniteScrollOptions = {
   sortOrder?: string;
   baseUrl: string;
   queryString?: string;
+  threshold?: number; // スクロールのトリガー位置
+  preloadPages?: number; // 先読みするページ数
 };
 
 export function useInfiniteScroll<T>(
@@ -16,11 +18,15 @@ export function useInfiniteScroll<T>(
     sortOrder = 'desc',
     baseUrl,
     queryString,
+    threshold = 0.7, // デフォルトで70%位置でトリガー
+    preloadPages = 1, // デフォルトで1ページ先読み
   } = options;
+
+  // 先読み状態管理用
+  const preloadedPagesRef = useRef<Set<number>>(new Set());
 
   // キー生成関数
   const getKey = (pageIndex: number, previousPageData: T | null) => {
-    // previousDataのpostsやepisodesの長さをチェック
     const dataArray = previousPageData ? Object.values(previousPageData).find(element => Array.isArray(element)) : null;
     if (previousPageData && dataArray && dataArray.length < limit) {
       return null;
@@ -29,7 +35,40 @@ export function useInfiniteScroll<T>(
     return `${baseUrl}?${queryString ? `${queryString}&` : ''}limit=${limit}&offset=${offset}&sort=${sortOrder}`;
   };
 
-  const fetcher = (url: string) => fetch(url).then(res => res.json());
+  const fetcher = async (url: string) => {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // 現在のページ番号を計算
+    const offset = url.match(/offset=(\d+)/)?.[1];
+    const pageNumber = offset ? Number.parseInt(offset) / limit : 0;
+
+    // プリフェッチの実行
+    if (!preloadedPagesRef.current.has(pageNumber + 1)) {
+      const nextPages = Array.from({ length: preloadPages }, (_, i) => pageNumber + i + 1);
+
+      // 並行で次のページをプリフェッチ
+      Promise.all(
+        nextPages.map(async (page) => {
+          const offset = page * limit;
+          const nextUrl = `${baseUrl}?${queryString ? `${queryString}&` : ''}limit=${limit}&offset=${offset}&sort=${sortOrder}`;
+
+          try {
+            // プリフェッチリクエスト
+            const prefetchResponse = await fetch(nextUrl);
+            if (prefetchResponse.ok) {
+              preloadedPagesRef.current.add(page);
+            }
+          }
+          catch (error) {
+            console.warn('Prefetch failed:', error);
+          }
+        }),
+      );
+    }
+
+    return data;
+  };
 
   const {
     data,
@@ -43,7 +82,7 @@ export function useInfiniteScroll<T>(
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-      if (entry!.isIntersecting && !isLoading) {
+      if (entry?.isIntersecting && !isLoading) {
         setSize(prev => prev + 1);
       }
     },
@@ -56,13 +95,15 @@ export function useInfiniteScroll<T>(
       if (!node) { return; }
 
       const observer = new IntersectionObserver(handleObserver, {
-        rootMargin: '100px',
+        root: null,
+        rootMargin: '200px', // 検出範囲を広げる
+        threshold,
       });
 
       observer.observe(node);
       return () => observer.disconnect();
     },
-    [handleObserver],
+    [handleObserver, threshold],
   );
 
   // データ配列を見つける関数
@@ -76,6 +117,13 @@ export function useInfiniteScroll<T>(
   const isReachingEnd = lastPage && findDataArray(lastPage).length < limit;
   const isLoadingMore = isLoading || (size > 0 && data && data[size - 1] === undefined && !isReachingEnd);
   const total = data?.[0] && typeof data[0] === 'object' ? ('total' in data[0] ? (data[0] as { total: number }).total : 0) : 0;
+
+  // コンポーネントのアンマウント時にプリフェッチ状態をリセット
+  useEffect(() => {
+    return () => {
+      preloadedPagesRef.current.clear();
+    };
+  }, []);
 
   return {
     data,

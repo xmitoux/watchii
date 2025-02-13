@@ -29,7 +29,6 @@ export default function EpisodeDetail() {
     data,
     error,
     isLoading,
-    isLoadingMore,
     setSize,
     observerRef,
     total,
@@ -91,7 +90,6 @@ export default function EpisodeDetail() {
           <PostGallery
             posts={allPosts}
             displayMode={displayMode}
-            isLoadingMore={isLoadingMore}
             observerRef={observerRef}
             hasMore={allPosts.length < total}
           />

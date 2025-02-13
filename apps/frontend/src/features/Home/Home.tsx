@@ -25,7 +25,6 @@ export default function Home() {
     data,
     error,
     isLoading,
-    isLoadingMore,
     setSize,
     observerRef,
     total,
@@ -87,7 +86,6 @@ export default function Home() {
           <PostGallery
             posts={allPosts}
             displayMode={displayMode}
-            isLoadingMore={isLoadingMore}
             observerRef={observerRef}
             hasMore={allPosts.length < total}
           />
