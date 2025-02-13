@@ -1,9 +1,12 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 
+import { hachi_maru_pop } from '../../utils/fonts';
+
 export type NavigationItem = {
   path: string;
+  name: string;
   activeIcon: string;
   inactiveIcon: string;
 };
@@ -23,14 +26,14 @@ type FooterProps = {
   navigationItems: NavigationItem[];
 };
 
-const Footer = ({ navigationItems }: FooterProps) => {
+export default function Footer({ navigationItems }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
 
   return (
     <Box
       backgroundColor="blue.300"
-      height="70px"
+      height="90px"
       position="fixed"
       bottom="0"
       left="0"
@@ -40,24 +43,38 @@ const Footer = ({ navigationItems }: FooterProps) => {
       zIndex="sticky"
     >
       <Flex justify="space-around" py={2}>
-        {navigationItems.map(item => (
-          <Box
-            key={item.path}
-            p={2}
-            cursor="pointer"
-            onClick={() => router.push(item.path)}
-          >
-            <NextImage
-              alt={item.path}
-              src={isIconActive(currentPath, item.path) ? item.activeIcon : item.inactiveIcon}
-              width="24"
-              height="24"
-            />
-          </Box>
-        ))}
+        {navigationItems.map((item) => {
+          const isItemActive = isIconActive(currentPath, item.path);
+
+          return (
+            <Box
+              key={item.path}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              onClick={() => router.push(item.path)}
+            >
+              <Box py={isItemActive ? 0 : '5px'}>
+                <NextImage
+                  alt={item.path}
+                  src={isItemActive ? item.activeIcon : item.inactiveIcon}
+                  width={isItemActive ? 40 : 30}
+                  height={isItemActive ? 40 : 30}
+                />
+              </Box>
+              <Text
+                className={hachi_maru_pop.className}
+                fontSize="small"
+                fontWeight={isItemActive ? '600' : '400'}
+              >
+                {item.name}
+              </Text>
+            </Box>
+          );
+        })}
       </Flex>
     </Box>
   );
-};
-
-export default Footer;
+}
