@@ -6,6 +6,7 @@ import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import LoadingAnimation from '@/components/Loading/LoadingAnimation';
 import { PostGallery } from '@/features/PostGallery/PostGallery';
 
 type PostFindAllResponse = {
@@ -45,10 +46,6 @@ export default function Home() {
     return <div>エラーが発生しました</div>;
   }
 
-  if (isLoading) {
-    return <div>読み込み中...</div>;
-  }
-
   /** 表示設定適用処理 */
   const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
     // 表示形式を更新
@@ -84,13 +81,17 @@ export default function Home() {
       />
 
       {/* post一覧 */}
-      <PostGallery
-        posts={allPosts}
-        displayMode={displayMode}
-        isLoadingMore={isLoadingMore}
-        observerRef={observerRef}
-        hasMore={allPosts.length < total}
-      />
+      {isLoading
+        ? <LoadingAnimation />
+        : (
+          <PostGallery
+            posts={allPosts}
+            displayMode={displayMode}
+            isLoadingMore={isLoadingMore}
+            observerRef={observerRef}
+            hasMore={allPosts.length < total}
+          />
+        )}
     </Layout>
   );
 }

@@ -10,6 +10,7 @@ import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import LoadingAnimation from '@/components/Loading/LoadingAnimation';
 
 import type { EpisodeItem } from '@repo/ui/types';
 
@@ -77,10 +78,6 @@ export default function Episodes() {
     return <div>エラーが発生しました</div>;
   }
 
-  if (isLoading) {
-    return <div>読み込み中...</div>;
-  }
-
   return (
     <Layout
       title="エピソード一覧"
@@ -101,20 +98,24 @@ export default function Episodes() {
       />
 
       {/* エピソード一覧 */}
-      <Flex
-        flexWrap="wrap"
-        gap={4}
-        justify="center"
-      >
-        {allEpisodes?.map(episode => (
-          <EpisodeCard
-            key={episode.id}
-            episode={episode}
-            imageWidth={imageWidth}
-            onClick={() => handleImageClick(episode.id)}
-          />
-        ))}
-      </Flex>
+      {isLoading
+        ? <LoadingAnimation />
+        : (
+          <Flex
+            flexWrap="wrap"
+            gap={4}
+            justify="center"
+          >
+            {allEpisodes?.map(episode => (
+              <EpisodeCard
+                key={episode.id}
+                episode={episode}
+                imageWidth={imageWidth}
+                onClick={() => handleImageClick(episode.id)}
+              />
+            ))}
+          </Flex>
+        )}
 
       {/* ローディング状態の表示 */}
       {isLoadingMore && (
