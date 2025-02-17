@@ -1,3 +1,5 @@
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 
 import { Button } from '@repo/ui/chakra-ui/button';
@@ -17,33 +19,20 @@ type PostFindAllResponse = {
   total: number;
 };
 
-export default function Home() {
-  // 並び順のstate
+// コンポーネントのpropsを更新！🔄
+type HomeProps = {
+  posts: PostFindAllResponse['posts'];
+  total: number;
+  currentPage: number;
+};
+
+export default function Home({ posts, total, currentPage }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
-
-  const {
-    data,
-    error,
-    isLoading,
-    setSize,
-    observerRef,
-    total,
-  } = useInfiniteScroll<PostFindAllResponse>({
-    baseUrl: '/api/posts',
-    sortOrder,
-  });
-
-  // 全投稿を結合
-  const allPosts = data ? data.flatMap(page => page.posts) : [];
-
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // 現在の表示設定
   const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
 
-  if (error) {
-    return <div>エラーが発生しました</div>;
-  }
+  const PER_PAGE = 12;
+  const totalPages = Math.ceil(total / PER_PAGE);
 
   /** 表示設定適用処理 */
   const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
@@ -56,8 +45,6 @@ export default function Home() {
   // 並び順変更時の処理
   const handleSortChange = (newSort: SortOrder) => {
     setSortOrder(newSort);
-    // データをリセットして最初から取得し直す
-    setSize(1);
   };
 
   return (
@@ -79,17 +66,28 @@ export default function Home() {
         onApplySettings={handleApplySettings}
       />
 
+      <PostGallery
+        posts={posts}
+        displayMode={displayMode}
+      />
+
       {/* post一覧 */}
-      {isLoading
-        ? <LoadingAnimation />
-        : (
-          <PostGallery
-            posts={allPosts}
-            displayMode={displayMode}
-            observerRef={observerRef}
-            hasMore={allPosts.length < total}
-          />
-        )}
+
+      {/* ページネーション追加！👇 */}
+      <div className="flex justify-center gap-2 mt-8">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          <Link
+            key={page}
+            href={`/${page}`}
+            className={`px-4 py-2 rounded ${currentPage === page
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+          >
+            {page}
+          </Link>
+        ))}
+      </div>
     </Layout>
   );
 }
