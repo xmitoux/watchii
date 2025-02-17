@@ -1,4 +1,3 @@
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import perfectionist from 'eslint-plugin-perfectionist'
 import onlyWarn from 'eslint-plugin-only-warn';
 import typescriptParser from '@typescript-eslint/parser';
@@ -26,28 +25,6 @@ export const customIgnores = {
     '**/vendor',
     '**/dist'
   ],
-};
-
-const configUnicornRecommended = eslintPluginUnicorn.configs['flat/recommended'];
-
-/**
- * @type {import('eslint').Linter.FlatConfig}
- */
-const customUnicornRules = {
-  files: ["**/*.ts", "**/*.tsx", "**/*.mjs"],
-  rules: {
-    'unicorn/consistent-function-scoping': 'off',
-    'unicorn/filename-case': 'off',
-    'unicorn/prefer-module': 'off',
-    'unicorn/prevent-abbreviations': 'off',
-    'unicorn/no-null': 'off',
-    'unicorn/no-single-promise-in-promise-methods': 'off',
-    'unicorn/import-style': 'off',
-    'unicorn/prefer-at': 'off',
-    'unicorn/no-negated-condition': 'off',
-    'unicorn/no-array-for-each': 'off',
-    'unicorn/numeric-separators-style': 'off',
-  },
 };
 
 /**
@@ -156,8 +133,6 @@ const customStylisticRules = {
 export const eslintConfigForNext = [
   customEslintRules,
   customIgnores,
-  configUnicornRecommended,
-  customUnicornRules,
   configPerfectionist,
   configOnlyWarn,
   configStylistic,
