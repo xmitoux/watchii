@@ -53,27 +53,23 @@ export function NextImage({
   const imageSrc = isProduction ? src : `${SUPABASE_STORAGE_URL}/${src}`;
 
   return (
-    <>
-      <Image
-        style={{
-          width: styleWidth,
-          height: styleHeight,
-          objectFit: 'contain',
-          ...style,
-        }}
-        className={className}
-        src={imageSrc}
-        loader={imageLoader}
-        width={width}
-        height={height}
-        alt={alt}
-        priority={priority}
-        onClick={() => onClick?.(imageSrc)}
-        onLoad={() => {
-          setShowSkeleton(false);
-        }}
-      />
-      {showSkeleton && <Skeleton width={styleWidth} height={styleHeight} />}
-    </>
+    <Image
+      style={{
+        width: styleWidth,
+        height: styleHeight,
+        objectFit: 'contain',
+        ...style,
+      }}
+      className={className}
+      src={imageSrc}
+      loader={imageLoader}
+      width={width}
+      height={height}
+      alt={alt}
+      priority={priority}
+      onClick={() => onClick?.(imageSrc)}
+      placeholder="blur"
+      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs2rvzPwAG2gMBozM5XQAAAABJRU5ErkJggg=="
+    />
   );
 }
