@@ -61,9 +61,11 @@ export function NextImage({
         ...style,
       }}
     >
+      {showSkeleton && <Skeleton height="250px" />}
       <Image
         style={{
           objectFit: 'contain',
+          display: showSkeleton ? 'none' : 'block',
         }}
         className={className}
         src={imageSrc}
@@ -73,8 +75,7 @@ export function NextImage({
         alt={alt}
         priority={priority}
         onClick={() => onClick?.(imageSrc)}
-        placeholder="blur"
-        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs2rvzPwAG2gMBozM5XQAAAABJRU5ErkJggg=="
+        onLoad={() => setShowSkeleton(false)}
       />
     </div>
   );
