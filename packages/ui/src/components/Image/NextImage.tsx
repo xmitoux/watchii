@@ -61,7 +61,16 @@ export function NextImage({
         ...style,
       }}
     >
-      {showSkeleton && <Skeleton height="250px" />}
+      {showSkeleton && (
+        <Skeleton
+          height="250px"
+          css={{
+            '--start-color': 'colors.pink.500',
+            '--end-color': 'colors.orange.500',
+          }}
+          variant="shine"
+        />
+      )}
       <Image
         style={{
           objectFit: 'contain',
