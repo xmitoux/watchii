@@ -1,42 +1,26 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Flex } from '@repo/ui/chakra-ui';
+import { Center, Flex, HStack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
+import {
+  PaginationItems,
+  PaginationNextTrigger,
+  PaginationPrevTrigger,
+  PaginationRoot,
+} from '@repo/ui/chakra-ui/pagination';
 import { EpisodeCard } from '@repo/ui/components';
-import { useInfiniteScroll } from '@repo/ui/hooks';
 import { useDeviceType } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import LoadingAnimation from '@/components/Loading/LoadingAnimation';
 
-import type { EpisodeItem } from '@repo/ui/types';
+import { EpisodesProps } from './types';
 
-type EpisodeFindAllResponse = {
-  episodes: EpisodeItem[];
-  total: number;
-};
-
-export default function Episodes() {
+export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
   // 並び順のstate
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
-
-  const {
-    data,
-    error,
-    isLoading,
-    setSize,
-    observerRef,
-    total,
-  } = useInfiniteScroll<EpisodeFindAllResponse>({
-    baseUrl: '/api/episodes',
-    sortOrder,
-  });
-
-  // 全投稿を結合
-  const allEpisodes = data ? data.flatMap(page => page.episodes) : [];
 
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
@@ -69,13 +53,7 @@ export default function Episodes() {
   // 並び順変更時の処理
   const handleSortChange = (newSort: SortOrder) => {
     setSortOrder(newSort);
-    // データをリセットして最初から取得し直す
-    setSize(1);
   };
-
-  if (error) {
-    return <div>エラーが発生しました</div>;
-  }
 
   return (
     <Layout
@@ -97,29 +75,38 @@ export default function Episodes() {
       />
 
       {/* エピソード一覧 */}
-      {isLoading
-        ? <LoadingAnimation />
-        : (
-          <Flex
-            flexWrap="wrap"
-            gap={4}
-            justify="center"
-          >
-            {allEpisodes?.map(episode => (
-              <EpisodeCard
-                key={episode.id}
-                episode={episode}
-                imageWidth={imageWidth}
-                onClick={() => handleImageClick(episode.id)}
-              />
-            ))}
-          </Flex>
-        )}
+      <Flex
+        flexWrap="wrap"
+        gap={4}
+        justify="center"
+      >
+        {episodes?.map(episode => (
+          <EpisodeCard
+            key={episode.id}
+            episode={episode}
+            imageWidth={imageWidth}
+            onClick={() => handleImageClick(episode.id)}
+          />
+        ))}
+      </Flex>
 
-      {/* 無限スクロール用の監視対象要素 */}
-      {allEpisodes.length < total && (
-        <div ref={observerRef} style={{ height: '10px' }} />
-      )}
+      {/* ページネーション */}
+      <Center mt={4}>
+        <PaginationRoot
+          variant="solid"
+          count={total}
+          pageSize={perPage}
+          defaultPage={currentPage}
+          siblingCount={isMobile ? 0 : 2}
+          getHref={page => `/episodes/page/${page}`}
+        >
+          <HStack px={4}>
+            <PaginationPrevTrigger />
+            <PaginationItems />
+            <PaginationNextTrigger />
+          </HStack>
+        </PaginationRoot>
+      </Center>
     </Layout>
   );
 }
