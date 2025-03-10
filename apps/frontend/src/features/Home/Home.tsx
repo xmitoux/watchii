@@ -1,49 +1,29 @@
 import { useState } from 'react';
 
+import { Center, HStack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import { useInfiniteScroll } from '@repo/ui/hooks';
+import {
+  PaginationItems,
+  PaginationNextTrigger,
+  PaginationPrevTrigger,
+  PaginationRoot,
+} from '@repo/ui/chakra-ui/pagination';
+import { useDeviceType } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import LoadingAnimation from '@/components/Loading/LoadingAnimation';
-import { PostGallery } from '@/features/PostGallery/PostGallery';
+import {
+  PostGallery,
+} from '@/features/PostGallery/PostGallery';
 
-type PostFindAllResponse = {
-  posts: {
-    id: number;
-    filename: string;
-  }[];
-  total: number;
-};
+import { HomeProps } from './types/home-types';
 
-export default function Home() {
-  // 並び順のstate
+export default function Home({ posts, total, currentPage, perPage }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
-
-  const {
-    data,
-    error,
-    isLoading,
-    setSize,
-    observerRef,
-    total,
-  } = useInfiniteScroll<PostFindAllResponse>({
-    baseUrl: '/api/posts',
-    sortOrder,
-  });
-
-  // 全投稿を結合
-  const allPosts = data ? data.flatMap(page => page.posts) : [];
-
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // 現在の表示設定
   const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
-
-  if (error) {
-    return <div>エラーが発生しました</div>;
-  }
+  const { isMobile } = useDeviceType();
 
   /** 表示設定適用処理 */
   const handleApplySettings = ({ sortOrder, displayMode }: { sortOrder: SortOrder; displayMode: DisplayMode }) => {
@@ -56,8 +36,6 @@ export default function Home() {
   // 並び順変更時の処理
   const handleSortChange = (newSort: SortOrder) => {
     setSortOrder(newSort);
-    // データをリセットして最初から取得し直す
-    setSize(1);
   };
 
   return (
@@ -80,16 +58,28 @@ export default function Home() {
       />
 
       {/* post一覧 */}
-      {isLoading
-        ? <LoadingAnimation />
-        : (
-          <PostGallery
-            posts={allPosts}
-            displayMode={displayMode}
-            observerRef={observerRef}
-            hasMore={allPosts.length < total}
-          />
-        )}
+      <PostGallery
+        posts={posts}
+        displayMode={displayMode}
+      />
+
+      {/* ページネーション */}
+      <Center mt={4}>
+        <PaginationRoot
+          variant="solid"
+          count={total}
+          pageSize={perPage}
+          defaultPage={currentPage}
+          siblingCount={isMobile ? 0 : 2}
+          getHref={page => `/${page}`}
+        >
+          <HStack px={4}>
+            <PaginationPrevTrigger />
+            <PaginationItems />
+            <PaginationNextTrigger />
+          </HStack>
+        </PaginationRoot>
+      </Center>
     </Layout>
   );
 }
