@@ -40,21 +40,30 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
   // オフセット計算（何件目から取得するか）
   const offset = (page - 1) * PER_PAGE;
 
-  // 指定されたページの投稿データをAPIから取得
-  const res = await fetch(
-    `${process.env.API_BASE_URL}/episodes?limit=${PER_PAGE}&offset=${offset}`,
-  );
-  const data = await res.json();
+  try {
+    // 指定されたページの投稿データをAPIから取得
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/episodes?limit=${PER_PAGE}&offset=${offset}`,
+    );
+    const data = await res.json();
 
-  // ページコンポーネントに渡すpropsを返す
-  return {
-    props: {
-      episodes: data.episodes,
-      total: data.total,
-      currentPage: page,
-      perPage: PER_PAGE,
-    },
-  };
+    // ページコンポーネントに渡すpropsを返す
+    return {
+      props: {
+        episodes: data.episodes,
+        total: data.total,
+        currentPage: page,
+        perPage: PER_PAGE,
+      },
+      revalidate: 3600, // 1時間ごとに再ビルド
+    };
+  }
+  catch {
+    // エラーが発生した場合は404ページを表示
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default function EpisodesPage({ episodes, total, currentPage, perPage }: EpisodesProps) {

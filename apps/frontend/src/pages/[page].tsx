@@ -40,21 +40,37 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({ params }) => {
   // オフセット計算（何件目から取得するか）
   const offset = (page - 1) * PER_PAGE;
 
-  // 指定されたページの投稿データをAPIから取得
-  const res = await fetch(
-    `${process.env.API_BASE_URL}/posts?limit=${PER_PAGE}&offset=${offset}`,
-  );
-  const data = await res.json();
+  try {
+    // 指定されたページの投稿データをAPIから取得
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/posts?limit=${PER_PAGE}&offset=${offset}`,
+    );
 
-  // ページコンポーネントに渡すpropsを返す
-  return {
-    props: {
-      posts: data.posts,
-      total: data.total,
-      currentPage: page,
-      perPage: PER_PAGE,
-    },
-  };
+    if (!res.ok) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const data = await res.json();
+
+    // ページコンポーネントに渡すpropsを返す
+    return {
+      props: {
+        posts: data.posts,
+        total: data.total,
+        currentPage: page,
+        perPage: PER_PAGE,
+      },
+      revalidate: 3600, // 1時間ごとに再ビルド
+    };
+  }
+  catch {
+    // エラーが発生した場合は404ページを表示
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default function HomePage({ posts, total, currentPage, perPage }: HomeProps) {

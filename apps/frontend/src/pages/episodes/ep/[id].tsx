@@ -31,18 +31,34 @@ export const getStaticProps: GetStaticProps<EpisodeDetailProps> = async ({ param
   // URLパラメータからエピソードIDを取得
   const id = Number(params?.id);
 
-  const res = await fetch(
-    `${process.env.API_BASE_URL}/episodes/${id}?limit=1000`,
-  );
-  const data = await res.json();
+  try {
+    const res = await fetch(
+      `${process.env.API_BASE_URL}/episodes/${id}?limit=1000`,
+    );
 
-  // ページコンポーネントに渡すpropsを返す
-  return {
-    props: {
-      episodeTitle: data.episodeTitle,
-      posts: data.posts,
-    },
-  };
+    if (!res.ok) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const data = await res.json();
+
+    // ページコンポーネントに渡すpropsを返す
+    return {
+      props: {
+        episodeTitle: data.episodeTitle,
+        posts: data.posts,
+      },
+      revalidate: 3600, // 1時間ごとに再ビルド
+    };
+  }
+  catch {
+    // エラーが発生した場合は404ページを表示
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default function EpisodesPage({ episodeTitle, posts }: EpisodeDetailProps) {
