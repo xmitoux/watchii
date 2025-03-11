@@ -15,7 +15,7 @@ export class EpisodesService {
     const {
       limit = 12,
       offset = 0,
-      sort = 'desc',
+      sort = 'asc',
     } = query;
 
     const episodes = await this.prisma.episode.findMany({
@@ -62,7 +62,7 @@ export class EpisodesService {
     const {
       limit = 12,
       offset = 0,
-      sort = 'desc',
+      sort = 'asc',
     } = query;
 
     const episode = await this.prisma.episode.findFirstOrThrow({
