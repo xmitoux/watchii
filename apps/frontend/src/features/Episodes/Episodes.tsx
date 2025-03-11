@@ -36,7 +36,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
   const router = useRouter();
 
   function handleImageClick(episodeId: number) {
-    router.push(`/episodes/${episodeId}`);
+    router.push(`/episodes/ep/${episodeId}`);
   }
 
   /** 表示設定適用処理 */

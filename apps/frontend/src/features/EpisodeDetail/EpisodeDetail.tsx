@@ -1,45 +1,18 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { Button } from '@repo/ui/chakra-ui/button';
-import { useInfiniteScroll } from '@repo/ui/hooks';
 import { MdTune } from '@repo/ui/icons';
-import { SimplePost } from '@repo/ui/types';
 
 import { DisplayMode, DisplaySettingsDrawer, SortOrder } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
-import LoadingAnimation from '@/components/Loading/LoadingAnimation';
 
 import { PostGallery } from '../PostGallery/PostGallery';
 
-type EpisodeFindOneResponse = {
-  episodeTitle: string;
-  posts: SimplePost[];
-  total: number;
-};
+import { EpisodeDetailProps } from './types';
 
-export default function EpisodeDetail() {
-  const router = useRouter();
-  const { id } = router.query;
-
+export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProps) {
   // 並び順のstate
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
-
-  const {
-    data,
-    error,
-    isLoading,
-    setSize,
-    observerRef,
-    total,
-  } = useInfiniteScroll<EpisodeFindOneResponse>({
-    baseUrl: `/api/episodes/${id}`,
-    sortOrder,
-  });
-
-  const allPosts = data ? data.flatMap(page => page.posts) : [];
-  const episodeTitle = data ? data.flatMap(page => page.episodeTitle)[0] : '';
-
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // 現在の表示設定
@@ -56,13 +29,7 @@ export default function EpisodeDetail() {
   // 並び順変更時の処理
   const handleSortChange = (newSort: SortOrder) => {
     setSortOrder(newSort);
-    // データをリセットして最初から取得し直す
-    setSize(1);
   };
-
-  if (error) {
-    return <div>エラーが発生しました</div>;
-  }
 
   return (
     <Layout
@@ -84,16 +51,10 @@ export default function EpisodeDetail() {
       />
 
       {/* post一覧 */}
-      {isLoading
-        ? <LoadingAnimation />
-        : (
-          <PostGallery
-            posts={allPosts}
-            displayMode={displayMode}
-            observerRef={observerRef}
-            hasMore={allPosts.length < total}
-          />
-        )}
+      <PostGallery
+        posts={posts}
+        displayMode={displayMode}
+      />
     </Layout>
   );
 }
