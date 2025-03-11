@@ -34,7 +34,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
  * 各ページに必要なデータを取得する
  * 各ページのビルド時に実行され、ページコンポーネントにpropsとして渡すデータを準備
  */
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({ params }) => {
   // URLパラメータからページ番号を取得（デフォルトは1ページ目）
   const page = Number(params?.page) || 1;
   // オフセット計算（何件目から取得するか）
@@ -52,6 +52,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       posts: data.posts,
       total: data.total,
       currentPage: page,
+      perPage: PER_PAGE,
     },
   };
 };
