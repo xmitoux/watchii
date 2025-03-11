@@ -95,7 +95,8 @@ export function NextImage({
       )}
       <Image
         style={{
-          width: '100%',
+          width: styleWidth,
+          height: styleHeight,
           display: showSkeleton ? 'none' : 'block',
         }}
         className={className}
