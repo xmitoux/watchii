@@ -18,7 +18,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
           count={total}
           pageSize={perPage}
           defaultPage={currentPage}
-          destination=""
+          destination="/home/page"
         />
       </Center>
     </Layout>
