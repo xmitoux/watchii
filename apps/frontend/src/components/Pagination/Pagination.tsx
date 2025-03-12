@@ -29,7 +29,7 @@ export function Pagination({ count, pageSize, defaultPage, destination }: Pagina
       siblingCount={paginationSiblingCount}
       getHref={page => `${destination}/${page}`}
     >
-      <HStack px={4}>
+      <HStack gap={isMobile ? 1 : 2}>
         <PaginationPrevTrigger />
         <PaginationItems />
         <PaginationNextTrigger />
