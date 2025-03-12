@@ -6,20 +6,16 @@ import { hachi_maru_pop } from '../../utils/fonts';
 
 export type NavigationItem = {
   path: string;
+  rootPath: string;
   name: string;
   activeIcon: string;
   inactiveIcon: string;
 };
 
 /** フッターアイコンがアクティブか判定 */
-const isIconActive = (currentPath: string, targetPath: string) => {
-  if (targetPath === '/') {
-    // ホーム画面アイコンは完全一致のみ
-    return currentPath === targetPath;
-  }
-
-  // それ以外は先頭一致で判定('/episodes/[id]'など)
-  return currentPath.startsWith(targetPath);
+const isIconActive = (currentPath: string, rootPath: string) => {
+  // 現在のパスがルートパスと先頭頭一致するか('/episodes/page/[page]'など)
+  return currentPath.startsWith(rootPath);
 };
 
 type FooterProps = {
@@ -44,7 +40,7 @@ export default function Footer({ navigationItems }: FooterProps) {
     >
       <Flex justify="space-around" py={2}>
         {navigationItems.map((item) => {
-          const isItemActive = isIconActive(currentPath, item.path);
+          const isItemActive = isIconActive(currentPath, item.rootPath);
 
           return (
             <Box

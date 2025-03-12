@@ -5,6 +5,7 @@ import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 const navigationItems: NavigationItem[] = [
   {
     path: '/home/page/1',
+    rootPath: '/home',
     name: 'ホーム',
     activeIcon: '/icons/home-active.png',
     inactiveIcon: '/icons/home-inactive.png',
@@ -12,6 +13,7 @@ const navigationItems: NavigationItem[] = [
 
   {
     path: '/episodes/page/1',
+    rootPath: '/episodes',
     name: 'エピソード',
     activeIcon: '/icons/episodes-active.png',
     inactiveIcon: '/icons/episodes-inactive.png',
