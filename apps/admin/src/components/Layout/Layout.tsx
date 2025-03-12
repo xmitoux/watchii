@@ -4,7 +4,7 @@ import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 const navigationItems: NavigationItem[] = [
   {
-    path: '/',
+    path: '/home',
     name: 'Post管理',
     activeIcon: '/icons/home-active.png',
     inactiveIcon: '/icons/home-inactive.png',

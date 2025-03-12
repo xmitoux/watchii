@@ -1,5 +1,7 @@
-import Home from '@/features/Home/Home';
-
-export default function HomePage() {
-  return <Home />;
+export default function Index() {
+  if (typeof window !== 'undefined') {
+    // ホーム画面にリダイレクト
+    window.location.href = '/home';
+  }
+  return null;
 }
