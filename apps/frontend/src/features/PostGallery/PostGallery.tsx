@@ -1,5 +1,4 @@
 // post一覧コンポーネント
-import { DisplayMode } from '@/components/Drawer/DisplaySettingsDrawer';
 
 import { PostGrid } from './components/PostGrid';
 import { PostViewerDialog } from './components/PostViewerDialog';
@@ -10,14 +9,12 @@ type PostGalleryProps = {
     id: number;
     filename: string;
   }>;
-  displayMode: DisplayMode;
   observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
   hasMore?: boolean;
 };
 
 export const PostGallery = ({
   posts,
-  displayMode,
   observerRef,
   hasMore,
 }: PostGalleryProps) => {
@@ -32,7 +29,6 @@ export const PostGallery = ({
     <>
       <PostGrid
         posts={posts}
-        displayMode={displayMode}
         onImageClick={handleImageClick}
         observerRef={observerRef}
         hasMore={hasMore}

@@ -4,11 +4,8 @@ import { NextImage } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 import { SimplePost } from '@repo/ui/types';
 
-import { DisplayMode } from '@/components/Drawer/DisplaySettingsDrawer';
-
 type PostGridProps = {
   posts: SimplePost[];
-  displayMode: DisplayMode;
   onImageClick: (filename: string) => void;
   isLoadingMore?: boolean;
   observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
@@ -17,17 +14,14 @@ type PostGridProps = {
 
 export function PostGrid({
   posts,
-  displayMode,
   onImageClick,
   observerRef,
   hasMore,
 }: PostGridProps) {
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
-
-  const imageWidth = isMobile
-    ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '350px';
+  const imageWidth = isMobile ? '90vw' : 'auto';
+  const imageHeight = isMobile ? 'auto' : '80vh';
 
   return (
     <>
@@ -38,6 +32,7 @@ export function PostGrid({
             src={post.filename}
             width={400}
             styleWidth={imageWidth}
+            styleHeight={imageHeight}
             alt={post.filename}
             priority
             onClick={() => onImageClick(post.filename)}
