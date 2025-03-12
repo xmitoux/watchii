@@ -1,28 +1,35 @@
 // post一覧コンポーネント
 
-import { PostGrid } from './components/PostGrid';
+import { Flex } from '@repo/ui/chakra-ui';
+import { NextImage } from '@repo/ui/components';
+import { useDeviceType } from '@repo/ui/hooks';
+import { SimplePost } from '@repo/ui/types';
 
 type PostGalleryProps = {
-  posts: Array<{
-    id: number;
-    filename: string;
-  }>;
-  observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
-  hasMore?: boolean;
+  posts: SimplePost[];
 };
 
-export const PostGallery = ({
-  posts,
-  observerRef,
-  hasMore,
-}: PostGalleryProps) => {
+export const PostGallery = ({ posts }: PostGalleryProps) => {
+  /** モバイルデバイス(スマホ・タブレット)か */
+  const { isMobile } = useDeviceType();
+  const imageWidth = isMobile ? '90vw' : 'auto';
+  const imageHeight = isMobile ? 'auto' : '80vh';
+
   return (
     <>
-      <PostGrid
-        posts={posts}
-        observerRef={observerRef}
-        hasMore={hasMore}
-      />
+      <Flex justify="center" gap={4} flexWrap="wrap">
+        {posts.map(post => (
+          <NextImage
+            key={post.id}
+            src={post.filename}
+            width={400}
+            styleWidth={imageWidth}
+            styleHeight={imageHeight}
+            alt={post.filename}
+            priority
+          />
+        ))}
+      </Flex>
     </>
   );
 };
