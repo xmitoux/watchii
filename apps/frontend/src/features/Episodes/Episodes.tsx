@@ -11,14 +11,17 @@ import { EpisodeCard } from '@repo/ui/components';
 import { useDeviceType } from '@repo/ui/hooks';
 
 import Layout from '@/components/Layout/Layout';
+import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
-  const imageWidth = isMobile ? '90vw' : 'auto';
-  const imageHeight = isMobile ? 'auto' : '80vh';
+
+  /** ページネーションの現在ページ前後のページ番号数(スマホは幅が足りないので0) */
+  const paginationSiblingCount = isMobile ? 0 : 2;
+
+  const imageWidth = usePostImageWidth();
 
   const router = useRouter();
 
@@ -39,7 +42,6 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
             key={episode.id}
             episode={episode}
             imageWidth={imageWidth}
-            imageHeight={imageHeight}
             onClick={() => handleImageClick(episode.id)}
           />
         ))}
@@ -52,7 +54,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
           count={total}
           pageSize={perPage}
           defaultPage={currentPage}
-          siblingCount={isMobile ? 0 : 2}
+          siblingCount={paginationSiblingCount}
           getHref={page => `/episodes/page/${page}`}
         >
           <HStack px={4}>

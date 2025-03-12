@@ -7,14 +7,12 @@ import { hachi_maru_pop } from '../../utils/fonts';
 type EpisodeCardProps = {
   episode: EpisodeItem;
   imageWidth: string;
-  imageHeight: string;
   onClick: () => void;
 };
 
 export function EpisodeCard({
   episode,
   imageWidth,
-  imageHeight,
   onClick,
 }: EpisodeCardProps) {
   return (
@@ -32,7 +30,6 @@ export function EpisodeCard({
         alt={episode.title}
         width={350}
         styleWidth={imageWidth}
-        styleHeight={imageHeight}
         priority
       />
 
