@@ -1,19 +1,20 @@
-// custom loaderを使用するためのnext/iamgeのラッパーコンポーネント
 import Image from 'next/image';
-import { CSSProperties } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
+
+import { Skeleton } from '@repo/ui/chakra-ui/skeleton';
 
 const isProduction = process.env.NODE_ENV === 'production';
-// CDNのベースURL(本番環境用)
 const CDN_BASE_URL = process.env.NEXT_PUBLIC_CDN_BASE_URL;
-// supabaseのストレージURL(開発環境用)
 const SUPABASE_STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
+
+// 固定のアスペクト比 (720:1024)
+const FIXED_ASPECT_RATIO = 720 / 1024;
 
 type ImageLoaderProps = {
   src: string;
   width: number;
 };
 
-// custom loader(CDNによる画像最適化URLを返す)(本番環境のみ使用)
 const imageLoader = isProduction
   ? ({ src, width }: ImageLoaderProps) => {
     return `${CDN_BASE_URL}/w=${width},f=webp/${src}`;
@@ -45,26 +46,69 @@ export function NextImage({
   style,
   onClick,
 }: NextImageProps) {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+  const [skeletonHeight, setSkeletonHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // 画像のURL
-  // (本番環境はファイル名をそのままloaderに渡しCDNのURLを作成、開発環境はsupabase URLを付与する)
   const imageSrc = isProduction ? src : `${SUPABASE_STORAGE_URL}/${src}`;
 
+  // コンテナの幅を監視して高さを計算
+  useEffect(() => {
+    // 初回レンダリング時に計算
+    calculateHeight();
+
+    // リサイズ時にも再計算
+    const resizeObserver = new ResizeObserver(calculateHeight);
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // 幅から高さを計算する関数
+  const calculateHeight = () => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.offsetWidth;
+      // 720:1024のアスペクト比で高さを計算
+      const calculatedHeight = containerWidth / FIXED_ASPECT_RATIO;
+      setSkeletonHeight(calculatedHeight);
+    }
+  };
+
   return (
-    <Image
+    <div
+      ref={containerRef}
       style={{
         width: styleWidth,
         height: styleHeight,
-        objectFit: 'contain',
-        ...style,
       }}
-      className={className}
-      src={imageSrc}
-      loader={imageLoader}
-      width={width}
-      height={height}
-      alt={alt}
-      priority={priority}
-      onClick={() => onClick?.(imageSrc)}
-    />
+    >
+      {showSkeleton && (
+        <Skeleton
+          height={skeletonHeight > 0 ? `${skeletonHeight}px` : '200px'}
+          width="100%"
+          variant="shine"
+        />
+      )}
+      <Image
+        style={{
+          width: styleWidth,
+          height: styleHeight,
+          display: showSkeleton ? 'none' : 'block',
+        }}
+        className={className}
+        src={imageSrc}
+        loader={imageLoader}
+        width={width}
+        height={height}
+        alt={alt}
+        priority={priority}
+        onClick={() => onClick?.(imageSrc)}
+        onLoad={() => setShowSkeleton(false)}
+      />
+    </div>
   );
 }

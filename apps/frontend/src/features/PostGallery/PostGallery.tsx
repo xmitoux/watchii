@@ -1,48 +1,33 @@
 // post一覧コンポーネント
-import { DisplayMode } from '@/components/Drawer/DisplaySettingsDrawer';
 
-import { PostGrid } from './components/PostGrid';
-import { PostViewerDialog } from './components/PostViewerDialog';
-import { usePostViewerDialog } from './hooks/usePostViewerDialog';
+import { Box, Flex } from '@repo/ui/chakra-ui';
+import { NextImage } from '@repo/ui/components';
+import { SimplePost } from '@repo/ui/types';
+
+import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 
 type PostGalleryProps = {
-  posts: Array<{
-    id: number;
-    filename: string;
-  }>;
-  displayMode: DisplayMode;
-  observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
-  hasMore?: boolean;
+  posts: SimplePost[];
 };
 
-export const PostGallery = ({
-  posts,
-  displayMode,
-  observerRef,
-  hasMore,
-}: PostGalleryProps) => {
-  const {
-    isViewerDialogOpen,
-    selectedImage,
-    setIsImageDialogOpen,
-    handleImageClick,
-  } = usePostViewerDialog();
+export const PostGallery = ({ posts }: PostGalleryProps) => {
+  const imageWidth = usePostImageWidth();
 
   return (
     <>
-      <PostGrid
-        posts={posts}
-        displayMode={displayMode}
-        onImageClick={handleImageClick}
-        observerRef={observerRef}
-        hasMore={hasMore}
-      />
-
-      <PostViewerDialog
-        isOpen={isViewerDialogOpen}
-        onOpenChange={e => setIsImageDialogOpen(e.open)}
-        filename={selectedImage}
-      />
+      <Flex justify="center" gap={4} flexWrap="wrap">
+        {posts.map(post => (
+          <Box key={post.id}>
+            <NextImage
+              src={post.filename}
+              width={400}
+              styleWidth={imageWidth}
+              alt={post.filename}
+              priority
+            />
+          </Box>
+        ))}
+      </Flex>
     </>
   );
 };

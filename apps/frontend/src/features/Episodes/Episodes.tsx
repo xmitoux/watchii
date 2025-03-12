@@ -1,34 +1,16 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
-import { Center, Flex, HStack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
-import {
-  PaginationItems,
-  PaginationNextTrigger,
-  PaginationPrevTrigger,
-  PaginationRoot,
-} from '@repo/ui/chakra-ui/pagination';
+import { Center, Flex } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
-import { useDeviceType } from '@repo/ui/hooks';
-import { MdTune } from '@repo/ui/icons';
 
-import { DisplayMode, DisplaySettingsDrawer } from '@/components/Drawer/DisplaySettingsDrawer';
 import Layout from '@/components/Layout/Layout';
+import { Pagination } from '@/components/Pagination/Pagination';
+import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  /** モバイルデバイス(スマホ・タブレット)か */
-  const { isMobile } = useDeviceType();
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  // 現在の表示設定
-  const [displayMode, setDisplayMode] = useState<DisplayMode>(DisplayMode.ONE_COLUMN);
-
-  const imageWidth = isMobile
-    ? (displayMode === 'one-column' ? '90vw' : '40vw')
-    : '300px';
+  const imageWidth = usePostImageWidth();
 
   const router = useRouter();
 
@@ -36,32 +18,8 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
     router.push(`/episodes/ep/${episodeId}`);
   }
 
-  /** 表示設定適用処理 */
-  const handleApplySettings = ({ displayMode }: { displayMode: DisplayMode }) => {
-    if (isMobile) {
-      // 表示形式を更新
-      setDisplayMode(displayMode);
-    }
-  };
-
   return (
-    <Layout
-      title="エピソード一覧"
-      // 表示設定ドロワーを開くボタン
-      actionButton={(
-        <Button variant="plain" onClick={() => setDrawerOpen(true)}>
-          <MdTune />
-        </Button>
-      )}
-    >
-      {/* 表示設定ドロワー */}
-      <DisplaySettingsDrawer
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        displayMode={displayMode}
-        onApplySettings={handleApplySettings}
-      />
-
+    <Layout title="エピソード一覧">
       {/* エピソード一覧 */}
       <Flex
         flexWrap="wrap"
@@ -80,20 +38,12 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
 
       {/* ページネーション */}
       <Center mt={4}>
-        <PaginationRoot
-          variant="solid"
+        <Pagination
           count={total}
           pageSize={perPage}
           defaultPage={currentPage}
-          siblingCount={isMobile ? 0 : 2}
-          getHref={page => `/episodes/page/${page}`}
-        >
-          <HStack px={4}>
-            <PaginationPrevTrigger />
-            <PaginationItems />
-            <PaginationNextTrigger />
-          </HStack>
-        </PaginationRoot>
+          destination="/episodes/page/"
+        />
       </Center>
     </Layout>
   );

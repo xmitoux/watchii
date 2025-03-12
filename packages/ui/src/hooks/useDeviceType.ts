@@ -5,7 +5,7 @@ import { useBreakpointValue } from '@repo/ui/chakra-ui';
  * @returns デバイスタイプに関する情報を含むオブジェクト
  */
 export const useDeviceType = () => {
-  const isMobile = useBreakpointValue({ base: true, lg: false });
+  const isMobile = useBreakpointValue({ base: true, md: false, lg: false });
   const isTablet = useBreakpointValue({ base: false, md: true, lg: false });
   const isDesktop = useBreakpointValue({ base: false, lg: true });
 

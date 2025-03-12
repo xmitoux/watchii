@@ -4,14 +4,14 @@ import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 const navigationItems: NavigationItem[] = [
   {
-    path: '/',
+    path: '/1',
     name: 'ホーム',
     activeIcon: '/icons/home-active.png',
     inactiveIcon: '/icons/home-inactive.png',
   },
 
   {
-    path: '/episodes',
+    path: '/episodes/page/1',
     name: 'エピソード',
     activeIcon: '/icons/episodes-active.png',
     inactiveIcon: '/icons/episodes-inactive.png',
