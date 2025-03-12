@@ -6,7 +6,6 @@ import { SimplePost } from '@repo/ui/types';
 
 type PostGridProps = {
   posts: SimplePost[];
-  onImageClick: (filename: string) => void;
   isLoadingMore?: boolean;
   observerRef?: (node: HTMLDivElement | null) => (() => void) | undefined;
   hasMore?: boolean;
@@ -14,7 +13,6 @@ type PostGridProps = {
 
 export function PostGrid({
   posts,
-  onImageClick,
   observerRef,
   hasMore,
 }: PostGridProps) {
@@ -35,7 +33,6 @@ export function PostGrid({
             styleHeight={imageHeight}
             alt={post.filename}
             priority
-            onClick={() => onImageClick(post.filename)}
           />
         ))}
       </Flex>
