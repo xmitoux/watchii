@@ -10,9 +10,9 @@ import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  const imageWidth = usePostImageWidth();
-
   const router = useRouter();
+
+  const imageWidth = usePostImageWidth();
 
   function handleImageClick(episodeId: number) {
     router.push(`/episodes/ep/${episodeId}`);
@@ -39,10 +39,10 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       {/* ページネーション */}
       <Center mt={4}>
         <Pagination
-          count={total}
-          pageSize={perPage}
-          defaultPage={currentPage}
-          destination="/episodes/page/"
+          totalPageCount={total}
+          perPage={perPage}
+          currentPage={currentPage}
+          onPageChange={page => router.push(`/episodes/page/${page}`)}
         />
       </Center>
     </Layout>

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { HStack } from '@repo/ui/chakra-ui';
 import {
   PaginationItems,
@@ -8,26 +10,37 @@ import {
 import { useDeviceType } from '@repo/ui/hooks';
 
 type PaginationProps = {
-  count: number;
-  pageSize: number;
-  defaultPage: number;
-  destination: string;
+  totalPageCount: number;
+  perPage: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 };
 
-export function Pagination({ count, pageSize, defaultPage, destination }: PaginationProps) {
+export function Pagination({ totalPageCount, perPage, currentPage, onPageChange }: PaginationProps) {
+  const [currentPageState, setCurrentPageState] = useState(currentPage);
+
+  useEffect(() => {
+    setCurrentPageState(currentPage);
+  }, [currentPage]);
+
   const { isMobile } = useDeviceType();
   /** ページネーションの現在ページ前後のページ番号数 */
   const paginationSiblingCount = isMobile ? 1 : 2;
+
+  function handlePageChange(page: number) {
+    setCurrentPageState(page);
+    onPageChange(page);
+  }
 
   return (
     <PaginationRoot
       variant="solid"
       size={isMobile ? 'xs' : 'sm'}
-      count={count}
-      pageSize={pageSize}
-      defaultPage={defaultPage}
+      count={totalPageCount}
+      pageSize={perPage}
+      page={currentPageState}
       siblingCount={paginationSiblingCount}
-      getHref={page => `${destination}/${page}`}
+      onPageChange={e => handlePageChange(e.page)}
     >
       <HStack gap={isMobile ? 1 : 2}>
         <PaginationPrevTrigger />
