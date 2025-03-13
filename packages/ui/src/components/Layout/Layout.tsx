@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 
 import Footer, { NavigationItem } from './Footer';
 import Header from './Header';
@@ -10,6 +10,7 @@ type LayoutProps = {
   actionButton?: React.ReactNode;
   canBack?: boolean;
   footerNavigationItems: NavigationItem[];
+  scrollRef?: RefObject<HTMLDivElement | null>;
 };
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -18,6 +19,7 @@ export const Layout: React.FC<LayoutProps> = ({
   footerNavigationItems,
   actionButton,
   canBack,
+  scrollRef,
 }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -28,6 +30,7 @@ export const Layout: React.FC<LayoutProps> = ({
       />
 
       <Box
+        ref={scrollRef}
         className="scroll-container no-scrollbar"
         as="main"
         position="absolute"
