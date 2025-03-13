@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
@@ -25,6 +25,7 @@ type LayoutProps = {
   title: string;
   actionButton?: React.ReactNode;
   canBack?: boolean;
+  scrollRef?: RefObject<HTMLDivElement | null>;
 };
 
 export default function Layout({
@@ -32,6 +33,7 @@ export default function Layout({
   title,
   actionButton,
   canBack,
+  scrollRef,
 }: LayoutProps) {
   return (
     <UiLayout
@@ -39,6 +41,7 @@ export default function Layout({
       actionButton={actionButton}
       canBack={canBack}
       footerNavigationItems={navigationItems}
+      scrollRef={scrollRef}
     >
       {children}
     </UiLayout>

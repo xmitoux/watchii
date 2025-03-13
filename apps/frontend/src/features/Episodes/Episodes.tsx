@@ -4,22 +4,28 @@ import { Center, Flex } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
+import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  const imageWidth = usePostImageWidth();
-
   const router = useRouter();
+
+  const { scrollRef, pagination } = usePagination({
+    currentPage,
+    destinationPage: '/episodes/page',
+  });
+
+  const imageWidth = usePostImageWidth();
 
   function handleImageClick(episodeId: number) {
     router.push(`/episodes/ep/${episodeId}`);
   }
 
   return (
-    <Layout title="エピソード一覧">
+    <Layout title="エピソード一覧" scrollRef={scrollRef}>
       {/* エピソード一覧 */}
       <Flex
         flexWrap="wrap"
@@ -39,10 +45,10 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       {/* ページネーション */}
       <Center mt={4}>
         <Pagination
-          count={total}
-          pageSize={perPage}
-          defaultPage={currentPage}
-          destination="/episodes/page/"
+          totalPageCount={total}
+          perPage={perPage}
+          currentPage={currentPage}
+          onPageChange={pagination}
         />
       </Center>
     </Layout>
