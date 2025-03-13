@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-import Footer, { NavigationItem } from './Fotter';
+import Footer, { NavigationItem } from './Footer';
 import Header from './Header';
 
 type LayoutProps = {
