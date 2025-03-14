@@ -28,5 +28,5 @@ export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePa
     router.push(`${destinationPage}/${page}`);
   }
 
-  return { scrollRef, pagination };
+  return { pagination };
 };
