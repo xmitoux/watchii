@@ -11,6 +11,7 @@ type LayoutProps = {
   canBack?: boolean;
   footerNavigationItems: NavigationItem[];
   scrollRef?: RefObject<HTMLDivElement | null>;
+  onNavigationClick?: (item: NavigationItem) => void;
 };
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -20,6 +21,7 @@ export const Layout: React.FC<LayoutProps> = ({
   actionButton,
   canBack,
   scrollRef,
+  onNavigationClick,
 }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -46,7 +48,7 @@ export const Layout: React.FC<LayoutProps> = ({
         </Box>
       </Box>
 
-      <Footer navigationItems={footerNavigationItems} />
+      <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />
     </Box>
   );
 };

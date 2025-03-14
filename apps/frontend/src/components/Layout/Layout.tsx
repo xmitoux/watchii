@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
+
+import { useNavigationStore } from '@/stores/navigationStore';
 
 const navigationItems: NavigationItem[] = [
   {
@@ -35,6 +38,18 @@ export default function Layout({
   canBack,
   scrollRef,
 }: LayoutProps) {
+  const router = useRouter();
+  const { home } = useNavigationStore();
+
+  function handleNavigationClick(item: NavigationItem) {
+    if (item.name === 'ホーム') {
+      router.push(`/home/page/${home.currentPage}`);
+    }
+    else {
+      router.push(item.path);
+    }
+  }
+
   return (
     <UiLayout
       title={title}
@@ -42,6 +57,7 @@ export default function Layout({
       canBack={canBack}
       footerNavigationItems={navigationItems}
       scrollRef={scrollRef}
+      onNavigationClick={handleNavigationClick}
     >
       {children}
     </UiLayout>
