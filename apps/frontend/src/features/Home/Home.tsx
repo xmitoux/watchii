@@ -20,7 +20,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
     scrollRef,
   });
 
-  const { home, setHomeScrollPosition, setHomeCurrentPage } = useNavigationStore();
+  const { homeState, setHomeScrollPosition, setHomeCurrentPage } = useNavigationStore();
 
   // レンダリング時(他の画面から遷移してきた場合)の処理
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
 
     // スクロール位置を復元
     requestAnimationFrame(() => {
-      element.scrollTop = home.scrollPosition;
+      element.scrollTop = homeState.scrollPosition;
     });
 
     // スクロール位置のストア保存処理をスクロールイベントに登録

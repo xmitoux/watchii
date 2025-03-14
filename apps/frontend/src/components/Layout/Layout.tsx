@@ -39,11 +39,14 @@ export default function Layout({
   scrollRef,
 }: LayoutProps) {
   const router = useRouter();
-  const { home } = useNavigationStore();
+  const { homeState: home, episodesState } = useNavigationStore();
 
   function handleNavigationClick(item: NavigationItem) {
     if (item.name === 'ホーム') {
       router.push(`/home/page/${home.currentPage}`);
+    }
+    else if (item.name === 'エピソード') {
+      router.push(`/episodes/page/${episodesState.currentPage}`);
     }
     else {
       router.push(item.path);
