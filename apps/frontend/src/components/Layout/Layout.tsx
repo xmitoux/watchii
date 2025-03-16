@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
-import { ReactNode, RefObject } from 'react';
+import React, { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
-import { useEpisodesStore } from '@/stores/episodesStore';
-import { useHomeStore } from '@/stores/homeStore';
+import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
 
 const navigationItems: NavigationItem[] = [
   {
@@ -32,6 +31,11 @@ type LayoutProps = {
   scrollRef?: RefObject<HTMLDivElement | null>;
 };
 
+// ストアセレクタ
+const stateSelector = (state: NavigationStore) => ({
+  currentPagePath: state.currentPagePath,
+});
+
 export default function Layout({
   children,
   title,
@@ -39,16 +43,20 @@ export default function Layout({
   canBack,
   scrollRef,
 }: LayoutProps) {
+  console.log('🎨レイアウトレンダリング');
+  console.log({ title });
+
   const router = useRouter();
-  const { homeNavaigationState } = useHomeStore();
-  const { episodesNavaigationState } = useEpisodesStore();
+
+  const { currentPagePath: homeCurrentPagePath } = useNavigationStore('home', stateSelector);
+  const { currentPagePath: episodesCurrentPagePath } = useNavigationStore('episodes', stateSelector);
 
   function handleNavigationClick(item: NavigationItem) {
     if (item.name === 'ホーム') {
-      router.push(homeNavaigationState.currentPagePath ?? '/home/page/1');
+      router.push(homeCurrentPagePath ?? '/home/page/1');
     }
     else if (item.name === 'エピソード') {
-      router.push(episodesNavaigationState.currentPagePath ?? '/episodes/page/1');
+      router.push(episodesCurrentPagePath ?? '/episodes/page/1');
     }
     else {
       router.push(item.path);

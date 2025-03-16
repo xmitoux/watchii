@@ -9,11 +9,13 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
-import { useEpisodesStore } from '@/stores/episodesStore';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
+  console.log('📖 エピソードレンダリング');
+
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
@@ -22,10 +24,18 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
     destinationPage: '/episodes/page',
   });
 
-  const { episodesNavaigationState, setEpisodesNavaigationState } = useEpisodesStore();
+  const navigationStore = useNavigationStore(
+    'episodes', (state) => ({
+      scrollPosition: state.scrollPosition,
+      setCurrentPagePath: state.setCurrentPagePath,
+      setScrollPosition: state.setScrollPosition,
+    }),
+  );
 
   // マウント時(他の画面から遷移してきた場合)の処理
   useEffect(() => {
+    console.log('エピソードuseEffect1️⃣');
+
     // スクロール制御対象の要素
     const element = scrollRef?.current;
     if (!element) {
@@ -34,7 +44,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
 
     // 少し遅延させて復元（レンダリングが完了してから）
     const timer = setTimeout(() => {
-      element.scrollTop = episodesNavaigationState.scrollPosition;
+      element.scrollTop = navigationStore.scrollPosition;
     }, 50);
 
     // クリーンアップ関数
@@ -45,7 +55,9 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
   // 画面遷移直前の処理
   useEffect(() => {
     const handleRouteChangeStart = () => {
-      setEpisodesNavaigationState({ currentPagePath: router.asPath });
+      console.log('🛣️ エピソードから遷移します');
+
+      navigationStore.setCurrentPagePath(router.asPath);
 
       const element = scrollRef?.current;
       if (!element) {
@@ -53,7 +65,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       }
 
       const scrollPosition = element.scrollTop ?? 0;
-      setEpisodesNavaigationState({ scrollPosition });
+      navigationStore.setScrollPosition(scrollPosition);
     };
 
     // イベントリスナーを登録

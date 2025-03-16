@@ -8,11 +8,13 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { PostGallery } from '@/features/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
-import { useHomeStore } from '@/stores/homeStore';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { HomeProps } from './types/home-types';
 
 export default function Home({ posts, total, currentPage, perPage }: HomeProps) {
+  console.log('🏚️ Homeレンダリング');
+
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
@@ -22,7 +24,13 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
     scrollRef,
   });
 
-  const { homeNavaigationState, setHomeNavaigationState } = useHomeStore();
+  const navigationStore = useNavigationStore(
+    'home', (state) => ({
+      scrollPosition: state.scrollPosition,
+      setCurrentPagePath: state.setCurrentPagePath,
+      setScrollPosition: state.setScrollPosition,
+    }),
+  );
 
   // マウント時(他の画面から遷移してきた場合)の処理
   useEffect(() => {
@@ -34,7 +42,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
 
     // 少し遅延させて復元（レンダリングが完了してから）
     const timer = setTimeout(() => {
-      element.scrollTop = homeNavaigationState.scrollPosition;
+      element.scrollTop = navigationStore.scrollPosition;
     }, 50);
 
     // クリーンアップ関数
@@ -45,7 +53,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
   // 画面遷移直前の処理
   useEffect(() => {
     const handleRouteChangeStart = () => {
-      setHomeNavaigationState({ currentPagePath: router.asPath });
+      navigationStore.setCurrentPagePath(router.asPath);
 
       const element = scrollRef?.current;
       if (!element) {
@@ -53,7 +61,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
       }
 
       const scrollPosition = element.scrollTop ?? 0;
-      setHomeNavaigationState({ scrollPosition });
+      navigationStore.setScrollPosition(scrollPosition);
     };
 
     // イベントリスナーを登録
