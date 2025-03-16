@@ -9,7 +9,7 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
-import { useNavigationStore } from '@/stores/navigationStore';
+import { useEpisodesStore } from '@/stores/episodesStore';
 
 import { EpisodesProps } from './types';
 
@@ -22,9 +22,9 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
     destinationPage: '/episodes/page',
   });
 
-  const { episodesState, setEpisodesScrollPosition, setEpisodesCurrentPage } = useNavigationStore();
+  const { episodesNavaigationState, setEpisodesNavaigationState } = useEpisodesStore();
 
-  // レンダリング時(他の画面から遷移してきた場合)の処理
+  // マウント時(他の画面から遷移してきた場合)の処理
   useEffect(() => {
     // スクロール制御対象の要素
     const element = scrollRef?.current;
@@ -32,30 +32,39 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       return;
     }
 
-    // スクロール位置を復元
-    requestAnimationFrame(() => {
-      element.scrollTop = episodesState.scrollPosition;
-    });
+    // 少し遅延させて復元（レンダリングが完了してから）
+    const timer = setTimeout(() => {
+      element.scrollTop = episodesNavaigationState.scrollPosition;
+    }, 50);
 
-    // スクロール位置のストア保存処理をスクロールイベントに登録
-    const saveScrollPosition = () => {
-      const scroll = element.scrollTop ?? 0;
-      setEpisodesScrollPosition(scroll);
-    };
-    element.addEventListener('scroll', saveScrollPosition);
-
-    // クリーンアップ
-    return () => {
-      element.removeEventListener('scroll', saveScrollPosition);
-    };
+    // クリーンアップ関数
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onPageChange(page: number) {
-    // ページ遷移時にページ番号をストアに保存
-    setEpisodesCurrentPage(page);
-    pagination(page);
-  }
+  // 画面遷移直前の処理
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      setEpisodesNavaigationState({ currentPagePath: router.asPath });
+
+      const element = scrollRef?.current;
+      if (!element) {
+        return;
+      }
+
+      const scrollPosition = element.scrollTop ?? 0;
+      setEpisodesNavaigationState({ scrollPosition });
+    };
+
+    // イベントリスナーを登録
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+
+    // コンポーネントのアンマウント時にイベントリスナーを解除
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   const imageWidth = usePostImageWidth();
 
@@ -87,7 +96,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
           totalPageCount={total}
           perPage={perPage}
           currentPage={currentPage}
-          onPageChange={onPageChange}
+          onPageChange={pagination}
         />
       </Center>
     </Layout>

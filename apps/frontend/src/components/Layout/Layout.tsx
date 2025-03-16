@@ -3,7 +3,8 @@ import { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
-import { useNavigationStore } from '@/stores/navigationStore';
+import { useEpisodesStore } from '@/stores/episodesStore';
+import { useHomeStore } from '@/stores/homeStore';
 
 const navigationItems: NavigationItem[] = [
   {
@@ -39,14 +40,15 @@ export default function Layout({
   scrollRef,
 }: LayoutProps) {
   const router = useRouter();
-  const { homeState: home, episodesState } = useNavigationStore();
+  const { homeNavaigationState } = useHomeStore();
+  const { episodesNavaigationState } = useEpisodesStore();
 
   function handleNavigationClick(item: NavigationItem) {
     if (item.name === 'ホーム') {
-      router.push(`/home/page/${home.currentPage}`);
+      router.push(homeNavaigationState.currentPagePath ?? '/home/page/1');
     }
     else if (item.name === 'エピソード') {
-      router.push(`/episodes/page/${episodesState.currentPage}`);
+      router.push(episodesNavaigationState.currentPagePath ?? '/episodes/page/1');
     }
     else {
       router.push(item.path);
