@@ -21,7 +21,9 @@ export function EpisodeImagePreview({
   const { isMobile } = useDeviceType();
   const imageWidth = isMobile ? '40vw' : '200px';
 
-  if (posts.length === 0) { return null; }
+  if (posts.length === 0) {
+    return null;
+  }
 
   return (
     <Box height="50vh" p={{ base: 0, lg: 2 }} overflow="auto">
@@ -80,7 +82,7 @@ export function EpisodeImagePreview({
                 _hover={{
                   transform: 'scale(1.2)',
                 }}
-                onClick={e => onPostRemove(post.id, e)}
+                onClick={(e) => onPostRemove(post.id, e)}
               >
                 <MdClose />
               </IconButton>

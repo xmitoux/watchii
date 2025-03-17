@@ -20,9 +20,10 @@ const isIconActive = (currentPath: string, rootPath: string) => {
 
 type FooterProps = {
   navigationItems: NavigationItem[];
+  onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
 
-export default function Footer({ navigationItems }: FooterProps) {
+export default function Footer({ navigationItems, onNavigationClick }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -50,7 +51,7 @@ export default function Footer({ navigationItems }: FooterProps) {
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
-              onClick={() => router.push(item.path)}
+              onClick={() => onNavigationClick(item, isItemActive)}
             >
               <Box py={isItemActive ? 0 : '5px'}>
                 <NextImage

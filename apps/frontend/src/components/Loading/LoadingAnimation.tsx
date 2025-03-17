@@ -13,7 +13,7 @@ export default function LoadingAnimation() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex(prevIndex => (prevIndex + 1) % images.length);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 500);
 
     return () => clearInterval(timer);

@@ -127,6 +127,8 @@ const customStylisticRules = {
     '@stylistic/object-curly-spacing': ['error', 'always'],
     '@stylistic/semi-style': ['error', 'last'],
     '@stylistic/switch-colon-spacing': 'error',
+    '@stylistic/brace-style': ['error', "stroustrup", { "allowSingleLine": false }],
+    '@stylistic/arrow-parens': ['error', 'always'],
   }
 }
 

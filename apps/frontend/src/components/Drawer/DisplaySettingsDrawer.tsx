@@ -65,7 +65,7 @@ export const DisplaySettingsDrawer: React.FC<DisplaySettingsDrawerProps> = ({
   }
 
   return (
-    <DrawerRoot open={open} onOpenChange={e => handleDrawerOpenClose(e.open)}>
+    <DrawerRoot open={open} onOpenChange={(e) => handleDrawerOpenClose(e.open)}>
       <DrawerBackdrop />
 
       <DrawerContent>

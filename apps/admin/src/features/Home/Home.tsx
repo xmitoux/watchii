@@ -70,7 +70,7 @@ export default function Home() {
 
     // ファイルバリデーション
     files.forEach((file) => {
-      if (regex.test(file.name) && images.every(img => img.file.name !== file.name)) {
+      if (regex.test(file.name) && images.every((img) => img.file.name !== file.name)) {
         // ファイル名が正しい形式、かつ選択済みのファイルと重複していなければOK
         validFiles.push(file);
       }
@@ -79,11 +79,11 @@ export default function Home() {
       }
     });
 
-    const newImages: ImageData[] = validFiles.map(file => ({
+    const newImages: ImageData[] = validFiles.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-    setImages(prev => [...prev, ...newImages]);
+    setImages((prev) => [...prev, ...newImages]);
 
     invalidFiles.forEach((file) => {
       // トースト表示制御用ID
@@ -151,7 +151,7 @@ export default function Home() {
   async function handleSubmit() {
     try {
       const request = {
-        files: images.map(img => img.file),
+        files: images.map((img) => img.file),
       };
 
       await trigger(request);

@@ -25,7 +25,7 @@ export function useEpisodeApi(episodeId?: number, options: UseEpisodeApiOptions 
   } = useSWR<EpisodeEditData>(
     // episodeIdがある時だけフェッチする
     episodeId ? `/api/episodes/edit-data/${episodeId}` : null,
-    (url: string) => fetch(url).then(res => res.json()),
+    (url: string) => fetch(url).then((res) => res.json()),
   );
 
   // 保存処理(新規作成 or 更新)

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
@@ -33,12 +34,19 @@ export default function Layout({
   actionButton,
   canBack,
 }: LayoutProps) {
+  const router = useRouter();
+
+  function handleNavigationClick(item: NavigationItem) {
+    router.push(item.path);
+  }
+
   return (
     <UiLayout
       title={title}
       actionButton={actionButton}
       canBack={canBack}
       footerNavigationItems={navigationItems}
+      onNavigationClick={handleNavigationClick}
     >
       {children}
     </UiLayout>

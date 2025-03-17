@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import Episodes from '@/features/Episodes/Episodes';
 import { EpisodesProps } from '@/features/Episodes/types';
 
-const PER_PAGE = 12;
+const PER_PAGE = 6;
 
 /**
  * ビルド時に生成する全ページのパスを定義する

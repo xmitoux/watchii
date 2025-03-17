@@ -51,7 +51,7 @@ export const EpisodePostSelectDialog = ({
   });
 
   // 全投稿を結合
-  const allPosts = data ? data.flatMap(page => page.posts) : [];
+  const allPosts = data ? data.flatMap((page) => page.posts) : [];
 
   // 選択状態を管理するstate
   const [selectedPosts, setSelectedPosts] = useState<SelectedPost[]>([]);
@@ -70,8 +70,8 @@ export const EpisodePostSelectDialog = ({
   // 画像選択の切り替え処理
   const togglePostSelection = (post: SelectedPost) => {
     setSelectedPosts((prev) => {
-      const isSelected = prev.some(p => p.id === post.id);
-      const filtered = isSelected ? prev.filter(p => p.id !== post.id) : [...prev, post];
+      const isSelected = prev.some((p) => p.id === post.id);
+      const filtered = isSelected ? prev.filter((p) => p.id !== post.id) : [...prev, post];
       // 選択したあとは上から投稿順に表示したいので昇順ソートする
       return filtered.sort((a, b) => a.postedAt.localeCompare(b.postedAt));
     });
@@ -104,7 +104,7 @@ export const EpisodePostSelectDialog = ({
         <DialogBody>
           <Flex justify="center" gap={4} flexWrap="wrap">
             {allPosts.map((post) => {
-              const isSelected = selectedPosts.some(p => p.id === post.id);
+              const isSelected = selectedPosts.some((p) => p.id === post.id);
               return (
                 <Box
                   key={post.id}

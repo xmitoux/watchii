@@ -11,6 +11,8 @@ type LayoutProps = {
   canBack?: boolean;
   footerNavigationItems: NavigationItem[];
   scrollRef?: RefObject<HTMLDivElement | null>;
+  onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
+  onNavigationBack?: () => void;
 };
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -20,6 +22,8 @@ export const Layout: React.FC<LayoutProps> = ({
   actionButton,
   canBack,
   scrollRef,
+  onNavigationClick,
+  onNavigationBack,
 }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -27,6 +31,7 @@ export const Layout: React.FC<LayoutProps> = ({
         title={title}
         actionButton={actionButton}
         canBack={canBack}
+        onNavigationBack={onNavigationBack}
       />
 
       <Box
@@ -36,7 +41,10 @@ export const Layout: React.FC<LayoutProps> = ({
         position="absolute"
         top="0"
         // フッターの高さ分上げる(iPhoneのホームバーを考慮)
-        bottom={{ base: 'calc(90px + env(safe-area-inset-bottom))', md: '90px' }}
+        bottom={{
+          base: 'calc(90px + env(safe-area-inset-bottom))',
+          md: '90px',
+        }}
         left="0"
         right="0"
         overflowY="auto"
@@ -46,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({
         </Box>
       </Box>
 
-      <Footer navigationItems={footerNavigationItems} />
+      <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />
     </Box>
   );
 };

@@ -9,9 +9,10 @@ type HeaderProps = {
   title: string;
   actionButton?: React.ReactNode;
   canBack?: boolean;
+  onNavigationBack?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
+const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigationBack }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   useEffect(() => {
@@ -42,6 +43,18 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
 
   const router = useRouter();
 
+  function handleBack() {
+    // 戻るボタンが押されたときの処理
+    if (onNavigationBack) {
+      // カスタムの戻る処理があればそれを実行
+      // (エピソード詳細からエピソード一覧の元ページに戻る場合など)
+      onNavigationBack();
+    }
+    else if (canBack) {
+      router.back();
+    }
+  }
+
   return (
     <Box
       className={hachi_maru_pop.className}
@@ -64,8 +77,8 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack }) => {
       >
         {/* 戻るボタン */}
         <Box width="40px">
-          {canBack && (
-            <Button variant="plain" paddingLeft={0} onClick={() => router.back()}>
+          {(onNavigationBack || canBack) && (
+            <Button variant="plain" paddingLeft={0} onClick={handleBack}>
               <MdArrowBack />
             </Button>
           )}

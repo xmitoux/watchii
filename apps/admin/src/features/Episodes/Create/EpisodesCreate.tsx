@@ -48,7 +48,7 @@ export default function EpisodesCreate() {
                 エピソード名
               </HStack>
             </Field.Label>
-            <Input value={episodeTitle} onChange={e => setEpisodeTitle(e.target.value)} />
+            <Input value={episodeTitle} onChange={(e) => setEpisodeTitle(e.target.value)} />
           </Field.Root>
 
           <Field.Root>
@@ -87,9 +87,9 @@ export default function EpisodesCreate() {
       {/* エピソードPost選択ダイアログ */}
       <EpisodePostSelectDialog
         isOpen={isEpisodeSelectDialogOpen}
-        onOpenChange={e => setIsEpisodeSelectDialogOpen(e.open)}
+        onOpenChange={(e) => setIsEpisodeSelectDialogOpen(e.open)}
         initialSelectedPosts={selectedPosts}
-        onSelect={posts => handleSelectPosts(posts)}
+        onSelect={(posts) => handleSelectPosts(posts)}
       />
     </Layout>
   );

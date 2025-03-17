@@ -4,14 +4,21 @@ import Layout from '@/components/Layout/Layout';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { PostGallery } from '@/features/PostGallery/PostGallery';
+import { useLayoutScroll } from '@/hooks/useLayoutScroll';
+import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 
 import { HomeProps } from './types/home-types';
 
 export default function Home({ posts, total, currentPage, perPage }: HomeProps) {
-  const { scrollRef, pagination } = usePagination({
+  const { scrollRef } = useLayoutScroll();
+
+  const { pagination } = usePagination({
     currentPage,
     destinationPage: '/home/page',
+    scrollRef,
   });
+
+  useNavigationRestore('home', scrollRef);
 
   return (
     <Layout title="Watchii" scrollRef={scrollRef}>
