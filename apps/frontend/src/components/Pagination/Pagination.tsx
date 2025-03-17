@@ -7,7 +7,8 @@ import {
   PaginationPrevTrigger,
   PaginationRoot,
 } from '@repo/ui/chakra-ui/pagination';
-import { useDeviceType } from '@repo/ui/hooks';
+
+import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
 
 type PaginationProps = {
   totalPageCount: number;
@@ -23,7 +24,7 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
     setCurrentPageState(currentPage);
   }, [currentPage]);
 
-  const { isMobile } = useDeviceType();
+  const { isMobile } = useDeviceTypeStore();
   /** ページネーションの現在ページ前後のページ番号数 */
   const paginationSiblingCount = isMobile ? 1 : 2;
 
@@ -40,7 +41,7 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
       pageSize={perPage}
       page={currentPageState}
       siblingCount={paginationSiblingCount}
-      onPageChange={e => handlePageChange(e.page)}
+      onPageChange={(e) => handlePageChange(e.page)}
     >
       <HStack gap={isMobile ? 1 : 2}>
         <PaginationPrevTrigger />

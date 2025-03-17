@@ -3,6 +3,7 @@ import React, { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
+import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
 
 const navigationItems: NavigationItem[] = [
@@ -64,15 +65,17 @@ export default function Layout({
   }
 
   return (
-    <UiLayout
-      title={title}
-      actionButton={actionButton}
-      canBack={canBack}
-      footerNavigationItems={navigationItems}
-      scrollRef={scrollRef}
-      onNavigationClick={handleNavigationClick}
-    >
-      {children}
-    </UiLayout>
+    <DeviceTypeInitializer>
+      <UiLayout
+        title={title}
+        actionButton={actionButton}
+        canBack={canBack}
+        footerNavigationItems={navigationItems}
+        scrollRef={scrollRef}
+        onNavigationClick={handleNavigationClick}
+      >
+        {children}
+      </UiLayout>
+    </DeviceTypeInitializer>
   );
 }
