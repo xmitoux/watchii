@@ -14,6 +14,8 @@ import { useEpisodeDetailStore } from '@/stores/episodeDetailStore';
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
+  console.log('📖エピソード一覧ページ');
+
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
@@ -27,12 +29,16 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
 
   const imageWidth = usePostImageWidth();
 
-  const setParentPagePath = useEpisodeDetailStore((state) => state.setParentPagePath);
+  const episodeDetailStore = useEpisodeDetailStore((state) => state);
 
   function handleImageClick(episodeId: number) {
     // エピソード詳細画面に遷移する際に、親ページのパスを保存する
     // (ホーム画面からエピソード詳細を復元した際、元のエピソード一覧ページに戻るため)
-    setParentPagePath(router.asPath);
+    episodeDetailStore.setParentPagePath(router.asPath);
+
+    console.log({ '📠 親のスクロール位置': scrollRef.current?.scrollTop });
+    episodeDetailStore.setParentPageScrollPosition(scrollRef.current?.scrollTop ?? 0);
+
     router.push(`/episodes/ep/${episodeId}`);
   }
 

@@ -24,6 +24,7 @@ export const useNavigationRestore = (storeKey: NavigationStoreKey, scrollRef: Re
 
     // 少し遅延させて復元（レンダリングが完了してから）
     const timer = setTimeout(() => {
+      console.log({ '🎄遷移後': navigationStore.scrollPosition });
       element.scrollTop = navigationStore.scrollPosition;
     }, 50);
 
@@ -44,6 +45,7 @@ export const useNavigationRestore = (storeKey: NavigationStoreKey, scrollRef: Re
 
       const scrollPosition = element.scrollTop ?? 0;
       navigationStore.setScrollPosition(scrollPosition);
+      console.log({ '🎨遷移前': scrollPosition });
     };
 
     // イベントリスナーを登録
