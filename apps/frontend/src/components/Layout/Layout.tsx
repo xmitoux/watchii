@@ -44,9 +44,6 @@ export default function Layout({
   canBack,
   scrollRef,
 }: LayoutProps) {
-  console.log('🎨レイアウトレンダリング');
-  console.log({ title });
-
   const router = useRouter();
 
   const { currentPagePath: homeCurrentPagePath } = useNavigationStore('home', stateSelector);

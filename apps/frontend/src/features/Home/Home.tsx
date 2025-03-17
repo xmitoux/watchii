@@ -13,8 +13,6 @@ import { useNavigationStore } from '@/stores/navigationStore';
 import { HomeProps } from './types/home-types';
 
 export default function Home({ posts, total, currentPage, perPage }: HomeProps) {
-  console.log('🏚️ Homeレンダリング');
-
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 

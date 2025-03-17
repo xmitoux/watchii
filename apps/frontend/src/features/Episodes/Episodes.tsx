@@ -14,8 +14,6 @@ import { useNavigationStore } from '@/stores/navigationStore';
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  console.log('📖 エピソードレンダリング');
-
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
@@ -34,8 +32,6 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
 
   // マウント時(他の画面から遷移してきた場合)の処理
   useEffect(() => {
-    console.log('エピソードuseEffect1️⃣');
-
     // スクロール制御対象の要素
     const element = scrollRef?.current;
     if (!element) {
@@ -55,8 +51,6 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
   // 画面遷移直前の処理
   useEffect(() => {
     const handleRouteChangeStart = () => {
-      console.log('🛣️ エピソードから遷移します');
-
       navigationStore.setCurrentPagePath(router.asPath);
 
       const element = scrollRef?.current;
