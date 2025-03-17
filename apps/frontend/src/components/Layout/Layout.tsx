@@ -30,6 +30,7 @@ type LayoutProps = {
   actionButton?: React.ReactNode;
   canBack?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
+  onNavigationBack?: () => void;
 };
 
 // ストアセレクタ
@@ -44,6 +45,7 @@ export default function Layout({
   actionButton,
   canBack,
   scrollRef,
+  onNavigationBack,
 }: LayoutProps) {
   const router = useRouter();
 
@@ -81,6 +83,7 @@ export default function Layout({
         footerNavigationItems={navigationItems}
         scrollRef={scrollRef}
         onNavigationClick={handleNavigationClick}
+        onNavigationBack={onNavigationBack}
       >
         {children}
       </UiLayout>

@@ -12,6 +12,7 @@ type LayoutProps = {
   footerNavigationItems: NavigationItem[];
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
+  onNavigationBack?: () => void;
 };
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -22,6 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({
   canBack,
   scrollRef,
   onNavigationClick,
+  onNavigationBack,
 }) => {
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -29,6 +31,7 @@ export const Layout: React.FC<LayoutProps> = ({
         title={title}
         actionButton={actionButton}
         canBack={canBack}
+        onNavigationBack={onNavigationBack}
       />
 
       <Box
@@ -40,7 +43,7 @@ export const Layout: React.FC<LayoutProps> = ({
         // フッターの高さ分上げる(iPhoneのホームバーを考慮)
         bottom={{
           base: 'calc(90px + env(safe-area-inset-bottom))',
-          md: '90px'
+          md: '90px',
         }}
         left="0"
         right="0"
