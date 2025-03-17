@@ -51,7 +51,7 @@ export function EpisodeCard({
             <Text
               className={hachi_maru_pop.className}
               color="white"
-              fontSize="md"
+              fontSize="xl"
               fontWeight="600"
               textDecoration="underline"
               textDecorationThickness="2px"
@@ -62,7 +62,7 @@ export function EpisodeCard({
             <Text
               className={hachi_maru_pop.className}
               color="white"
-              fontSize="sm"
+              fontSize="md"
               fontWeight="600"
             >
               {`(全${episode.totalPosts}話)`}
