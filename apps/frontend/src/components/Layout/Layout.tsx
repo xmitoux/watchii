@@ -36,6 +36,7 @@ type LayoutProps = {
 const stateSelector = (state: NavigationStore) => ({
   currentPagePath: state.currentPagePath,
 });
+type StateSelector = Required<ReturnType<typeof stateSelector>>;
 
 export default function Layout({
   children,
@@ -46,10 +47,20 @@ export default function Layout({
 }: LayoutProps) {
   const router = useRouter();
 
-  const { currentPagePath: homeCurrentPagePath } = useNavigationStore('home', stateSelector);
-  const { currentPagePath: episodesCurrentPagePath } = useNavigationStore('episodes', stateSelector);
+  const {
+    currentPagePath: homeCurrentPagePath,
+  } = useNavigationStore<StateSelector>('home', stateSelector);
+  const {
+    currentPagePath: episodesCurrentPagePath,
+  } = useNavigationStore<StateSelector>('episodes', stateSelector);
 
-  function handleNavigationClick(item: NavigationItem) {
+  function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
+    if (isRecursive) {
+      // 再起ナビゲーション(例: ホーム画面でホームクリック)なら1ページ目に遷移
+      router.push(item.path);
+      return;
+    }
+
     if (item.name === 'ホーム') {
       router.push(homeCurrentPagePath ?? '/home/page/1');
     }

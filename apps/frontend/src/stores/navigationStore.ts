@@ -13,7 +13,7 @@ export type NavigationState = {
 };
 
 export type NavigationActions = {
-  setCurrentPagePath: (currentPagePath: string) => void;
+  setCurrentPagePath: (currentPagePath: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
 };
 

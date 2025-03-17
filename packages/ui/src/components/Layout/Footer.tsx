@@ -20,7 +20,7 @@ const isIconActive = (currentPath: string, rootPath: string) => {
 
 type FooterProps = {
   navigationItems: NavigationItem[];
-  onNavigationClick?: (item: NavigationItem) => void;
+  onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
 
 export default function Footer({ navigationItems, onNavigationClick }: FooterProps) {
@@ -53,7 +53,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               cursor="pointer"
               onClick={() => {
                 if (onNavigationClick) {
-                  onNavigationClick(item);
+                  onNavigationClick(item, isItemActive);
                   return;
                 }
                 router.push(item.path);
