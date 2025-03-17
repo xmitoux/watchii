@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
@@ -9,13 +10,11 @@ import { Pagination } from '@/components/Pagination/Pagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
-import { useEpisodeDetailStore } from '@/stores/episodeDetailStore';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  console.log('📖エピソード一覧ページ');
-
   const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
@@ -29,16 +28,16 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
 
   const imageWidth = usePostImageWidth();
 
-  const episodeDetailStore = useEpisodeDetailStore((state) => state);
+  const resetEpisodeDetailStore = useNavigationStore('episodeDetail', (state) => state.reset);
+
+  useEffect(() => {
+    // エピソード詳細ページのストアをリセット
+    // (一覧ページを開いた時点で詳細の復元状態は不要)
+    resetEpisodeDetailStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleImageClick(episodeId: number) {
-    // エピソード詳細画面に遷移する際に、親ページのパスを保存する
-    // (ホーム画面からエピソード詳細を復元した際、元のエピソード一覧ページに戻るため)
-    episodeDetailStore.setParentPagePath(router.asPath);
-
-    console.log({ '📠 親のスクロール位置': scrollRef.current?.scrollTop });
-    episodeDetailStore.setParentPageScrollPosition(scrollRef.current?.scrollTop ?? 0);
-
     router.push(`/episodes/ep/${episodeId}`);
   }
 

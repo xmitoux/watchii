@@ -55,6 +55,9 @@ export default function Layout({
   const {
     currentPagePath: episodesCurrentPagePath,
   } = useNavigationStore<StateSelector>('episodes', stateSelector);
+  const {
+    currentPagePath: episodeDetailCurrentPagePath,
+  } = useNavigationStore<StateSelector>('episodeDetail', stateSelector);
 
   function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
     if (isRecursive) {
@@ -67,7 +70,13 @@ export default function Layout({
       router.push(homeCurrentPagePath ?? '/home/page/1');
     }
     else if (item.name === 'エピソード') {
-      router.push(episodesCurrentPagePath ?? '/episodes/page/1');
+      if (episodeDetailCurrentPagePath) {
+        // エピソード詳細ページがストアされているならそちらを復元
+        router.push(episodeDetailCurrentPagePath);
+      }
+      else {
+        router.push(episodesCurrentPagePath ?? '/episodes/page/1');
+      }
     }
     else {
       router.push(item.path);

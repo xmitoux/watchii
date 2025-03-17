@@ -5,7 +5,7 @@ import { createStore } from 'zustand';
 import { shallow } from 'zustand/shallow';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 
-export type NavigationStoreKey = 'home' | 'episodes';
+export type NavigationStoreKey = 'home' | 'episodes' | 'episodeDetail';
 
 export type NavigationState = {
   currentPagePath: string | null;
@@ -15,6 +15,7 @@ export type NavigationState = {
 export type NavigationActions = {
   setCurrentPagePath: (currentPagePath: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
+  reset: () => void;
 };
 
 export type NavigationStore = NavigationState & NavigationActions;
@@ -29,6 +30,7 @@ const createNavigationStore = () => {
     ...initialState,
     setCurrentPagePath: (currentPagePath) => set({ currentPagePath }),
     setScrollPosition: (scrollPosition) => set({ scrollPosition }),
+    reset: () => set(initialState),
   }));
 };
 
