@@ -16,7 +16,7 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
   return (
     <>
       <Flex justify="center" gap={4} flexWrap="wrap">
-        {posts.map(post => (
+        {posts.map((post) => (
           <Box key={post.id}>
             <NextImage
               src={post.filename}

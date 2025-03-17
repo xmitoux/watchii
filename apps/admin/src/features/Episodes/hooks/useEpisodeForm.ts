@@ -13,7 +13,7 @@ export function useEpisodeForm() {
   function handleSelectPosts(posts: PostEntity[]) {
     setSelectedPosts(posts);
 
-    if (selectedThumbnailPostId && posts.every(p => p.id !== selectedThumbnailPostId)) {
+    if (selectedThumbnailPostId && posts.every((p) => p.id !== selectedThumbnailPostId)) {
       // エピソードPost選択解除された画像がサムネイル設定選択されていた場合はその選択状態も解除
       setSelectedThumbnailPostId(null);
     }
@@ -21,7 +21,7 @@ export function useEpisodeForm() {
 
   /** 選択中のエピソードPostを削除 */
   function removeSelectedPost(postId: number, e: React.MouseEvent<HTMLButtonElement>) {
-    setSelectedPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+    setSelectedPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
 
     if (postId === selectedThumbnailPostId) {
       // 削除された画像がサムネイル設定選択されていた場合はその選択状態も解除
@@ -34,7 +34,7 @@ export function useEpisodeForm() {
   /** プレビュー画像クリック処理 */
   function handlePreviewClick(postId: number) {
     // サムネイル設定選択状態をトグル
-    setSelectedThumbnailPostId(prevId => prevId === postId ? null : postId);
+    setSelectedThumbnailPostId((prevId) => prevId === postId ? null : postId);
   }
 
   /** フォームバリデーション */
@@ -55,7 +55,7 @@ export function useEpisodeForm() {
   function getFormData(): EpisodeForm {
     return {
       title,
-      postIds: selectedPosts.map(post => post.id),
+      postIds: selectedPosts.map((post) => post.id),
       thumbnailPostId: selectedThumbnailPostId!,
     };
   }

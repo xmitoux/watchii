@@ -29,7 +29,7 @@ export default function Episodes() {
   });
 
   // 全投稿を結合
-  const allEpisodes = data ? data.flatMap(page => page.episodes) : [];
+  const allEpisodes = data ? data.flatMap((page) => page.episodes) : [];
 
   /** モバイルデバイス(スマホ・タブレット)か */
   const { isMobile } = useDeviceType();
@@ -65,7 +65,7 @@ export default function Episodes() {
         gap={4}
         justify="center"
       >
-        {allEpisodes?.map(episode => (
+        {allEpisodes?.map((episode) => (
           <EpisodeCard
             key={episode.id}
             episode={episode}
