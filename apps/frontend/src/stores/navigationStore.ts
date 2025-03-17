@@ -5,7 +5,7 @@ import { createStore } from 'zustand';
 import { shallow } from 'zustand/shallow';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 
-type NavigationStoreKey = 'home' | 'episodes';
+export type NavigationStoreKey = 'home' | 'episodes';
 
 export type NavigationState = {
   currentPagePath: string | null;
