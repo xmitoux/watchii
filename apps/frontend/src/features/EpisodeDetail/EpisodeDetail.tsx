@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router';
 
+import { Button, Center, Icon } from '@repo/ui/chakra-ui';
+import { MdArrowBackIos } from '@repo/ui/icons';
+
 import Layout from '@/components/Layout/Layout';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
@@ -34,6 +37,16 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
     <Layout title={episodeTitle} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
       {/* post一覧 */}
       <PostGallery posts={posts} />
+
+      {/* 一覧に戻るボタン */}
+      <Center mt={4}>
+        <Button variant="outline" onClick={handleNavigationBack}>
+          <Icon size="sm">
+            <MdArrowBackIos />
+          </Icon>
+          一覧に戻る
+        </Button>
+      </Center>
     </Layout>
   );
 }
