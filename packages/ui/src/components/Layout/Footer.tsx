@@ -51,13 +51,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               justifyContent="center"
               alignItems="center"
               cursor="pointer"
-              onClick={() => {
-                if (onNavigationClick) {
-                  onNavigationClick(item, isItemActive);
-                  return;
-                }
-                router.push(item.path);
-              }}
+              onClick={() => onNavigationClick(item, isItemActive)}
             >
               <Box py={isItemActive ? 0 : '5px'}>
                 <NextImage
