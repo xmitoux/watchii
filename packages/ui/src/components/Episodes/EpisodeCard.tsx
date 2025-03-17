@@ -40,6 +40,7 @@ export function EpisodeCard({
         right={0}
         bottom={0}
         bg="gray.600/50"
+        borderRadius={10}
         transition="background-color 0.2s"
         _hover={{
           bg: 'blue.600/40',
