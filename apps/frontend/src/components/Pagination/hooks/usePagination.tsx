@@ -19,7 +19,7 @@ export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePa
   useEffect(() => {
     if (scrollRef?.current) {
       // スクロールコンテナをトップにスクロール
-      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollRef.current.scrollTo({ top: 0 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
