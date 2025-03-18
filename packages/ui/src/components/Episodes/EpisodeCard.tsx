@@ -40,6 +40,7 @@ export function EpisodeCard({
         right={0}
         bottom={0}
         bg="gray.600/50"
+        borderRadius={10}
         transition="background-color 0.2s"
         _hover={{
           bg: 'blue.600/40',
@@ -50,7 +51,7 @@ export function EpisodeCard({
             <Text
               className={hachi_maru_pop.className}
               color="white"
-              fontSize="md"
+              fontSize="xl"
               fontWeight="600"
               textDecoration="underline"
               textDecorationThickness="2px"
@@ -61,7 +62,7 @@ export function EpisodeCard({
             <Text
               className={hachi_maru_pop.className}
               color="white"
-              fontSize="sm"
+              fontSize="md"
               fontWeight="600"
             >
               {`(全${episode.totalPosts}話)`}

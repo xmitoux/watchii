@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import Image from 'next/image';
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 
@@ -79,12 +80,10 @@ export function NextImage({
   };
 
   return (
-    <div
+    <Box
       ref={containerRef}
-      style={{
-        width: styleWidth,
-        height: styleHeight,
-      }}
+      width={styleWidth}
+      height={styleHeight}
     >
       {showSkeleton && (
         <Skeleton
@@ -98,6 +97,7 @@ export function NextImage({
           width: styleWidth,
           height: styleHeight,
           display: showSkeleton ? 'none' : 'block',
+          borderRadius: '10px',
         }}
         className={className}
         src={imageSrc}
@@ -109,6 +109,6 @@ export function NextImage({
         onClick={() => onClick?.(imageSrc)}
         onLoad={() => setShowSkeleton(false)}
       />
-    </div>
+    </Box>
   );
 }

@@ -40,14 +40,15 @@ export const Layout: React.FC<LayoutProps> = ({
         as="main"
         position="absolute"
         top="0"
-        // フッターの高さ分上げる(iPhoneのホームバーを考慮)
-        bottom={{
-          base: 'calc(90px + env(safe-area-inset-bottom))',
-          md: '90px',
-        }}
+        bottom="0"
         left="0"
         right="0"
         overflowY="auto"
+        // フッターの高さ分上げる(iPhoneのホームバーを考慮)
+        pb={{
+          base: 'calc(90px + env(safe-area-inset-bottom))',
+          md: '90px',
+        }}
       >
         <Box px={4} pt={20} pb={5}>
           {children}

@@ -1,9 +1,10 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { MdArrowBack } from 'react-icons/md';
+import { MdArrowBackIos } from 'react-icons/md';
 
 import { hachi_maru_pop } from '../../utils/fonts';
+
+import { useScrollHide } from './hooks/useScrollHide';
 
 type HeaderProps = {
   title: string;
@@ -13,33 +14,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigationBack }) => {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
-
-  useEffect(() => {
-    let lastScrollY = 0;
-    const container = document.querySelector('.scroll-container');
-
-    const handleScroll = (e: Event) => {
-      const target = e.target as HTMLElement;
-      const currentScrollY = target.scrollTop;
-      const direction = currentScrollY > lastScrollY ? 'down' : 'up';
-
-      if (direction === 'down' && currentScrollY > 50) {
-        setIsVisible(false);
-      }
-      else if (direction === 'up') {
-        setIsVisible(true);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    // スクロールコンテナにイベントリスナーを追加
-    if (container) {
-      container.addEventListener('scroll', handleScroll, { passive: true });
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
+  const { isHide } = useScrollHide();
 
   const router = useRouter();
 
@@ -64,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
       top="0"
       left="0"
       right="0"
-      transform={`translateY(${isVisible ? '0' : '-100%'})`}
+      transform={`translateY(${isHide ? '0' : '-100%'})`}
       transition="transform 0.3s ease-in-out"
       zIndex="sticky"
     >
@@ -79,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
         <Box width="40px">
           {(onNavigationBack || canBack) && (
             <Button variant="plain" paddingLeft={0} onClick={handleBack}>
-              <MdArrowBack />
+              <MdArrowBackIos />
             </Button>
           )}
         </Box>

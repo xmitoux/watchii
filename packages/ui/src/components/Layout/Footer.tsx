@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 
 import { hachi_maru_pop } from '../../utils/fonts';
 
+import { useScrollHide } from './hooks/useScrollHide';
+
 export type NavigationItem = {
   path: string;
   rootPath: string;
@@ -22,10 +24,11 @@ type FooterProps = {
   navigationItems: NavigationItem[];
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
-
 export default function Footer({ navigationItems, onNavigationClick }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
+
+  const { isHide } = useScrollHide();
 
   return (
     <Box
@@ -38,6 +41,8 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
       // iPhoneのホームバー対応
       paddingBottom="env(safe-area-inset-bottom)"
       zIndex="sticky"
+      transform={`translateY(${isHide ? '0' : '100%'})`}
+      transition="transform 0.3s ease-in-out"
     >
       <Flex justify="space-around" py={2}>
         {navigationItems.map((item) => {
