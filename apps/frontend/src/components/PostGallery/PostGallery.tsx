@@ -16,8 +16,15 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
 
   return (
     <Flex justify="center" gap={4} flexWrap="wrap">
-      {posts.map((post) => (
-        <Flex key={post.id} direction="column" align="end" gap={1}>
+      {posts.map((post, index) => (
+        <Flex
+          key={post.id}
+          direction="column"
+          align="end"
+          gap={1}
+          // ページシャトルによるスクロール操作用の属性
+          data-image-index={index}
+        >
           <NextImage
             src={post.filename}
             width={400}
@@ -25,6 +32,7 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
             alt={post.filename}
             priority
           />
+
           <Text fontSize="sm" color="gray">
             投稿:
             {' '}
