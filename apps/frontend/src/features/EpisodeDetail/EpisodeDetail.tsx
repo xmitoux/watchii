@@ -4,11 +4,10 @@ import { Button, Center, Icon } from '@repo/ui/chakra-ui';
 import { MdArrowBackIos } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
+import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useNavigationStore } from '@/stores/navigationStore';
-
-import { PostGallery } from '../PostGallery/PostGallery';
 
 import { EpisodeDetailProps } from './types';
 

@@ -3,7 +3,7 @@ import { Center } from '@repo/ui/chakra-ui';
 import Layout from '@/components/Layout/Layout';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
-import { PostGallery } from '@/features/PostGallery/PostGallery';
+import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 
