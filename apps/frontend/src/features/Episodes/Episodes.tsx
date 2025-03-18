@@ -12,7 +12,7 @@ import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { EpisodesProps } from './types';
+import { EpisodesProps } from './types/episodes-types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
   const router = useRouter();

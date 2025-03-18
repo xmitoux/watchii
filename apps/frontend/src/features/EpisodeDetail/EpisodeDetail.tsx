@@ -9,7 +9,7 @@ import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { EpisodeDetailProps } from './types';
+import { EpisodeDetailProps } from './types/episode-detail-types';
 
 export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProps) {
   const router = useRouter();
