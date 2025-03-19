@@ -5,7 +5,10 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "deploy:backend": "pnpm install --frozen-lockfile && pnpm -F backend deploy:backend"
+    "deploy:backend": "pnpm install --frozen-lockfile && pnpm -F backend deploy:backend",
+    "dev:back": "pnpm -F backend dev",
+    "dev:admin": "pnpm -F admin dev",
+    "dev:front": "pnpm -F frontend dev"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

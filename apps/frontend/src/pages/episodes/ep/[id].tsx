@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
 import EpisodeDetail from '@/features/EpisodeDetail/EpisodeDetail';
-import { EpisodeDetailProps } from '@/features/EpisodeDetail/types';
+import { EpisodeDetailProps } from '@/features/EpisodeDetail/types/episode-detail-types';
 
 /**
  * ビルド時に生成する全ページのパスを定義する

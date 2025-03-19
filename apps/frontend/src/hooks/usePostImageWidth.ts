@@ -9,13 +9,13 @@ export const usePostImageWidth = () => {
 
   const getImageWidth = () => {
     if (isMobile) {
-      return '90vw';
-    }
-    if (isTablet) {
       return '80vw';
     }
+    if (isTablet) {
+      return '70vw';
+    }
 
-    return '25vw';
+    return '50vh';
   };
 
   return getImageWidth();

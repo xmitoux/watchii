@@ -44,10 +44,10 @@ export const Layout: React.FC<LayoutProps> = ({
         left="0"
         right="0"
         overflowY="auto"
-        // フッターの高さ分上げる(iPhoneのホームバーを考慮)
+        // フッターの高さを小さくした分、余白も調整
         pb={{
-          base: 'calc(90px + env(safe-area-inset-bottom))',
-          md: '90px',
+          base: 'calc(80px + env(safe-area-inset-bottom))',
+          md: '80px',
         }}
       >
         <Box px={4} pt={20} pb={5}>

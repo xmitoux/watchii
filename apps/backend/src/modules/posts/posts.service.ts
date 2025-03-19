@@ -63,7 +63,7 @@ export class PostsService {
         this.logger.log('Post登録中にエラーが発生...😨 半端にアップロードされたファイルを削除します🚮');
 
         try {
-          const paths = uploadedFiles.map(file => file.path);
+          const paths = uploadedFiles.map((file) => file.path);
           await this.fileUploadService.deleteFiles(paths);
 
           this.logger.log('ファイルの削除に成功しました✨️');
@@ -71,7 +71,7 @@ export class PostsService {
         catch (cleanupError) {
           this.logger.error(cleanupError);
           this.logger.error('ファイルの削除に失敗しました😱 以下のファイルの手動削除が必要です…🧹');
-          this.logger.error('%o', uploadedFiles.map(f => f.path).join(', '));
+          this.logger.error('%o', uploadedFiles.map((f) => f.path).join(', '));
         }
       }
 
@@ -117,20 +117,8 @@ export class PostsService {
       },
     });
 
-    const convPost = posts.map((post) => {
-      return {
-        id: post.id,
-        filename: post.filename.replace(
-          'https://nllcsgowbqddoussovlt.supabase.co/storage/v1/object/public/post-images/',
-          '',
-        ),
-        // filename: post.filename,
-        postedAt: post.postedAt,
-      };
-    });
-
     return {
-      posts: convPost,
+      posts,
       total,
     };
   }

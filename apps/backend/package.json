@@ -12,7 +12,8 @@
     "db:mg": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "deploy:backend": "pnpm build && prisma migrate deploy",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@nestjs/cli": "^10.0.0",

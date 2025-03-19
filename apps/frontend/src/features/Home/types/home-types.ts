@@ -1,13 +1,7 @@
-export type PostFindAllResponse = {
-  posts: {
-    id: number;
-    filename: string;
-  }[];
-  total: number;
-};
+import { PostEntity } from '@/types/post-types';
 
 export type HomeProps = {
-  posts: PostFindAllResponse['posts'];
+  posts: PostEntity[];
   total: number;
   currentPage: number;
   perPage: number;

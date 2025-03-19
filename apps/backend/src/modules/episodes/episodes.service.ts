@@ -43,7 +43,7 @@ export class EpisodesService {
     });
 
     // レスポンスの整形
-    const mappedEpisodes = episodes.map(episode => ({
+    const mappedEpisodes = episodes.map((episode) => ({
       ...episode,
       // エピソードに含まれるpostの件数を追加
       totalPosts: episode._count.posts,
@@ -73,6 +73,7 @@ export class EpisodesService {
           select: {
             id: true,
             filename: true,
+            postedAt: true,
           },
           orderBy: {
             postedAt: sort,

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",

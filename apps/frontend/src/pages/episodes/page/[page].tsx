@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
 import Episodes from '@/features/Episodes/Episodes';
-import { EpisodesProps } from '@/features/Episodes/types';
+import { EpisodesProps } from '@/features/Episodes/types/episodes-types';
 
 const PER_PAGE = 6;
 
