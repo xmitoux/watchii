@@ -33,7 +33,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
   return (
     <Box
       backgroundColor="blue.300"
-      height="90px"
+      height="80px"
       position="fixed"
       bottom="0"
       left="0"
