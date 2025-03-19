@@ -4,6 +4,7 @@ import { Button, Center, Icon } from '@repo/ui/chakra-ui';
 import { MdArrowBackIos } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
+import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
@@ -38,7 +39,7 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
       <PostGallery posts={posts} />
 
       {/* 一覧に戻るボタン */}
-      <Center mt={4}>
+      <Center mt={4} mb="60px">
         <Button variant="outline" onClick={handleNavigationBack}>
           <Icon size="sm">
             <MdArrowBackIos />
@@ -46,6 +47,12 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
           一覧に戻る
         </Button>
       </Center>
+
+      {/* Postページシャトル */}
+      <PostPageShuttle
+        scrollRef={scrollRef}
+        totalPosts={posts.length}
+      />
     </Layout>
   );
 }

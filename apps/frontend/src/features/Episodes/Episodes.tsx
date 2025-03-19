@@ -5,6 +5,7 @@ import { Center, Flex } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
+import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
@@ -44,23 +45,24 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
   return (
     <Layout title="エピソード一覧" scrollRef={scrollRef}>
       {/* エピソード一覧 */}
-      <Flex
-        flexWrap="wrap"
-        gap={4}
-        justify="center"
-      >
-        {episodes?.map((episode) => (
-          <EpisodeCard
+      <Flex justify="center" gap={4} flexWrap="wrap">
+        {episodes?.map((episode, index) => (
+          <div
             key={episode.id}
-            episode={episode}
-            imageWidth={imageWidth}
-            onClick={() => handleImageClick(episode.id)}
-          />
+            // ページシャトルによるスクロール操作用の属性
+            data-image-index={index}
+          >
+            <EpisodeCard
+              episode={episode}
+              imageWidth={imageWidth}
+              onClick={() => handleImageClick(episode.id)}
+            />
+          </div>
         ))}
       </Flex>
 
       {/* ページネーション */}
-      <Center mt={4}>
+      <Center mt={4} mb="60px">
         <Pagination
           totalPageCount={total}
           perPage={perPage}
@@ -68,6 +70,12 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
           onPageChange={pagination}
         />
       </Center>
+
+      {/* Postページシャトル */}
+      <PostPageShuttle
+        scrollRef={scrollRef}
+        totalPosts={episodes.length}
+      />
     </Layout>
   );
 }
