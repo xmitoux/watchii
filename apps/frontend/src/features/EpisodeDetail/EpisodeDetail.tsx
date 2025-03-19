@@ -39,7 +39,7 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
       <PostGallery posts={posts} />
 
       {/* 一覧に戻るボタン */}
-      <Center mt={4} mb="60px">
+      <Center mt={3} mb="60px">
         <Button variant="outline" onClick={handleNavigationBack}>
           <Icon size="sm">
             <MdArrowBackIos />

@@ -33,7 +33,7 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
             priority
           />
 
-          <Text fontSize="sm" color="gray">
+          <Text fontSize="xs" color="gray">
             投稿:
             {' '}
             {formatToJST(post.postedAt)}

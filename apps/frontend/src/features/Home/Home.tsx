@@ -27,7 +27,7 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
       <PostGallery posts={posts} />
 
       {/* ページネーション(シャトルに隠れないよう余白) */}
-      <Center mt={4} mb="60px">
+      <Center mt={3} mb="60px">
         <Pagination
           totalPageCount={total}
           perPage={perPage}

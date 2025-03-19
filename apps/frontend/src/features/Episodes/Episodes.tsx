@@ -62,7 +62,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       </Flex>
 
       {/* ページネーション */}
-      <Center mt={4} mb="60px">
+      <Center mt={3} mb="60px">
         <Pagination
           totalPageCount={total}
           perPage={perPage}

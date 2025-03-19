@@ -53,7 +53,7 @@ export const usePostPageShuttleScroll = ({ totalPosts, scrollRef }: PostPageShut
     const elementTop = imageElement.offsetTop;
     const elementHeight = imageElement.offsetHeight;
     // 画像の中央にスクロールする(小さいスマホでPostがシャトルに隠れ内容少し上にずらす)
-    const scrollTo = elementTop - (containerHeight - elementHeight) / 2 + 40;
+    const scrollTo = elementTop - (containerHeight - elementHeight) / 2 + 50;
 
     scrollRef.current.scrollTo({
       top: scrollTo,
