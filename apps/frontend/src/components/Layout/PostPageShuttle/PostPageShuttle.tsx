@@ -22,7 +22,7 @@ export default function PostPageShuttle({ totalPosts, scrollRef }: PostPageShutt
 
   return (
     <ActionBar.Root open={true}>
-      <ActionBar.Positioner position="fixed" bottom="90px">
+      <ActionBar.Positioner position="fixed" bottom="85px">
         <ActionBar.Content padding={0}>
           <Flex align="center" justify="space-between" px={4} width="300px" height="48px">
             <Flex gap={4}>
@@ -32,9 +32,7 @@ export default function PostPageShuttle({ totalPosts, scrollRef }: PostPageShutt
 
             <Box>
               {currentImageIndex + 1}
-              {' '}
-              /
-              {' '}
+              {' / '}
               {totalPosts}
             </Box>
 
