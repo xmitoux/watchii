@@ -1,6 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import { hachi_maru_pop } from '../../utils/fonts';
 
@@ -22,14 +23,37 @@ type FooterProps = {
   navigationItems: NavigationItem[];
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
+
 export default function Footer({ navigationItems, onNavigationClick }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
 
+  // 現在のパスに対応するアクティブなアイテムのインデックスを計算
+  const currentActiveIndex = navigationItems.findIndex((item) =>
+    isIconActive(currentPath, item.rootPath));
+
+  // アクティブなインデックスをステートとして保持
+  const [activeIndex, setActiveIndex] = useState(currentActiveIndex);
+
+  // ルーター変更時にアクティブインデックスを更新
+  useEffect(() => {
+    const newActiveIndex = navigationItems.findIndex((item) =>
+      isIconActive(currentPath, item.rootPath));
+    setActiveIndex(newActiveIndex);
+  }, [currentPath, navigationItems]);
+
+  const handleClick = (item: NavigationItem, isItemActive: boolean, index: number) => {
+    // クリック時にはインデックスをすぐ更新（アニメーションのため）
+    setActiveIndex(index);
+
+    // 実際のナビゲーション処理
+    onNavigationClick(item, isItemActive);
+  };
+
   return (
     <Box
       backgroundColor="blue.300"
-      height="80px"
+      height="50px"
       position="fixed"
       bottom="0"
       left="0"
@@ -38,36 +62,48 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
       paddingBottom="env(safe-area-inset-bottom)"
       zIndex="sticky"
     >
-      <Flex justify="space-around" py={2}>
-        {navigationItems.map((item) => {
-          const isItemActive = isIconActive(currentPath, item.rootPath);
+      <Flex justify="space-around" height="100%">
+        {navigationItems.map((item, index) => {
+          const isItemActive = index === activeIndex;
 
           return (
-            <Box
+            <Flex
               key={item.path}
-              display="flex"
               flexDirection="column"
-              justifyContent="center"
               alignItems="center"
+              mb="6px"
+              width="70px"
+              position="relative"
               cursor="pointer"
-              onClick={() => onNavigationClick(item, isItemActive)}
+              onClick={() => handleClick(item, isIconActive(currentPath, item.rootPath), index)}
             >
-              <Box py={isItemActive ? 0 : '5px'}>
+              {/* アイコン部分(absoluteではみ出し表示) */}
+              <Box
+                pb={isItemActive ? 1 : 2}
+                position="absolute"
+                bottom={isItemActive ? '25px' : '20px'}
+                transition="all 0.2s ease"
+                transform={isItemActive ? 'scale(1.1)' : 'scale(1)'}
+              >
                 <NextImage
-                  alt={item.path}
                   src={isItemActive ? item.activeIcon : item.inactiveIcon}
                   width={isItemActive ? 40 : 30}
                   height={isItemActive ? 40 : 30}
+                  alt={item.path}
                 />
               </Box>
+
+              {/* テキスト部分 */}
               <Text
                 className={hachi_maru_pop.className}
-                fontSize="small"
-                fontWeight={isItemActive ? '600' : '400'}
+                fontSize="sm"
+                fontWeight={isItemActive ? 'bold' : '400'}
+                position="absolute"
+                bottom={2}
               >
                 {item.name}
               </Text>
-            </Box>
+            </Flex>
           );
         })}
       </Flex>
