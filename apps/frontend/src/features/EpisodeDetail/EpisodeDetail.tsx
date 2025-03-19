@@ -51,7 +51,7 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
       {/* Postページシャトル */}
       <PostPageShuttle
         scrollRef={scrollRef}
-        totalPosts={posts.length}
+        postsPerPage={posts.length}
       />
     </Layout>
   );

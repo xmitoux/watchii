@@ -74,7 +74,9 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       {/* Postページシャトル */}
       <PostPageShuttle
         scrollRef={scrollRef}
-        totalPosts={episodes.length}
+        postsPerPage={episodes.length}
+        postsTotal={total}
+        pageOffset={currentPage * perPage - perPage}
       />
     </Layout>
   );

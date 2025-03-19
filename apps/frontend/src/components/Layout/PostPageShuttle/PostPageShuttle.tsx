@@ -8,17 +8,22 @@ import { PostPageShuttleButton } from './PostPageShuttleButton';
 
 export type PostPageShuttleProps = {
   scrollRef?: RefObject<HTMLDivElement | null>;
-  totalPosts: number;
+  /** 1ページ(ページネーション単位)あたりのPost枚数 */
+  postsPerPage: number;
+  /** 総Post(ページネーション全体)枚数 */
+  postsTotal?: number;
+  /** Postページ用のオフセット値 */
+  pageOffset?: number;
 };
 
-export default function PostPageShuttle({ totalPosts, scrollRef }: PostPageShuttleProps) {
+export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, postsTotal }: PostPageShuttleProps) {
   const {
     handleScrollTop,
     handlePrevImage,
     handleNextImage,
     handleScrollBottom,
     currentImageIndex,
-  } = usePostPageShuttleScroll({ totalPosts, scrollRef });
+  } = usePostPageShuttleScroll({ postsPerPage, scrollRef });
 
   return (
     <ActionBar.Root open={true}>
@@ -31,9 +36,9 @@ export default function PostPageShuttle({ totalPosts, scrollRef }: PostPageShutt
             </Flex>
 
             <Box>
-              {currentImageIndex + 1}
+              {currentImageIndex + 1 + (pageOffset || 0)}
               {' / '}
-              {totalPosts}
+              {postsTotal || postsPerPage}
             </Box>
 
             <Flex gap={4}>

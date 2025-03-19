@@ -39,7 +39,9 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
       {/* Postページシャトル */}
       <PostPageShuttle
         scrollRef={scrollRef}
-        totalPosts={posts.length}
+        postsPerPage={posts.length}
+        postsTotal={total}
+        pageOffset={currentPage * perPage - perPage}
       />
     </Layout>
   );

@@ -32,8 +32,10 @@ function getMostVisibleImageIndex(container: HTMLElement): number | null {
   return bestMatchIndex;
 }
 
+type UsePostPageShuttleScrollProps = Pick<PostPageShuttleProps, 'postsPerPage' | 'scrollRef'>;
+
 /** Postページシャトルのスクロール処理用カスタムフック */
-export const usePostPageShuttleScroll = ({ totalPosts, scrollRef }: PostPageShuttleProps) => {
+export const usePostPageShuttleScroll = ({ postsPerPage, scrollRef }: UsePostPageShuttleScrollProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const isManualScrolling = useRef(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -88,10 +90,10 @@ export const usePostPageShuttleScroll = ({ totalPosts, scrollRef }: PostPageShut
     }
 
     setManualScrolling(1500);
-    setCurrentImageIndex(totalPosts - 1); // 最後の画像に設定
+    setCurrentImageIndex(postsPerPage - 1); // 最後の画像に設定
     const { scrollHeight } = scrollRef.current;
     scrollRef.current.scrollTo({ top: scrollHeight, behavior: 'smooth' });
-  }, [scrollRef, setManualScrolling, totalPosts]);
+  }, [scrollRef, setManualScrolling, postsPerPage]);
 
   const handlePrevImage = useCallback(() => {
     if (!scrollRef?.current || currentImageIndex <= 0) {
@@ -105,7 +107,7 @@ export const usePostPageShuttleScroll = ({ totalPosts, scrollRef }: PostPageShut
   }, [currentImageIndex, scrollRef, setManualScrolling, scrollImageToCenter]);
 
   const handleNextImage = useCallback(() => {
-    if (!scrollRef?.current || currentImageIndex >= totalPosts - 1) {
+    if (!scrollRef?.current || currentImageIndex >= postsPerPage - 1) {
       return;
     }
 
@@ -113,7 +115,7 @@ export const usePostPageShuttleScroll = ({ totalPosts, scrollRef }: PostPageShut
     setManualScrolling(1500); // スクロールとアニメーション完了までの時間を考慮
     setCurrentImageIndex(newIndex);
     scrollImageToCenter(newIndex);
-  }, [currentImageIndex, totalPosts, scrollRef, setManualScrolling, scrollImageToCenter]);
+  }, [currentImageIndex, postsPerPage, scrollRef, setManualScrolling, scrollImageToCenter]);
 
   // スクロール検知による現在の画像インデックスの更新
   useEffect(() => {
