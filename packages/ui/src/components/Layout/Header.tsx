@@ -4,8 +4,6 @@ import { MdArrowBackIos } from 'react-icons/md';
 
 import { hachi_maru_pop } from '../../utils/fonts';
 
-import { useScrollHide } from './hooks/useScrollHide';
-
 type HeaderProps = {
   title: string;
   actionButton?: React.ReactNode;
@@ -14,8 +12,6 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigationBack }) => {
-  const { isHide } = useScrollHide();
-
   const router = useRouter();
 
   function handleBack() {
@@ -39,8 +35,6 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
       top="0"
       left="0"
       right="0"
-      transform={`translateY(${isHide ? '0' : '-100%'})`}
-      transition="transform 0.3s ease-in-out"
       zIndex="sticky"
     >
       {/* メインヘッダー部分 */}
