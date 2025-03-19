@@ -12,10 +12,10 @@ export const usePostImageWidth = () => {
       return '80vw';
     }
     if (isTablet) {
-      return '80vw';
+      return '70vw';
     }
 
-    return '25vw';
+    return '50vh';
   };
 
   return getImageWidth();

@@ -15,7 +15,7 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
   const imageWidth = usePostImageWidth();
 
   return (
-    <Flex justify="center" gap={4} flexWrap="wrap">
+    <Flex direction="column" align="center" gap={4}>
       {posts.map((post, index) => (
         <Flex
           key={post.id}

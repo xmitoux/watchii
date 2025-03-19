@@ -45,7 +45,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
   return (
     <Layout title="エピソード一覧" scrollRef={scrollRef}>
       {/* エピソード一覧 */}
-      <Flex justify="center" gap={4} flexWrap="wrap">
+      <Flex direction="column" align="center" gap={4}>
         {episodes?.map((episode, index) => (
           <div
             key={episode.id}
