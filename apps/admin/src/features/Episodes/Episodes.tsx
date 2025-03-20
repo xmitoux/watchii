@@ -37,10 +37,6 @@ export default function Episodes() {
 
   const router = useRouter();
 
-  function handleImageClick(episodeId: number) {
-    router.push(`/episodes/${episodeId}`);
-  }
-
   if (error) {
     return <div>エラーが発生しました</div>;
   }
@@ -70,7 +66,7 @@ export default function Episodes() {
             key={episode.id}
             episode={episode}
             imageWidth={imageWidth}
-            onClick={() => handleImageClick(episode.id)}
+            href={`/episodes/${episode.id}`}
           />
         ))}
       </Flex>

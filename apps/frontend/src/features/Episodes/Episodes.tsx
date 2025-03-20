@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { Center, Flex } from '@repo/ui/chakra-ui';
@@ -16,7 +15,6 @@ import { useNavigationStore } from '@/stores/navigationStore';
 import { EpisodesProps } from './types/episodes-types';
 
 export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  const router = useRouter();
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
@@ -38,10 +36,6 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleImageClick(episodeId: number) {
-    router.push(`/episodes/ep/${episodeId}`);
-  }
-
   return (
     <Layout title="エピソード一覧" scrollRef={scrollRef}>
       {/* エピソード一覧 */}
@@ -55,7 +49,7 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
             <EpisodeCard
               episode={episode}
               imageWidth={imageWidth}
-              onClick={() => handleImageClick(episode.id)}
+              href={`/episodes/ep/${episode.id}`}
             />
           </div>
         ))}

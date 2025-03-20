@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { RefObject, useEffect } from 'react';
+import { RefObject, useCallback, useEffect } from 'react';
 
 export type UsePaginationProps = {
   currentPage: number;
@@ -15,6 +15,19 @@ export type UsePaginationProps = {
 export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePaginationProps) => {
   const router = useRouter();
 
+  // プリフェッチ処理
+  const prefetchPages = useCallback(() => {
+    // 現在のページの前後のページをプリフェッチ
+    if (currentPage > 1) {
+      router.prefetch(`${destinationPage}/${currentPage - 1}`);
+    }
+    router.prefetch(`${destinationPage}/${currentPage + 1}`);
+  }, [currentPage, destinationPage, router]);
+
+  useEffect(() => {
+    prefetchPages();
+  }, [prefetchPages]);
+
   // currentPageが変わるたびにスクロールする
   useEffect(() => {
     if (scrollRef?.current) {
@@ -24,7 +37,9 @@ export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
-  function pagination(page: number) {
+  async function pagination(page: number) {
+    // 遷移前に次のページをプリフェッチ
+    await router.prefetch(`${destinationPage}/${page}`);
     router.push(`${destinationPage}/${page}`);
   }
 
