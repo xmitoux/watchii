@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { ReactNode, RefObject } from 'react';
+import React, { ReactNode, RefObject, useEffect } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
@@ -58,6 +58,27 @@ export default function Layout({
   const {
     currentPagePath: episodeDetailCurrentPagePath,
   } = useNavigationStore<StateSelector>('episodeDetail', stateSelector);
+
+  // ナビゲーションアイテムのプリフェッチ
+  useEffect(() => {
+    navigationItems.forEach((item) => {
+      // デフォルトパスのプリフェッチ
+      router.prefetch(item.path);
+
+      // ストアされているパスのプリフェッチ
+      if (item.name === 'ホーム' && homeCurrentPagePath) {
+        router.prefetch(homeCurrentPagePath);
+      }
+      else if (item.name === 'エピソード') {
+        if (episodeDetailCurrentPagePath) {
+          router.prefetch(episodeDetailCurrentPagePath);
+        }
+        if (episodesCurrentPagePath) {
+          router.prefetch(episodesCurrentPagePath);
+        }
+      }
+    });
+  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath]);
 
   function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
     if (isRecursive) {
