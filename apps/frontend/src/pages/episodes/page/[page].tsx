@@ -1,9 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
+import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
 import Episodes from '@/features/Episodes/Episodes';
 import { EpisodesProps } from '@/features/Episodes/types/episodes-types';
 
-const PER_PAGE = 6;
+const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
 
 /**
  * ビルド時に生成する全ページのパスを定義する
