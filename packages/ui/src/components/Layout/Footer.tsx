@@ -82,14 +82,22 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
                 pb={isItemActive ? 1 : 2}
                 position="absolute"
                 bottom={isItemActive ? '25px' : '20px'}
-                transition="all 0.2s ease"
+                transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
                 transform={isItemActive ? 'scale(1.1)' : 'scale(1)'}
+                style={{
+                  willChange: 'transform',
+                }}
               >
                 <NextImage
                   src={isItemActive ? item.activeIcon : item.inactiveIcon}
                   width={isItemActive ? 40 : 30}
                   height={isItemActive ? 40 : 30}
                   alt={item.path}
+                  priority
+                  style={{
+                    transition: 'opacity 0.2s ease',
+                    opacity: 1,
+                  }}
                 />
               </Box>
 
