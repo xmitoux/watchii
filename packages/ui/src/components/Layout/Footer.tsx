@@ -53,7 +53,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
   return (
     <Box
       backgroundColor="blue.300"
-      height="50px"
+      height="60px"
       position="fixed"
       bottom="0"
       left="0"
@@ -71,7 +71,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               key={item.path}
               flexDirection="column"
               alignItems="center"
-              mb="6px"
+              mb={3}
               width="80px"
               position="relative"
               cursor="pointer"

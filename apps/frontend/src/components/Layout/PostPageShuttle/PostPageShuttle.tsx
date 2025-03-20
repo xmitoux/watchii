@@ -27,7 +27,7 @@ export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, p
 
   return (
     <ActionBar.Root open={true}>
-      <ActionBar.Positioner position="fixed" bottom="85px">
+      <ActionBar.Positioner position="fixed" bottom="90px">
         <ActionBar.Content padding={0}>
           <Flex align="center" justify="space-between" px={4} width="300px" height="48px">
             <Flex gap={4}>
