@@ -140,7 +140,7 @@ export const usePostPageShuttleScroll = ({ postsPerPage, scrollRef }: UsePostPag
         if (mostVisibleIndex !== null) {
           setCurrentImageIndex(mostVisibleIndex);
         }
-      }, 10); // スクロール終了後200msでインデックスを更新
+      }, 10); // スクロール終了後10msでインデックスを更新
     };
 
     container.addEventListener('scroll', handleScroll);
@@ -154,6 +154,7 @@ export const usePostPageShuttleScroll = ({ postsPerPage, scrollRef }: UsePostPag
 
   return {
     currentImageIndex,
+    setCurrentImageIndex,
     handleScrollTop,
     handleScrollBottom,
     handlePrevImage,
