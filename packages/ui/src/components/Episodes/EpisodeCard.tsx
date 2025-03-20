@@ -51,7 +51,7 @@ export function EpisodeCard({
             <Text
               className={hachi_maru_pop.className}
               color="white"
-              fontSize="xl"
+              fontSize="lg"
               fontWeight="600"
               textDecoration="underline"
               textDecorationThickness="2px"

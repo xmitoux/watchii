@@ -1,3 +1,10 @@
+/* アプリ全体のスタイル設定 */
+:root {
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* スクロールバーを非表示(スクロールは可能) */
 .no-scrollbar {
   scrollbar-width: none;
