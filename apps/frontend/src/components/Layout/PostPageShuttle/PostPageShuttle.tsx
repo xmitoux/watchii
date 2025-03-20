@@ -1,5 +1,5 @@
 // Postページシャトル
-import React, { RefObject } from 'react';
+import React, { RefObject, useEffect } from 'react';
 
 import { ActionBar, Box, Flex } from '@repo/ui/chakra-ui';
 
@@ -23,7 +23,15 @@ export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, p
     handleNextImage,
     handleScrollBottom,
     currentImageIndex,
+    setCurrentImageIndex,
   } = usePostPageShuttleScroll({ postsPerPage, scrollRef });
+
+  useEffect(() => {
+    // オフセット値が変更(=ページ移動)されたらインデックスをリセット
+    // (ページ移動時、インデックスが正しく更新されず現在ページ番号が実際と異なることがあるのでその対応)
+    setCurrentImageIndex(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageOffset]);
 
   return (
     <ActionBar.Root open={true}>
