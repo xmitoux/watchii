@@ -32,7 +32,10 @@ export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePa
   useEffect(() => {
     if (scrollRef?.current) {
       // スクロールコンテナをトップにスクロール
-      scrollRef.current.scrollTo({ top: 0 });
+      // (ページ遷移前に、現在ページの先頭まで一瞬スクロールしてしまうのでちょっと待つ)
+      setTimeout(() => {
+        scrollRef!.current!.scrollTo({ top: 0 });
+      }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);

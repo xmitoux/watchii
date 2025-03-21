@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { ReactNode, RefObject, useEffect } from 'react';
 
@@ -5,6 +6,8 @@ import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
+
+import { usePageTransition } from './hooks/usePageTransition';
 
 const navigationItems: NavigationItem[] = [
   {
@@ -48,6 +51,7 @@ export default function Layout({
   onNavigationBack,
 }: LayoutProps) {
   const router = useRouter();
+  const { transitionProps } = usePageTransition();
 
   const {
     currentPagePath: homeCurrentPagePath,
@@ -115,7 +119,11 @@ export default function Layout({
         onNavigationClick={handleNavigationClick}
         onNavigationBack={onNavigationBack}
       >
-        {children}
+        <AnimatePresence mode="wait" custom={transitionProps.custom}>
+          <motion.div initial {...transitionProps}>
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </UiLayout>
     </DeviceTypeInitializer>
   );
