@@ -23,14 +23,15 @@ export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, p
     handleNextImage,
     handleScrollBottom,
     currentImageIndex,
-    setCurrentImageIndex,
+    // setCurrentImageIndex,
   } = usePostPageShuttleScroll({ postsPerPage, scrollRef });
 
   useEffect(() => {
     // オフセット値が変更(=ページ移動)されたらインデックスをリセット
     // (ページ移動時、インデックスが正しく更新されず現在ページ番号が実際と異なることがあるのでその対応)
-    setCurrentImageIndex(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // (スライドトランジションを入れたら不要になったのでコメントアウト)
+    // setCurrentImageIndex(0);
+
   }, [pageOffset]);
 
   return (
