@@ -99,7 +99,6 @@ export function usePageTransition() {
 
   // TypeScriptエラーを修正するため、適切な型でオブジェクトを分割
   const transitionProps: HTMLMotionProps<'div'> = {
-    key: router.asPath,
     custom: direction,
     variants,
     initial: 'initial',

@@ -120,7 +120,7 @@ export default function Layout({
         onNavigationBack={onNavigationBack}
       >
         <AnimatePresence mode="wait" custom={transitionProps.custom}>
-          <motion.div initial {...transitionProps}>
+          <motion.div key={router.asPath} {...transitionProps}>
             {children}
           </motion.div>
         </AnimatePresence>

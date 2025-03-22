@@ -54,8 +54,10 @@ export const usePostPageShuttleScroll = ({ postsPerPage, scrollRef }: UsePostPag
     const containerHeight = scrollRef.current.clientHeight;
     const elementTop = imageElement.offsetTop;
     const elementHeight = imageElement.offsetHeight;
-    // 画像の中央にスクロールする(小さいスマホでPostがシャトルに隠れ内容少し上にずらす)
-    const scrollTo = elementTop - (containerHeight - elementHeight) / 2 + 50;
+    // 画像の中央にスクロールする
+    // (小さいスマホでPostがシャトルに隠れ内容少し上にずらす 50px)
+    // (ページトランジションの追加によりなぜかスクロール量が減ったので更に増やす 80px)
+    const scrollTo = (elementTop - (containerHeight - elementHeight) / 2) + 50 + 80;
 
     scrollRef.current.scrollTo({
       top: scrollTo,
