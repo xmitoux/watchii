@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
         </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text fontSize="lg" flex="1" textAlign="center">
+        <Text pb={1} fontSize="lg" textAlign="center">
           {title}
         </Text>
 
