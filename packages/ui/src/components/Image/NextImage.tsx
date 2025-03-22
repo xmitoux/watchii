@@ -31,7 +31,7 @@ export type NextImageProps = {
   alt: string;
   priority?: boolean;
   className?: string;
-  style?: CSSProperties;
+  rounded?: boolean;
   onClick?: (src: string) => void;
 };
 
@@ -44,7 +44,7 @@ export function NextImage({
   alt,
   priority = false,
   className = '',
-  style,
+  rounded = true,
   onClick,
 }: NextImageProps) {
   const [showSkeleton, setShowSkeleton] = useState(true);
@@ -97,7 +97,7 @@ export function NextImage({
           width: styleWidth,
           height: styleHeight,
           display: showSkeleton ? 'none' : 'block',
-          borderRadius: '10px',
+          borderRadius: rounded ? '10px' : undefined,
         }}
         className={className}
         src={imageSrc}
