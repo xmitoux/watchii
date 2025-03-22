@@ -8,6 +8,7 @@ import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 
+import { usePWAInstallGuide } from './hooks/usePWAInstallGuide';
 import { HomeProps } from './types/home-types';
 
 export default function Home({ posts, total, currentPage, perPage }: HomeProps) {
@@ -21,28 +22,45 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
 
   useNavigationRestore('home', scrollRef);
 
+  const {
+    isPWA,
+    showPWAGuide,
+    PWSGuideButton,
+    PWAInstallGuide,
+  } = usePWAInstallGuide();
+
   return (
-    <Layout title="Watchii" scrollRef={scrollRef}>
-      {/* post一覧 */}
-      <PostGallery posts={posts} />
+    <>
+      {showPWAGuide
+        ? <PWAInstallGuide />
+        : (
+          <Layout
+            title="Watchii"
+            scrollRef={scrollRef}
+            actionButton={!isPWA() ? <PWSGuideButton /> : undefined}
+          >
+            {/* post一覧 */}
+            <PostGallery posts={posts} />
 
-      {/* ページネーション(シャトルに隠れないよう余白) */}
-      <Center mt={3} mb="60px">
-        <Pagination
-          totalPageCount={total}
-          perPage={perPage}
-          currentPage={currentPage}
-          onPageChange={pagination}
-        />
-      </Center>
+            {/* ページネーション(シャトルに隠れないよう余白) */}
+            <Center mt={3} mb="60px">
+              <Pagination
+                totalPageCount={total}
+                perPage={perPage}
+                currentPage={currentPage}
+                onPageChange={pagination}
+              />
+            </Center>
 
-      {/* Postページシャトル */}
-      <PostPageShuttle
-        scrollRef={scrollRef}
-        postsPerPage={posts.length}
-        postsTotal={total}
-        pageOffset={currentPage * perPage - perPage}
-      />
-    </Layout>
+            {/* Postページシャトル */}
+            <PostPageShuttle
+              scrollRef={scrollRef}
+              postsPerPage={posts.length}
+              postsTotal={total}
+              pageOffset={currentPage * perPage - perPage}
+            />
+          </Layout>
+        )}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@repo/ui/chakra-ui';
+import { CloseButton } from '@repo/ui/chakra-ui/close-button';
 
 import { PWAInstallGuideImage } from './components/PWAInstallGuideImage';
 
@@ -29,31 +30,24 @@ const steps = [
   },
 ];
 
-/** PWAガイドを見たフラグをセット */
-function setHasSeenPWAGuide() {
-  localStorage.setItem('hasSeenPWAGuide', 'true');
-}
-
 /** PWAインストールガイド */
-export default function PWAInstallGuide() {
-  const router = useRouter();
+export default function PWAInstallGuide({ onClose }: { onClose: () => void }) {
+  const [currentStep, setCurrentStep] = useState(0);
 
   /** ステップ変更時の処理 */
   function handleStepChange({ step }: { step: number }) {
-    if (step === steps.length) {
-      // ステップが完了したらガイド見たフラグをセット
-      setHasSeenPWAGuide();
-    }
+    setCurrentStep(step);
   }
 
-  /** ステップスキップ時の処理 */
-  function handleSkip() {
-    setHasSeenPWAGuide();
-    router.push('/home/page/1');
-  }
+  const isStepCompleted = currentStep === steps.length;
 
   return (
-    <Container maxW="container.md" py={8}>
+    <Container maxW="md" pb={8}>
+      {/* 閉じるボタン */}
+      <Flex justify="end" pt={2}>
+        <CloseButton onClick={onClose} />
+      </Flex>
+
       <Flex direction="column" align="center" gap={4}>
         <VStack>
           <Heading size="xl">
@@ -68,7 +62,7 @@ export default function PWAInstallGuide() {
         </VStack>
 
         <Flex h="75vh" align="center" justify="center">
-          <Box p={6} rounded="lg" bg="gray.900" shadow="md">
+          <Box px={6} py={4} rounded="lg" bg="gray.900" shadow="md">
             <Steps.Root count={steps.length} size="sm" onStepChange={handleStepChange}>
               {/* step数 */}
               <Steps.List mb={1}>
@@ -122,26 +116,18 @@ export default function PWAInstallGuide() {
               </Steps.CompletedContent>
 
               {/* step移動 */}
-              <Flex justify="center" gap={4} mt={2} position="relative">
+              <Flex justify="center" gap={4} mt={2}>
                 <Steps.PrevTrigger asChild>
-                  <Button w="80px">前へ</Button>
+                  <Button>前へ</Button>
                 </Steps.PrevTrigger>
 
-                <Steps.NextTrigger asChild>
-                  <Button w="80px">次へ</Button>
-                </Steps.NextTrigger>
-
-                <Text
-                  color="blue.500"
-                  fontSize="xs"
-                  position="absolute"
-                  right="-1"
-                  top="3"
-                  cursor="pointer"
-                  onClick={handleSkip}
-                >
-                  スキップ
-                </Text>
+                {isStepCompleted
+                  ? <Button color="white" bg="blue.500" onClick={onClose}>完了</Button>
+                  : (
+                    <Steps.NextTrigger asChild>
+                      <Button>次へ</Button>
+                    </Steps.NextTrigger>
+                  )}
               </Flex>
             </Steps.Root>
           </Box>
