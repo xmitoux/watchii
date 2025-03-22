@@ -1,4 +1,6 @@
-import { Center } from '@repo/ui/chakra-ui';
+import { AnimatePresence } from 'motion/react';
+
+import { Box, Center } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
@@ -31,36 +33,47 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
 
   return (
     <>
-      {showPWAGuide
-        ? <PWAInstallGuide />
-        : (
-          <Layout
-            title="Watchii"
-            scrollRef={scrollRef}
-            actionButton={!isPWA() ? <PWSGuideButton /> : undefined}
-          >
-            {/* post一覧 */}
-            <PostGallery posts={posts} />
-
-            {/* ページネーション(シャトルに隠れないよう余白) */}
-            <Center mt={3} mb="60px">
-              <Pagination
-                totalPageCount={total}
-                perPage={perPage}
-                currentPage={currentPage}
-                onPageChange={pagination}
-              />
-            </Center>
-
-            {/* Postページシャトル */}
-            <PostPageShuttle
-              scrollRef={scrollRef}
-              postsPerPage={posts.length}
-              postsTotal={total}
-              pageOffset={currentPage * perPage - perPage}
-            />
-          </Layout>
+      <AnimatePresence mode="wait">
+        {showPWAGuide && (
+          <PWAInstallGuide />
         )}
+      </AnimatePresence>
+
+      {/* ガイドが表示されていてもレイアウトは常に存在 (ただしz-indexで下に) */}
+      <Box
+        style={{
+          filter: showPWAGuide ? 'blur(3px)' : 'none',
+          transition: 'filter 0.3s ease-in-out',
+        }}
+      >
+        <Layout
+          title="Watchii"
+          scrollRef={scrollRef}
+          actionButton={!isPWA() ? <PWSGuideButton /> : undefined}
+
+        >
+          {/* post一覧 */}
+          <PostGallery posts={posts} />
+
+          {/* ページネーション(シャトルに隠れないよう余白) */}
+          <Center mt={3} mb="60px">
+            <Pagination
+              totalPageCount={total}
+              perPage={perPage}
+              currentPage={currentPage}
+              onPageChange={pagination}
+            />
+          </Center>
+
+          {/* Postページシャトル */}
+          <PostPageShuttle
+            scrollRef={scrollRef}
+            postsPerPage={posts.length}
+            postsTotal={total}
+            pageOffset={currentPage * perPage - perPage}
+          />
+        </Layout>
+      </Box>
     </>
   );
 }
