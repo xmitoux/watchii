@@ -33,9 +33,10 @@ export const usePagination = ({ currentPage, destinationPage, scrollRef }: UsePa
     if (scrollRef?.current) {
       // スクロールコンテナをトップにスクロール
       // (ページ遷移前に、現在ページの先頭まで一瞬スクロールしてしまうのでちょっと待つ)
+      // (長く待つと、ストアのスクロール位置復元を無視してスクロールしてしまうので50msに減らす)
       setTimeout(() => {
         scrollRef!.current!.scrollTo({ top: 0 });
-      }, 300);
+      }, 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
