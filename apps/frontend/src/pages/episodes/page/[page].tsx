@@ -1,10 +1,13 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
+import { EPISODE_CONSTS } from '@/constants/episode-consts';
 import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
+import { getEpisodePagesByCategory, getEpisodesByCategory } from '@/features/Episodes/api/episodes-api';
 import Episodes from '@/features/Episodes/Episodes';
 import { EpisodesProps } from '@/features/Episodes/types/episodes-types';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
+const CATEGORY = EPISODE_CONSTS.CATEGORY.LONG.id;
 
 /**
  * ビルド時に生成する全ページのパスを定義する
@@ -12,8 +15,7 @@ const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
  */
 export const getStaticPaths: GetStaticPaths = async () => {
   // APIからエピソードの総数を取得（ここでは1件だけ取得して総数情報だけ使用）
-  const res = await fetch(`${process.env.API_BASE_URL}/episodes?limit=1`);
-  const { total } = await res.json();
+  const total = await getEpisodePagesByCategory({ category: CATEGORY });
 
   // 必要なページ数を計算（切り上げ）
   const pages = Math.ceil(total / PER_PAGE);
@@ -42,11 +44,12 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
   const offset = (page - 1) * PER_PAGE;
 
   try {
-    // 指定されたページの投稿データをAPIから取得
-    const res = await fetch(
-      `${process.env.API_BASE_URL}/episodes?limit=${PER_PAGE}&offset=${offset}`,
-    );
-    const data = await res.json();
+    // 指定されたページのエピソード一覧をAPIから取得
+    const data = await getEpisodesByCategory({
+      category: CATEGORY,
+      perPage: PER_PAGE,
+      offset,
+    });
 
     // ページコンポーネントに渡すpropsを返す
     return {
