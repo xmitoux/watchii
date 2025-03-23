@@ -28,8 +28,8 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
       router.push(parentPagePath);
     }
     else {
-      // あり得ないが一応
-      router.push('/episodes/page/1');
+      // あり得ないが一応 元カテゴリには戻しようがないので長編カテゴリへ
+      router.push('/episodes/categories/long/page/1');
     }
   }
 
