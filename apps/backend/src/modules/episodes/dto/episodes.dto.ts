@@ -5,9 +5,30 @@ type EpisodesFindAllRequest = {
   limit?: number;
   offset?: number;
   sort?: 'asc' | 'desc';
+  category?: number;
 };
 
 export class EpisodesFindAllRequestDto implements EpisodesFindAllRequest {
+  @IsNumber()
+  @IsOptional()
+  limit?: number;
+
+  @IsNumber()
+  @IsOptional()
+  offset?: number;
+
+  @IsString()
+  @IsOptional()
+  sort?: 'asc' | 'desc';
+
+  @IsNumber()
+  @IsOptional()
+  category?: number;
+}
+
+type EpisodesFindOneRequest = Pick<EpisodesFindAllRequestDto, 'limit' | 'offset' | 'sort'>;
+
+export class EpisodesFindOneRequestDto implements EpisodesFindOneRequest {
   @IsNumber()
   @IsOptional()
   limit?: number;

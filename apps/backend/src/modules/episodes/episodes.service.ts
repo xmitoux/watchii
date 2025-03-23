@@ -2,8 +2,17 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { EpisodeCreateRequestDto, EpisodesFindAllRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import {
+  EpisodeCreateRequestDto,
+  EpisodesFindAllRequestDto,
+  EpisodesFindOneRequestDto,
+  EpisodeUpdateRequestDto,
+} from './dto/episodes.dto';
+import {
+  EpisodeFindAllResponseEntity,
+  EpisodeFindEditDataResponseEntity,
+  EpisodeFindOneResponseEntity,
+} from './entities/episode.entity';
 
 @Injectable()
 export class EpisodesService {
@@ -11,7 +20,7 @@ export class EpisodesService {
 
   private readonly logger = new Logger(EpisodesService.name);
 
-  async findAll(query: EpisodesFindAllRequestDto = {}): Promise<EpisodeFindAllResponseEntity> {
+  async findAll(query: EpisodesFindAllRequestDto): Promise<EpisodeFindAllResponseEntity> {
     const {
       limit = 12,
       offset = 0,
@@ -22,6 +31,7 @@ export class EpisodesService {
       select: {
         id: true,
         title: true,
+        category: true,
         thumbnailPost: {
           select: {
             filename: true,
@@ -31,6 +41,11 @@ export class EpisodesService {
         _count: {
           select: { posts: true },
         },
+      },
+      where: {
+        // カテゴリー指定があれば絞り込み
+        // (admin: 指定なしですべて取得、front: カテゴリ一覧ページで指定して絞り込み)
+        ...(query.category ? { category: query.category } : {}),
       },
       orderBy: {
         // サムネ画像の投稿日時でソート
@@ -49,8 +64,13 @@ export class EpisodesService {
       totalPosts: episode._count.posts,
     }));
 
-    // 全体の件数を取得(無限スクロール用)
-    const total = await this.prisma.episode.count();
+    // 全体の件数を取得(ページネーション用)
+    const total = await this.prisma.episode.count({
+      where: {
+        // カテゴリー指定があれば絞り込み
+        ...(query.category ? { category: query.category } : {}),
+      },
+    });
 
     return {
       episodes: mappedEpisodes,
@@ -58,7 +78,7 @@ export class EpisodesService {
     };
   }
 
-  async findOne(id: number, query: EpisodesFindAllRequestDto = {}): Promise<EpisodeFindOneResponseEntity> {
+  async findOne(id: number, query: EpisodesFindOneRequestDto = {}): Promise<EpisodeFindOneResponseEntity> {
     const {
       limit = 12,
       offset = 0,
