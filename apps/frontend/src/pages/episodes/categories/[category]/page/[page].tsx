@@ -68,13 +68,15 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
   }
 
   try {
-    // カテゴリ名からカテゴリIDを取得
-    const categoryId = Object.values(EPISODE_CONSTS.CATEGORY).find((cat) => cat.pathName === category)?.id;
-    if (!categoryId) {
+    // カテゴリ名からカテゴリ定数を取得
+    const categoryConst = Object.values(EPISODE_CONSTS.CATEGORY).find((cat) => cat.pathName === category);
+    if (!categoryConst) {
       return {
         notFound: true,
       };
     }
+
+    const categoryId = categoryConst.id;
 
     // 指定されたページのエピソード一覧をAPIから取得
     const data = await getEpisodesByCategory({
@@ -91,6 +93,7 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
         currentPage: page,
         perPage: PER_PAGE,
         categoryPathName: category,
+        categoryName: categoryConst.name,
       },
       revalidate: 3600, // 1時間ごとに再ビルド
     };

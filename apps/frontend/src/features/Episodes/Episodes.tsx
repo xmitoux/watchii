@@ -16,7 +16,7 @@ import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types/episodes-types';
 
-export default function Episodes({ episodes, total, currentPage, perPage, categoryPathName }: EpisodesProps) {
+export default function Episodes({ episodes, total, currentPage, perPage, categoryPathName, categoryName }: EpisodesProps) {
   const router = useRouter();
 
   const { scrollRef } = useLayoutScroll();
@@ -47,7 +47,7 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
   }
 
   return (
-    <Layout title="エピソード一覧" scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
+    <Layout title={`${categoryName}一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
       {/* エピソード一覧 */}
       <Flex direction="column" align="center" gap={4}>
         {episodes?.map((episode, index) => (
