@@ -1,15 +1,26 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { Flex } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
 import { EPISODE_CONSTS } from '@/constants/episode-consts';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodeCategoryCard } from './components/EpisodeCategoryCard';
 
 /** エピソードカテゴリ一覧 */
 export default function EpisodeCategories() {
   const router = useRouter();
+
+  const resetEpisodeStore = useNavigationStore('episodes', (state) => state.reset);
+
+  useEffect(() => {
+    // エピソード一覧ページのストアをリセット
+    // (カテゴリページを開いた時点で一覧の復元状態は不要)
+    resetEpisodeStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function goToEpisodesPage(categoryPathName: string) {
     router.push(`/episodes/categories/${categoryPathName}/page/1`);
