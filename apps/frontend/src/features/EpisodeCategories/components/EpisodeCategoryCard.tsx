@@ -6,12 +6,13 @@ type EpisodeCategoryCardProps = {
   title: string;
   description: string;
   imageUrl: string;
+  onClick: () => void;
 };
 
 /** エピソードカテゴリカード */
-export function EpisodeCategoryCard({ title, description, imageUrl }: EpisodeCategoryCardProps) {
+export function EpisodeCategoryCard({ title, description, imageUrl, onClick }: EpisodeCategoryCardProps) {
   return (
-    <Card.Root w="xs" boxShadow="md" cursor="pointer">
+    <Card.Root w="xs" boxShadow="md" cursor="pointer" onClick={onClick}>
       {/* カード画像 */}
       <Flex justify="center">
         {[1, 2, 3].map((item) => {

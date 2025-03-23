@@ -7,7 +7,7 @@ import Episodes from '@/features/Episodes/Episodes';
 import { EpisodesProps } from '@/features/Episodes/types/episodes-types';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
-const CATEGORY = EPISODE_CONSTS.CATEGORY.LONG.id;
+const CATEGORY = EPISODE_CONSTS.CATEGORY.SHORT.id;
 
 /**
  * ビルド時に生成する全ページのパスを定義する
@@ -58,6 +58,7 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
         total: data.total,
         currentPage: page,
         perPage: PER_PAGE,
+        categoryPathName: EPISODE_CONSTS.CATEGORY.SHORT.pathName,
       },
       revalidate: 3600, // 1時間ごとに再ビルド
     };
@@ -70,6 +71,6 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
   }
 };
 
-export default function EpisodesPage({ episodes, total, currentPage, perPage }: EpisodesProps) {
-  return <Episodes episodes={episodes} total={total} currentPage={currentPage} perPage={perPage} />;
+export default function EpisodesPage(props: EpisodesProps) {
+  return <Episodes {...props} />;
 }

@@ -14,12 +14,12 @@ import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types/episodes-types';
 
-export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
+export default function Episodes({ episodes, total, currentPage, perPage, categoryPathName }: EpisodesProps) {
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
     currentPage,
-    destinationPage: '/episodes/page',
+    destinationPage: `/episodes/categories/${categoryPathName}/page`,
     scrollRef,
   });
 

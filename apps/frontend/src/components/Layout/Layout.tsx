@@ -19,7 +19,7 @@ const navigationItems: NavigationItem[] = [
   },
 
   {
-    path: '/episodes/page/1',
+    path: '/episodes/categories',
     rootPath: '/episodes',
     name: 'エピソード',
     activeIcon: '/icons/episodes-active.png',
