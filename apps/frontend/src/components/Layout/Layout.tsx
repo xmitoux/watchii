@@ -99,8 +99,13 @@ export default function Layout({
         // エピソード詳細ページがストアされているならそちらを復元
         router.push(episodeDetailCurrentPagePath);
       }
+      else if (episodesCurrentPagePath) {
+        // エピソード一覧ページがストアされているならそちらを復元
+        router.push(episodesCurrentPagePath);
+      }
       else {
-        router.push(episodesCurrentPagePath ?? '/episodes/page/1');
+        // どちらもストアされていない場合はカテゴリ一覧に遷移
+        router.push('/episodes/categories');
       }
     }
     else {
