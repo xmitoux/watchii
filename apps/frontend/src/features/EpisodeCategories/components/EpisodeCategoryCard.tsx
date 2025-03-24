@@ -1,21 +1,27 @@
+import NextImage from 'next/image';
 import Link from 'next/link';
 
 import { Box, Card, Flex, Icon, Image } from '@repo/ui/chakra-ui';
-import { NextImage } from '@repo/ui/components';
 import { MdArrowForwardIos } from '@repo/ui/icons';
 
 type EpisodeCategoryCardProps = {
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrls: EpisodeCategoryCardImages;
   categoryPathName: string; // onClick の代わりに categoryPathName を受け取る
+};
+
+export type EpisodeCategoryCardImages = {
+  1: string;
+  2: string;
+  3: string;
 };
 
 /** エピソードカテゴリカード */
 export function EpisodeCategoryCard({
   title,
   description,
-  imageUrl,
+  imageUrls,
   categoryPathName,
 }: EpisodeCategoryCardProps) {
   // エピソード一覧のパスを構築
@@ -28,18 +34,17 @@ export function EpisodeCategoryCard({
         <Flex justify="center">
           {[1, 2, 3].map((item) => {
             // 左右両端の角丸設定
-            const roundedTopLeft = item === 1 ? 8 : 0;
-            const roundedTopRight = item === 3 ? 8 : 0;
+            const roundedTopLeft = item === 1 ? 4 : 0;
+            const roundedTopRight = item === 3 ? 4 : 0;
 
             return (
               //  eslint-disable-next-line jsx-a11y/alt-text
               <Image key={item} w="full" asChild roundedTopLeft={roundedTopLeft} roundedTopRight={roundedTopRight}>
                 <NextImage
-                  src={imageUrl}
-                  width={400}
-                  height={400}
-                  styleWidth="106px"
-                  rounded={false}
+                  src={imageUrls[item as keyof EpisodeCategoryCardImages]}
+                  width={200}
+                  height={0}
+                  style={{ width: '106px', height: 'auto' }}
                   priority
                   alt="カテゴリサムネイル"
                 />

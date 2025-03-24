@@ -6,7 +6,25 @@ import Layout from '@/components/Layout/Layout';
 import { EPISODE_CONSTS } from '@/constants/episode-consts';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { EpisodeCategoryCard } from './components/EpisodeCategoryCard';
+import { EpisodeCategoryCard, EpisodeCategoryCardImages } from './components/EpisodeCategoryCard';
+
+const categoryImages: Record<string, EpisodeCategoryCardImages> = {
+  long: {
+    1: '/images/episode-category/long/episode-category-long-1.webp',
+    2: '/images/episode-category/long/episode-category-long-2.webp',
+    3: '/images/episode-category/long/episode-category-long-3.webp',
+  },
+  short: {
+    1: '/images/episode-category/short/episode-category-short-1.webp',
+    2: '/images/episode-category/short/episode-category-short-2.webp',
+    3: '/images/episode-category/short/episode-category-short-3.webp',
+  },
+  other: {
+    1: '/images/episode-category/other/episode-category-other-1.webp',
+    2: '/images/episode-category/other/episode-category-other-2.webp',
+    3: '/images/episode-category/other/episode-category-other-3.webp',
+  },
+};
 
 /** エピソードカテゴリ一覧 */
 export default function EpisodeCategories() {
@@ -25,19 +43,19 @@ export default function EpisodeCategories() {
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.LONG.name}
           description="物語が多数のページにわたるエピソードをまとめています。"
-          imageUrl="20200625_154426-EbXmcdTU8AA39Xq.webp"
+          imageUrls={categoryImages.long}
           categoryPathName={EPISODE_CONSTS.CATEGORY.LONG.pathName}
         />
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.SHORT.name}
           description="長編より短いページ数で続くエピソードをまとめています。"
-          imageUrl="20200627_151349-EbhynWgUwAEpBNy.webp"
+          imageUrls={categoryImages.short}
           categoryPathName={EPISODE_CONSTS.CATEGORY.SHORT.pathName}
         />
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.OTHER.name}
           description="1話完結のエピソードをまとめています。"
-          imageUrl="20200704_134901-EcFiVgRU0AEE-6p.webp"
+          imageUrls={categoryImages.other}
           categoryPathName={EPISODE_CONSTS.CATEGORY.OTHER.pathName}
         />
       </Flex>
