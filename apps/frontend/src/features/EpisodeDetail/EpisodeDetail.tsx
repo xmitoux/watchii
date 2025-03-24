@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
-import { Button, Center, Icon } from '@repo/ui/chakra-ui';
-import { MdArrowBackIos } from '@repo/ui/icons';
+import { Button, Icon, VStack } from '@repo/ui/chakra-ui';
+import { MdKeyboardArrowLeft, MdKeyboardDoubleArrowLeft } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
@@ -20,33 +20,45 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
   useNavigationRestore('episodeDetail', scrollRef);
   const parentPagePath = useNavigationStore('episodes', (state) => state.currentPagePath);
 
-  /** ヘッダーの戻るボタン処理 */
-  const handleNavigationBack = () => {
+  /** エピソード一覧に戻る */
+  function goToEpisodes() {
     if (parentPagePath) {
       // 元のエピソード一覧ページに戻る
       // (ホーム画面からエピソード詳細を復元した場合でも戻れる)
       router.push(parentPagePath);
     }
     else {
-      // あり得ないが一応
-      router.push('/episodes/page/1');
+      // あり得ないが一応 元カテゴリには戻しようがないので長編カテゴリへ
+      router.push('/episodes/categories/long/page/1');
     }
-  };
+  }
+
+  /** エピソードカテゴリ一覧に戻る */
+  function goToEpisodeCategories() {
+    router.push('/episodes/categories');
+  }
 
   return (
-    <Layout title={episodeTitle} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
+    <Layout title={episodeTitle} scrollRef={scrollRef} onNavigationBack={goToEpisodes}>
       {/* post一覧 */}
       <PostGallery posts={posts} />
 
       {/* 一覧に戻るボタン */}
-      <Center mt={3} mb="60px">
-        <Button variant="outline" onClick={handleNavigationBack}>
+      <VStack mt={3} mb="60px">
+        <Button variant="outline" onClick={goToEpisodes}>
           <Icon size="sm">
-            <MdArrowBackIos />
+            <MdKeyboardArrowLeft />
           </Icon>
-          一覧に戻る
+          エピソード一覧に戻る
         </Button>
-      </Center>
+
+        <Button variant="outline" onClick={goToEpisodeCategories}>
+          <Icon size="sm">
+            <MdKeyboardDoubleArrowLeft />
+          </Icon>
+          エピソードカテゴリ一覧に戻る
+        </Button>
+      </VStack>
 
       {/* Postページシャトル */}
       <PostPageShuttle

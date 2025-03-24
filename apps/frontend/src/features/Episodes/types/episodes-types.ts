@@ -15,4 +15,7 @@ export type EpisodesProps = {
   total: number;
   currentPage: number;
   perPage: number;
+  categoryPathName: string;
+  categoryName: string;
+
 };

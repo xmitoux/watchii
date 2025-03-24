@@ -2,8 +2,16 @@ import { Body, Controller, Get, Logger, Param, Post, Put, Query } from '@nestjs/
 
 import { IdParam } from '@/common/dto/IdParam';
 
-import { EpisodeCreateRequestDto, EpisodeUpdateRequestDto } from './dto/episodes.dto';
-import { EpisodeFindAllResponseEntity, EpisodeFindEditDataResponseEntity, EpisodeFindOneResponseEntity } from './entities/episode.entity';
+import {
+  EpisodeCreateRequestDto,
+  EpisodesFindOneRequestDto,
+  EpisodeUpdateRequestDto,
+} from './dto/episodes.dto';
+import {
+  EpisodeFindAllResponseEntity,
+  EpisodeFindEditDataResponseEntity,
+  EpisodeFindOneResponseEntity,
+} from './entities/episode.entity';
 import { EpisodesService } from './episodes.service';
 
 @Controller('/api/episodes')
@@ -14,17 +22,19 @@ export class EpisodesController {
 
   @Get()
   async findAll(
-      @Query('limit') limit?: number,
-      @Query('offset') offset?: number,
-      @Query('sort') sort?: 'asc' | 'desc',
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+    @Query('sort') sort?: 'asc' | 'desc',
+    @Query('category') category?: number,
   ): Promise<EpisodeFindAllResponseEntity> {
     this.logger.log('findAll');
-    this.logger.log('%o', { limit, offset, sort });
+    this.logger.log('%o', { limit, offset, sort, category });
 
     return this.episodesService.findAll({
       limit: limit ? Number(limit) : undefined,
       offset: offset ? Number(offset) : undefined,
       sort,
+      category,
     });
   }
 

@@ -1,7 +1,9 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import { Center, Flex } from '@repo/ui/chakra-ui';
+import { Button, Center, Flex, Icon } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
+import { MdArrowBackIos } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
@@ -14,12 +16,14 @@ import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types/episodes-types';
 
-export default function Episodes({ episodes, total, currentPage, perPage }: EpisodesProps) {
+export default function Episodes({ episodes, total, currentPage, perPage, categoryPathName, categoryName }: EpisodesProps) {
+  const router = useRouter();
+
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
     currentPage,
-    destinationPage: '/episodes/page',
+    destinationPage: `/episodes/categories/${categoryPathName}/page`,
     scrollRef,
   });
 
@@ -36,8 +40,14 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** ヘッダーの戻るボタン処理 */
+  function handleNavigationBack() {
+    // エピソードカテゴリ一覧に戻る
+    router.push('/episodes/categories');
+  }
+
   return (
-    <Layout title="エピソード一覧" scrollRef={scrollRef}>
+    <Layout title={`${categoryName}一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
       {/* エピソード一覧 */}
       <Flex direction="column" align="center" gap={4}>
         {episodes?.map((episode, index) => (
@@ -56,13 +66,23 @@ export default function Episodes({ episodes, total, currentPage, perPage }: Epis
       </Flex>
 
       {/* ページネーション */}
-      <Center mt={3} mb="60px">
+      <Center mt={3}>
         <Pagination
           totalPageCount={total}
           perPage={perPage}
           currentPage={currentPage}
           onPageChange={pagination}
         />
+      </Center>
+
+      {/* 一覧に戻るボタン */}
+      <Center mt={3} mb="60px">
+        <Button variant="outline" onClick={handleNavigationBack}>
+          <Icon size="sm">
+            <MdArrowBackIos />
+          </Icon>
+          エピソードカテゴリ一覧に戻る
+        </Button>
       </Center>
 
       {/* Postページシャトル */}

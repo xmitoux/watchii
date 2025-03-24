@@ -1,7 +1,7 @@
 export default function EpisodesIndex() {
   if (typeof window !== 'undefined') {
-    // エピソード一覧1ページ目にリダイレクト
-    window.location.href = '/episodes/page/1';
+    // エピソードカテゴリ一覧にリダイレクト
+    window.location.href = '/episodes/categories';
   }
   return null;
 }
