@@ -159,6 +159,7 @@ export default function Home() {
       toaster.create({
         title: 'Post登録完了！💾',
         type: 'success',
+        duration: 1500,
       });
 
       setImages([]);
