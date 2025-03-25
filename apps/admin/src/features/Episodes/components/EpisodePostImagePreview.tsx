@@ -26,7 +26,7 @@ export function EpisodeImagePreview({
   }
 
   return (
-    <Box height="50vh" p={{ base: 0, lg: 2 }} overflow="auto">
+    <Box height="40vh" p={{ base: 0, lg: 2 }} overflow="auto">
       <Flex justify={{ base: 'space-evenly', lg: 'start' }} gap={4} wrap="wrap">
         {posts.map((post) => {
           const isSelected = post.id === thumbnailPostId;
