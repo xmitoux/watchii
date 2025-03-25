@@ -27,7 +27,7 @@ model Episode {
   thumbnailPostId Int      @unique @map("thumbnail_post_id")
   thumbnailPost   Post     @relation("ThumbnailPost", fields: [thumbnailPostId], references: [id])
   posts           Post[]   @relation("EpisodePosts")
-  category        Int?
+  category        Int
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 

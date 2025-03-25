@@ -2,10 +2,12 @@ import { useState } from 'react';
 
 import { PostEntity } from '@repo/ui/types';
 
+import { EPISODE_CONSTANTS } from '../constants/episode-constants';
 import { EpisodeForm } from '../types';
 
 export function useEpisodeForm() {
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState(EPISODE_CONSTANTS.CATEGORY.LONG.id);
   const [selectedPosts, setSelectedPosts] = useState<PostEntity[]>([]);
   const [selectedThumbnailPostId, setSelectedThumbnailPostId] = useState<number | null>(null);
 
@@ -47,6 +49,7 @@ export function useEpisodeForm() {
   /** フォームをリセットする */
   function reset() {
     setTitle('');
+    setCategory(EPISODE_CONSTANTS.CATEGORY.LONG.id);
     setSelectedPosts([]);
     setSelectedThumbnailPostId(null);
   }
@@ -55,6 +58,7 @@ export function useEpisodeForm() {
   function getFormData(): EpisodeForm {
     return {
       title,
+      category,
       postIds: selectedPosts.map((post) => post.id),
       thumbnailPostId: selectedThumbnailPostId!,
     };
@@ -63,6 +67,8 @@ export function useEpisodeForm() {
   return {
     episodeTitle: title,
     setEpisodeTitle: setTitle,
+    category,
+    setCategory,
     selectedPosts,
     setSelectedPosts,
     selectedThumbnailPostId,

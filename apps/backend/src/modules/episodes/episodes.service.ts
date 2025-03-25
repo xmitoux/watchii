@@ -144,6 +144,7 @@ export class EpisodesService {
         data: {
           title: dto.title,
           thumbnailPostId: dto.thumbnailPostId,
+          category: dto.category,
         },
       });
 
@@ -167,6 +168,7 @@ export class EpisodesService {
       select: {
         id: true,
         title: true,
+        category: true,
         thumbnailPostId: true,
         posts: {
           select: {
@@ -186,6 +188,7 @@ export class EpisodesService {
 
     return {
       episodeTitle: episode.title,
+      category: episode.category,
       posts: episode.posts,
       thumbnailPostId: episode.thumbnailPostId,
     };
@@ -240,6 +243,7 @@ export class EpisodesService {
         },
         data: {
           title: dto.title,
+          category: dto.category,
           thumbnailPostId: dto.thumbnailPostId,
         },
       });

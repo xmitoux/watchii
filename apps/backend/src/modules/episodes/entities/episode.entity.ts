@@ -25,6 +25,7 @@ export class EpisodeFindOneResponseEntity {
 
 export class EpisodeFindEditDataResponseEntity {
   episodeTitle: string;
+  category: number;
   posts: Pick<
     Post,
     'id'

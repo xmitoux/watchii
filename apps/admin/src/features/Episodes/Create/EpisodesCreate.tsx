@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { MdBook, MdMenuBook, MdPhotoAlbum } from 'react-icons/md';
+import { MdBook, MdCategory, MdDescription, MdMenuBook, MdPhotoAlbum, MdStar } from 'react-icons/md';
 
 import { Field, Fieldset, HStack, Input, Show, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
+import { RadioCardItem, RadioCardRoot } from '@repo/ui/chakra-ui/radio-card';
 import { Toaster } from '@repo/ui/chakra-ui/toaster';
 
 import Layout from '@/components/Layout/Layout';
 
 import { EpisodeImagePreview } from '../components/EpisodePostImagePreview';
 import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
+import { EPISODE_CONSTANTS } from '../constants/episode-constants';
 import { useEpisodeApi } from '../hooks/useEpisodeApi';
 import { useEpisodeForm } from '../hooks/useEpisodeForm';
 
@@ -16,6 +18,8 @@ export default function EpisodesCreate() {
   const {
     episodeTitle,
     setEpisodeTitle,
+    category,
+    setCategory,
     selectedPosts,
     selectedThumbnailPostId,
     handleSelectPosts,
@@ -49,6 +53,45 @@ export default function EpisodesCreate() {
               </HStack>
             </Field.Label>
             <Input value={episodeTitle} onChange={(e) => setEpisodeTitle(e.target.value)} />
+          </Field.Root>
+
+          <Field.Root>
+            <Field.Label>
+              <HStack>
+                <MdCategory />
+                エピソードカテゴリ設定
+              </HStack>
+            </Field.Label>
+
+            <RadioCardRoot
+              variant="surface"
+              orientation="vertical"
+              align="center"
+              value={category.toString()}
+              onValueChange={({ value }) => setCategory(Number(value))}
+            >
+              <HStack>
+                {Object.values(EPISODE_CONSTANTS.CATEGORY).map((item) => {
+                  const icon
+                    = item.name === '長編'
+                      ? <MdMenuBook />
+                      : item.name === '短編'
+                        ? <MdDescription />
+                        : <MdStar />;
+
+                  return (
+                    <RadioCardItem
+                      key={item.id}
+                      label={item.name}
+                      icon={icon}
+                      value={item.id.toString()}
+                      indicator={null}
+                      width={20}
+                    />
+                  );
+                })}
+              </HStack>
+            </RadioCardRoot>
           </Field.Root>
 
           <Field.Root>
