@@ -83,6 +83,11 @@ export const EpisodePostSelectDialog = ({
     onOpenChange({ open: false });
   };
 
+  // すべてチェックする
+  const checkAllPosts = () => {
+    setSelectedPosts(allPosts);
+  };
+
   if (error) {
     return <div>エラーが発生しました</div>;
   }
@@ -97,6 +102,7 @@ export const EpisodePostSelectDialog = ({
         <DialogHeader>
           <HStack>
             <DialogTitle>エピソードPostを選択する</DialogTitle>
+            <Button variant="surface" onClick={checkAllPosts}>すべてチェック</Button>
             <Button onClick={handleConfirm}>確定</Button>
           </HStack>
         </DialogHeader>
