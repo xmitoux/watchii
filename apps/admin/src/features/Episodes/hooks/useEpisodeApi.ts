@@ -8,6 +8,7 @@ import { EpisodeForm } from '../types';
 
 type EpisodeEditData = {
   episodeTitle: string;
+  category: number;
   posts: PostEntity[];
   thumbnailPostId: number;
 };
