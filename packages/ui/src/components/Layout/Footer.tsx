@@ -72,7 +72,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               flexDirection="column"
               alignItems="center"
               mb={3}
-              width="80px"
+              width="100px"
               position="relative"
               cursor="pointer"
               onClick={() => handleClick(item, isIconActive(currentPath, item.rootPath), index)}
