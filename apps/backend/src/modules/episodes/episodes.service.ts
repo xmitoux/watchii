@@ -144,6 +144,7 @@ export class EpisodesService {
         data: {
           title: dto.title,
           thumbnailPostId: dto.thumbnailPostId,
+          category: dto.category,
         },
       });
 

@@ -46,6 +46,9 @@ export class EpisodeCreateRequestDto {
   @IsString()
   title: string;
 
+  @IsNumber()
+  category: number;
+
   @IsArray()
   @ArrayNotEmpty()
   @IsNumber({}, { each: true })
