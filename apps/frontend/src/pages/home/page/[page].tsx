@@ -27,7 +27,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   // パス情報と fallback 設定を返す
   return {
     paths, // 生成するすべてのページパス
-    fallback: false, // パスにないページは404になる
+    fallback: 'blocking', // パスにないページはオンデマンドで生成
   };
 };
 
