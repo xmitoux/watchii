@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({ params }) => {
         currentPage: page,
         perPage: PER_PAGE,
       },
-      revalidate: 3600, // 1時間ごとに再ビルド
+      revalidate: 60, // 1時間ごとに再ビルド
     };
   }
   catch {
