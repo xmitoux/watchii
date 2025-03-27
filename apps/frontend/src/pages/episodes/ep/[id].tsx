@@ -19,7 +19,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: 'blocking', // 新しいエピソードが追加されたときも対応できるように
+    fallback: false, // パスにないページは404を返す
   };
 };
 
@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps<EpisodeDetailProps> = async ({ param
         episodeTitle: data.episodeTitle,
         posts: data.posts,
       },
-      revalidate: 3600, // 1時間ごとに再ビルド
+      // revalidate: 3600, // 1時間ごとに再ビルド
     };
   }
   catch {

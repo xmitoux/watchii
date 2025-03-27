@@ -44,7 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   // パス情報と fallback 設定を返す
   return {
     paths,
-    fallback: false, // パスにないページは404になる
+    fallback: false, // パスにないページは404を返す
   };
 };
 
@@ -95,7 +95,7 @@ export const getStaticProps: GetStaticProps<EpisodesProps> = async ({ params }) 
         categoryPathName: category,
         categoryName: categoryConst.name,
       },
-      revalidate: 3600, // 1時間ごとに再ビルド
+      // revalidate: 3600, // 1時間ごとに再ビルド
     };
   }
   catch (error) {
