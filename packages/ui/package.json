@@ -19,7 +19,7 @@
     "chakra": "pnpm dlx @chakra-ui/cli snippet add"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.2.5",
+    "@chakra-ui/react": "^3.14.2",
     "@emotion/react": "^11.14.0",
     "@supabase/supabase-js": "^2.47.10",
     "next": "15.1.3",
