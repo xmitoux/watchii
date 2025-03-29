@@ -32,6 +32,7 @@ type LayoutProps = {
   title: string;
   actionButton?: React.ReactNode;
   canBack?: boolean;
+  noFooter?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationBack?: () => void;
 };
@@ -47,6 +48,7 @@ export default function Layout({
   title,
   actionButton,
   canBack,
+  noFooter,
   scrollRef,
   onNavigationBack,
 }: LayoutProps) {
@@ -120,6 +122,7 @@ export default function Layout({
         actionButton={actionButton}
         canBack={canBack}
         footerNavigationItems={navigationItems}
+        noFooter={noFooter}
         scrollRef={scrollRef}
         onNavigationClick={handleNavigationClick}
         onNavigationBack={onNavigationBack}

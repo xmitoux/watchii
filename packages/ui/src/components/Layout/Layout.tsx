@@ -10,6 +10,7 @@ type LayoutProps = {
   actionButton?: React.ReactNode;
   canBack?: boolean;
   footerNavigationItems: NavigationItem[];
+  noFooter?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
   onNavigationBack?: () => void;
@@ -21,6 +22,7 @@ export const Layout: React.FC<LayoutProps> = ({
   footerNavigationItems,
   actionButton,
   canBack,
+  noFooter,
   scrollRef,
   onNavigationClick,
   onNavigationBack,
@@ -55,7 +57,7 @@ export const Layout: React.FC<LayoutProps> = ({
         </Box>
       </Box>
 
-      <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />
+      {!noFooter && <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />}
     </Box>
   );
 };
