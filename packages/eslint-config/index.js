@@ -129,6 +129,7 @@ const customStylisticRules = {
     '@stylistic/switch-colon-spacing': 'error',
     '@stylistic/brace-style': ['error', "stroustrup", { "allowSingleLine": false }],
     '@stylistic/arrow-parens': ['error', 'always'],
+    '@stylistic/indent': ["error", 2, { "ignoredNodes": ["ConditionalExpression"] }]
   }
 }
 
