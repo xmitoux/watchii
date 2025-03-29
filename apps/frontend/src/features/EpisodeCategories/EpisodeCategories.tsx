@@ -19,6 +19,11 @@ const categoryImages: Record<string, EpisodeCategoryCardImages> = {
     2: '/images/episode-category/short/episode-category-short-2.webp',
     3: '/images/episode-category/short/episode-category-short-3.webp',
   },
+  season: {
+    1: '/images/episode-category/season/episode-category-season-1.webp',
+    2: '/images/episode-category/season/episode-category-season-2.webp',
+    3: '/images/episode-category/season/episode-category-season-3.webp',
+  },
   other: {
     1: '/images/episode-category/other/episode-category-other-1.webp',
     2: '/images/episode-category/other/episode-category-other-2.webp',
@@ -48,9 +53,15 @@ export default function EpisodeCategories() {
         />
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.SHORT.name}
-          description="長編より短いページ数で続くエピソードをまとめています。"
+          description="ページ数の少ないエピソードをまとめています。"
           imageUrls={categoryImages.short}
           categoryPathName={EPISODE_CONSTS.CATEGORY.SHORT.pathName}
+        />
+        <EpisodeCategoryCard
+          title={EPISODE_CONSTS.CATEGORY.SEASON.name}
+          description="季節関連エピソードをまとめています。"
+          imageUrls={categoryImages.season}
+          categoryPathName={EPISODE_CONSTS.CATEGORY.SEASON.pathName}
         />
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.OTHER.name}
