@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MdBook, MdCategory, MdDescription, MdMenuBook, MdPhotoAlbum, MdStar } from 'react-icons/md';
+import { JSX, useState } from 'react';
+import { MdBook, MdCategory, MdDescription, MdListAlt, MdMenuBook, MdPhotoAlbum, MdStar } from 'react-icons/md';
 
 import { Field, Fieldset, HStack, Input, Show, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
@@ -10,9 +10,16 @@ import Layout from '@/components/Layout/Layout';
 
 import { EpisodeImagePreview } from '../components/EpisodePostImagePreview';
 import { EpisodePostSelectDialog } from '../components/EpisodePostSelectDialog';
-import { EPISODE_CONSTANTS } from '../constants/episode-constants';
+import { EPISODE_CONSTANTS, EpisodeCategoryKey } from '../constants/episode-constants';
 import { useEpisodeApi } from '../hooks/useEpisodeApi';
 import { useEpisodeForm } from '../hooks/useEpisodeForm';
+
+const episodeIcons: Record<EpisodeCategoryKey, JSX.Element> = {
+  LONG: <MdMenuBook />,
+  SHORT: <MdDescription />,
+  SEASON: <MdStar />,
+  OTHER: <MdListAlt />,
+};
 
 export default function EpisodesCreate() {
   const {
@@ -71,25 +78,16 @@ export default function EpisodesCreate() {
               onValueChange={({ value }) => setCategory(Number(value))}
             >
               <HStack>
-                {Object.values(EPISODE_CONSTANTS.CATEGORY).map((item) => {
-                  const icon
-                    = item.name === '長編'
-                      ? <MdMenuBook />
-                      : item.name === '短編'
-                        ? <MdDescription />
-                        : <MdStar />;
-
-                  return (
-                    <RadioCardItem
-                      key={item.id}
-                      label={item.name}
-                      icon={icon}
-                      value={item.id.toString()}
-                      indicator={null}
-                      width={20}
-                    />
-                  );
-                })}
+                {Object.entries(EPISODE_CONSTANTS.CATEGORY).map(([key, item]) => (
+                  <RadioCardItem
+                    key={item.id}
+                    label={item.name}
+                    icon={episodeIcons[key as EpisodeCategoryKey]}
+                    value={item.id.toString()}
+                    indicator={null}
+                    width={20}
+                  />
+                ))}
               </HStack>
             </RadioCardRoot>
           </Field.Root>
