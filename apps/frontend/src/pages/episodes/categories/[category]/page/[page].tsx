@@ -13,14 +13,10 @@ const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
  * 静的サイト生成(SSG)でページネーションを実装する際に必要
  */
 export const getStaticPaths: GetStaticPaths = async () => {
-  // 有効なカテゴリーの配列（文字列として扱う）
-  const categories = [
-    EPISODE_CONSTS.CATEGORY.LONG,
-    EPISODE_CONSTS.CATEGORY.SHORT,
-    EPISODE_CONSTS.CATEGORY.OTHER,
-  ];
-
   const paths = [];
+
+  // カテゴリ定数を取得
+  const categories = Object.values(EPISODE_CONSTS.CATEGORY);
 
   // 各カテゴリーに対してページパスを生成
   for (const category of categories) {
