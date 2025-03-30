@@ -13,12 +13,13 @@ import { Button } from '@repo/ui/chakra-ui/button';
 import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdLock, MdMail } from '@repo/ui/icons';
-import { supabase } from '@repo/ui/utils';
+import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 
 export default function Login() {
   const router = useRouter();
+  const supabase = createClient();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +40,7 @@ export default function Login() {
       }
 
       // ホーム画面にリダイレクト
-      router.push('/home/page/1');
+      router.push('/home');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
