@@ -6,7 +6,7 @@ export default function Document() {
   const appName = 'Watchii';
   const appUrl = 'https://watchii.vercel.app';
   const appDescription = 'ちいかわが読めるアプリです🐰🐱🐭';
-  const ogImageUrl = '/images/og-image.webp';
+  const ogImageUrl = '/images/og-image.png';
 
   return (
     <Html className={kosugi_maru.className} lang="ja" suppressHydrationWarning>
@@ -17,7 +17,7 @@ export default function Document() {
         {/* OGP基本設定 */}
         <meta property="og:site_name" content={appName} />
         <meta property="og:url" content={appUrl} />
-        <meta property="og:title" content={`${appName} - ちいかわ漫画ビューアー`} />
+        <meta property="og:title" content={`${appName} - ちいかわ漫画ビューア`} />
         <meta property="og:description" content={appDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={ogImageUrl} />
