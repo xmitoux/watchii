@@ -6,7 +6,7 @@ export default function Document() {
   const appName = 'Watchii';
   const appUrl = 'https://watchii.vercel.app';
   const appDescription = 'ちいかわが読めるアプリです🐰🐱🐭';
-  const ogImageUrl = '/images/og-image.png';
+  const ogImageUrl = 'https://watchii.vercel.app/images/og-image.png';
 
   return (
     <Html className={kosugi_maru.className} lang="ja" suppressHydrationWarning>
