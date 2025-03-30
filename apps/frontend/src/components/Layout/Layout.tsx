@@ -4,6 +4,7 @@ import React, { ReactNode, RefObject, useEffect } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
+import { MenuDrawer } from '@/components/Drawer/MenuDrawer';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
 
@@ -30,9 +31,9 @@ const navigationItems: NavigationItem[] = [
 type LayoutProps = {
   children: ReactNode;
   title: string;
-  actionButton?: React.ReactNode;
   canBack?: boolean;
   noFooter?: boolean;
+  noMenu?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationBack?: () => void;
 };
@@ -46,9 +47,9 @@ type StateSelector = Required<ReturnType<typeof stateSelector>>;
 export default function Layout({
   children,
   title,
-  actionButton,
   canBack,
   noFooter,
+  noMenu,
   scrollRef,
   onNavigationBack,
 }: LayoutProps) {
@@ -119,7 +120,7 @@ export default function Layout({
     <DeviceTypeInitializer>
       <UiLayout
         title={title}
-        actionButton={actionButton}
+        actionButton={!noMenu && <MenuDrawer />}
         canBack={canBack}
         footerNavigationItems={navigationItems}
         noFooter={noFooter}

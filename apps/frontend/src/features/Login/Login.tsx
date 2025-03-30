@@ -57,7 +57,7 @@ export default function Login() {
   }
 
   return (
-    <Layout title="Watchiiへようこそ！" noFooter>
+    <Layout title="Watchiiへようこそ！" noFooter noMenu>
       <Center>
         <form onSubmit={handleLogin}>
           <Fieldset.Root size="lg">
