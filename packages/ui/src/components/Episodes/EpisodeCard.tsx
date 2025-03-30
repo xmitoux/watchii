@@ -30,7 +30,7 @@ export function EpisodeCard({
         <NextImage
           src={episode.thumbnailPost.filename}
           alt={episode.title}
-          width={350}
+          width={400}
           styleWidth={imageWidth}
           priority
         />
