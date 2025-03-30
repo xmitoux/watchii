@@ -2,11 +2,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { ReactNode, RefObject, useEffect } from 'react';
 
+import { Box } from '@repo/ui/chakra-ui';
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 import { MenuDrawer } from '@/components/Drawer/MenuDrawer';
+import PWAInstallGuide from '@/features/PWAInstallGuide/PWAInstallGuide';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
+import { useSettingStore } from '@/stores/settingStore';
 
 import { usePageTransition } from './hooks/usePageTransition';
 
@@ -116,24 +119,41 @@ export default function Layout({
     }
   }
 
+  // PWAインストールガイド用のストア
+  const showPWAGuide = useSettingStore((state) => state.showPWAGuide);
+  const setShowPWAInstallGuide = useSettingStore((state) => state.setShowPWAInstallGuide);
+
   return (
     <DeviceTypeInitializer>
-      <UiLayout
-        title={title}
-        actionButton={!noMenu && <MenuDrawer />}
-        canBack={canBack}
-        footerNavigationItems={navigationItems}
-        noFooter={noFooter}
-        scrollRef={scrollRef}
-        onNavigationClick={handleNavigationClick}
-        onNavigationBack={onNavigationBack}
+      {/* PWAインストールガイド(ストアのガイド表示を監視して表示) */}
+      <AnimatePresence mode="wait">
+        {showPWAGuide && (<PWAInstallGuide onClose={() => setShowPWAInstallGuide(false)} />)}
+      </AnimatePresence>
+
+      {/* ガイドが表示されていてもレイアウトは常に存在 (ただしz-indexで下に) */}
+      <Box
+        style={{
+          filter: showPWAGuide ? 'blur(3px)' : 'none',
+          transition: 'filter 0.3s ease-in-out',
+        }}
       >
-        <AnimatePresence mode="wait" custom={transitionProps.custom}>
-          <motion.div key={router.asPath} {...transitionProps}>
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </UiLayout>
+        <UiLayout
+          title={title}
+          actionButton={!noMenu && <MenuDrawer />}
+          canBack={canBack}
+          footerNavigationItems={navigationItems}
+          noFooter={noFooter}
+          scrollRef={scrollRef}
+          onNavigationClick={handleNavigationClick}
+          onNavigationBack={onNavigationBack}
+        >
+          <AnimatePresence mode="wait" custom={transitionProps.custom}>
+            <motion.div key={router.asPath} {...transitionProps}>
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </UiLayout>
+      </Box>
     </DeviceTypeInitializer>
   );
 }

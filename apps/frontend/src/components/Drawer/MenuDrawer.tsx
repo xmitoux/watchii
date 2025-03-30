@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
@@ -6,10 +7,24 @@ import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdExitToApp, MdMenu, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
+import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
+import { useSettingStore } from '@/stores/settingStore';
+
 /** メニュードロワー */
 export function MenuDrawer() {
   const router = useRouter();
   const supabase = createClient();
+
+  const [showMenu, setShowMenu] = useState(false);
+
+  const { isPWA } = usePWAInstallGuide();
+  const setShowPWAInstallGuide = useSettingStore((state) => state.setShowPWAInstallGuide);
+
+  function handlePWAInstallGuide() {
+    // PWAインストールガイドを表示
+    setShowPWAInstallGuide(true);
+    setShowMenu(false);
+  }
 
   async function handleLogout() {
     try {
@@ -37,7 +52,7 @@ export function MenuDrawer() {
 
   return (
     <>
-      <Drawer.Root>
+      <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
           <Button variant="plain">
             <MdMenu />
@@ -54,11 +69,13 @@ export function MenuDrawer() {
               </Drawer.Header>
 
               <Drawer.Body>
-                <Flex direction="column" gap={0}>
-                  <Button variant="ghost" width="full">
-                    <MdSmartphone />
-                    インストールガイド
-                  </Button>
+                <Flex direction="column">
+                  {!isPWA() && (
+                    <Button variant="ghost" width="full" onClick={handlePWAInstallGuide}>
+                      <MdSmartphone />
+                      インストールガイド
+                    </Button>
+                  )}
                 </Flex>
               </Drawer.Body>
 
