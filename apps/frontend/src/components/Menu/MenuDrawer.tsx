@@ -63,7 +63,7 @@ export function MenuDrawer() {
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
-          <Button variant="plain">
+          <Button variant="plain" color="chiiWhite">
             <MdMenu />
           </Button>
         </Drawer.Trigger>
@@ -74,7 +74,7 @@ export function MenuDrawer() {
           <Drawer.Positioner>
             <Drawer.Content>
               <Drawer.Header>
-                <Drawer.Title>メニュー</Drawer.Title>
+                <Drawer.Title color="blackSwitch">メニュー</Drawer.Title>
               </Drawer.Header>
 
               <Drawer.Body>

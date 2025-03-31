@@ -29,7 +29,7 @@ export function EpisodeCategoryCard({
 
   return (
     <Link href={href}>
-      <Card.Root w="xs" boxShadow="md" cursor="pointer">
+      <Card.Root w="xs" bg="whiteSwitch" boxShadow="md" cursor="pointer">
         {/* カード画像 */}
         <Flex justify="center">
           {[1, 2, 3].map((item) => {
@@ -58,13 +58,13 @@ export function EpisodeCategoryCard({
           <Flex align="center" justify="space-between" gap={1}>
             <Box>
               {/* カテゴリ名 */}
-              <Card.Title mb={2}>{title}</Card.Title>
+              <Card.Title color="blackSwitch" mb={2}>{title}</Card.Title>
               {/* カテゴリ詳細 */}
               <Card.Description display="flex" alignItems="center" justifyContent="space-between">
                 {description}
               </Card.Description>
             </Box>
-            <Icon>
+            <Icon color="blackSwitch">
               <MdArrowForwardIos />
             </Icon>
           </Flex>

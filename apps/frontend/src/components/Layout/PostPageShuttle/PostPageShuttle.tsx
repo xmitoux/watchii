@@ -37,14 +37,14 @@ export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, p
   return (
     <ActionBar.Root open={true}>
       <ActionBar.Positioner position="fixed" bottom="90px">
-        <ActionBar.Content padding={0}>
+        <ActionBar.Content bg="whiteSwitch" padding={0}>
           <Flex align="center" justify="space-between" px={4} width="300px" height="48px">
             <Flex gap={4}>
               <PostPageShuttleButton direction="top" onClick={handleScrollTop} />
               <PostPageShuttleButton direction="up" onClick={handlePrevImage} />
             </Flex>
 
-            <Box>
+            <Box color="blackSwitch" fontSize="sm">
               {currentImageIndex + 1 + (pageOffset || 0)}
               {' / '}
               {postsTotal || postsPerPage}

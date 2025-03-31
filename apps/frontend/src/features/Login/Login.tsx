@@ -96,8 +96,8 @@ export default function Login() {
             </Fieldset.Content>
 
             <Button
-              color="white"
-              bg="blue.500"
+              color="chiiWhite"
+              bg="hachiBlue"
               type="submit"
               disabled={email === '' || password === ''}
               loading={loading}

@@ -52,7 +52,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
 
   return (
     <Box
-      backgroundColor="blue.300"
+      backgroundColor="hachiBlue"
       height="60px"
       position="fixed"
       bottom="0"
@@ -104,6 +104,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               {/* テキスト部分 */}
               <Text
                 className={hachi_maru_pop.className}
+                color="chiiWhite"
                 fontSize="sm"
                 fontWeight={isItemActive ? 'bold' : '400'}
                 position="absolute"

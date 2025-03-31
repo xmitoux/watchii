@@ -29,7 +29,7 @@ export default function Document() {
 
         <link crossOrigin="use-credentials" href="/manifest.json" rel="manifest" />
         <link href="/apple-touch-icon-180x180.png" rel="apple-touch-icon"></link>
-        <meta name="theme-color" content="#A3CFFF" />
+        <meta name="theme-color" content="#9DD7F2" />
       </Head>
       <body>
         <Main />

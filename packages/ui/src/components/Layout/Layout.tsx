@@ -28,7 +28,7 @@ export const Layout: React.FC<LayoutProps> = ({
   onNavigationBack,
 }) => {
   return (
-    <Box height="100vh" overflow="hidden" position="relative">
+    <Box bg={{ base: 'chiiWhite', _dark: 'gray.900' }} height="100vh" overflow="hidden" position="relative">
       <Header
         title={title}
         actionButton={actionButton}

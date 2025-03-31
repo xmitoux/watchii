@@ -29,8 +29,8 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
   return (
     <Box
       className={hachi_maru_pop.className}
+      bg="hachiBlue"
       fontWeight={600}
-      backgroundColor="blue.300"
       position="fixed"
       top="0"
       left="0"
@@ -47,14 +47,14 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
         {/* 戻るボタン */}
         <Box width="40px">
           {(onNavigationBack || canBack) && (
-            <Button variant="plain" paddingLeft={0} onClick={handleBack}>
+            <Button variant="plain" color="chiiWhite" paddingLeft={0} onClick={handleBack}>
               <MdArrowBackIos />
             </Button>
           )}
         </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text pb={1} fontSize="lg" textAlign="center">
+        <Text pb={1} color="chiiWhite" fontSize="lg" textAlign="center">
           {title}
         </Text>
 
