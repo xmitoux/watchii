@@ -3,8 +3,9 @@ import { useState } from 'react';
 
 import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
+import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { MdExitToApp, MdMenu, MdSmartphone } from '@repo/ui/icons';
+import { MdDarkMode, MdExitToApp, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
@@ -23,6 +24,14 @@ export function MenuDrawer() {
   function handlePWAInstallGuide() {
     // PWAインストールガイドを表示
     setShowPWAInstallGuide(true);
+    setShowMenu(false);
+  }
+
+  const { toggleColorMode, colorMode } = useColorMode();
+
+  function handleToggleDarkMode() {
+    // ダークモードのトグル
+    toggleColorMode();
     setShowMenu(false);
   }
 
@@ -54,7 +63,7 @@ export function MenuDrawer() {
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
-          <Button variant="plain">
+          <Button variant="plain" color="chiiWhite">
             <MdMenu />
           </Button>
         </Drawer.Trigger>
@@ -65,11 +74,16 @@ export function MenuDrawer() {
           <Drawer.Positioner>
             <Drawer.Content>
               <Drawer.Header>
-                <Drawer.Title>メニュー</Drawer.Title>
+                <Drawer.Title color="blackSwitch">メニュー</Drawer.Title>
               </Drawer.Header>
 
               <Drawer.Body>
                 <Flex direction="column">
+                  <Button variant="ghost" width="full" onClick={handleToggleDarkMode}>
+                    {colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
+                    ダークモード切り替え
+                  </Button>
+
                   {!isPWA() && (
                     <Button variant="ghost" width="full" onClick={handlePWAInstallGuide}>
                       <MdSmartphone />

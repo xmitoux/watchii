@@ -24,11 +24,12 @@ export function PostPageShuttleButton({ direction, onClick }: PostPageShuttleBut
 
   return (
     <IconButton
+      bg="hachiBlue"
       size="xs"
       rounded="full"
       onClick={onClick}
     >
-      <Icon size="md">
+      <Icon color="chiiWhite" size="md">
         {icon[direction]}
       </Icon>
     </IconButton>

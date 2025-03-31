@@ -1,26 +1,11 @@
-import { ChakraProvider, createSystem, defaultConfig, defaultSystem } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import { kosugi_maru } from '../../utils';
-
-import {
-  ColorModeProvider,
-  type ColorModeProviderProps,
-} from './color-mode';
-
-const system = createSystem(defaultConfig, {
-  theme: {
-    tokens: {
-      fonts: {
-        heading: { value: kosugi_maru.style.fontFamily },
-        body: { value: kosugi_maru.style.fontFamily },
-      },
-    },
-  },
-});
+import { ColorModeProvider, type ColorModeProviderProps } from './color-mode';
+import theme from './theme';
 
 export function Provider(props: ColorModeProviderProps) {
   return (
-    <ChakraProvider value={system}>
+    <ChakraProvider value={theme}>
       <ColorModeProvider {...props} />
     </ChakraProvider>
   );

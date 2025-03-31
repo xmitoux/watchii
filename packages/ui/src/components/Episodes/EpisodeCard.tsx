@@ -41,18 +41,18 @@ export function EpisodeCard({
           left={0}
           right={0}
           bottom={0}
-          bg="gray.600/50"
+          bg="usaYellow/40"
           borderRadius={10}
           transition="background-color 0.2s"
           _hover={{
-            bg: 'blue.600/40',
+            bg: 'hachiBlue/40',
           }}
         >
           <Flex justify="center" align="center" h="full">
             <VStack>
               <Text
                 className={hachi_maru_pop.className}
-                color="white"
+                color="blackPrimary"
                 fontSize="lg"
                 fontWeight="600"
                 textDecoration="underline"
@@ -63,7 +63,7 @@ export function EpisodeCard({
               </Text>
               <Text
                 className={hachi_maru_pop.className}
-                color="white"
+                color="blackPrimary"
                 fontSize="md"
                 fontWeight="600"
               >
