@@ -5,7 +5,7 @@ import React, { ReactNode, RefObject, useEffect } from 'react';
 import { Box } from '@repo/ui/chakra-ui';
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
-import { MenuDrawer } from '@/components/Drawer/MenuDrawer';
+import { MenuDrawer } from '@/components/Menu/MenuDrawer';
 import PWAInstallGuide from '@/features/PWAInstallGuide/PWAInstallGuide';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
