@@ -41,36 +41,55 @@ export function EpisodeCard({
           left={0}
           right={0}
           bottom={0}
-          bg="usaYellow/40"
+          bg="usaYellow/30"
           borderRadius={10}
           transition="background-color 0.2s"
           _hover={{
-            bg: 'hachiBlue/40',
+            bg: 'hachiBlue/20',
           }}
         >
-          <Flex justify="center" align="center" h="full">
-            <VStack>
+          {/* ぼかしコンテナを配置する半透明のオーバーレイ */}
+          <Box
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            width="90%"
+            py={3}
+            backdropFilter="blur(0.8px)"
+            style={{
+              WebkitBackdropFilter: 'blur(0.8px)',
+            }}
+            bg="hachiBlue/40"
+            borderRadius="md"
+            border="1px solid"
+            borderColor="hachiBlue/20"
+          >
+            <Flex direction="column" justify="center" align="center" h="full">
+              {/* エピソードタイトル */}
               <Text
                 className={hachi_maru_pop.className}
-                color="blackPrimary"
-                fontSize="lg"
+                color="chiiWhite"
+                fontSize="md"
                 fontWeight="600"
-                textDecoration="underline"
-                textDecorationThickness="2px"
-                textUnderlineOffset="3px"
+                textShadow="0px 1px 2px rgba(0, 0, 0, 0.9)"
+                textAlign="center"
+                px={2}
               >
                 {episode.title}
               </Text>
+              {/* エピソードの話数 */}
               <Text
                 className={hachi_maru_pop.className}
-                color="blackPrimary"
-                fontSize="md"
+                color="chiiWhite"
+                fontSize="sm"
                 fontWeight="600"
+                textShadow="0px 1px 2px rgba(0, 0, 0, 0.9)"
               >
                 {`(全${episode.totalPosts}話)`}
               </Text>
-            </VStack>
-          </Flex>
+            </Flex>
+          </Box>
         </Box>
       </Box>
     </Link>

@@ -10,7 +10,11 @@ export default createSystem(defaultConfig, {
         body: { value: kosugi_maru.style.fontFamily },
       },
       colors: {
-        hachiBlue: { value: '#9BD5F2' },
+        hachiBlue: {
+          DEFAULT: { value: '#9BD5F2' },
+          dark: { value: '#78A6BE' },
+          light: { value: '#BFE9FF' },
+        },
         chiiWhite: { value: '#FFFFFF' },
         usaYellow: { value: '#FDEFCA' },
         blackPrimary: { value: '{colors.gray.800}' },

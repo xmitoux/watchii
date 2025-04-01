@@ -24,12 +24,12 @@ export function PostPageShuttleButton({ direction, onClick }: PostPageShuttleBut
 
   return (
     <IconButton
-      bg="hachiBlue"
+      bg={{ base: 'hachiBlue.light', _dark: 'hachiBlue.dark' }}
       size="xs"
       rounded="full"
       onClick={onClick}
     >
-      <Icon color="chiiWhite" size="md">
+      <Icon color="chiiWhite" size="lg">
         {icon[direction]}
       </Icon>
     </IconButton>
