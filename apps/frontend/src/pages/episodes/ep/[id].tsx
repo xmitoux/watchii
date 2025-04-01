@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 
 import EpisodeDetail from '@/features/EpisodeDetail/EpisodeDetail';
 import { EpisodeDetailProps } from '@/features/EpisodeDetail/types/episode-detail-types';
+import { fetchData } from '@/utils/fetch';
 
 /**
  * ビルド時に生成する全ページのパスを定義する
@@ -9,7 +10,7 @@ import { EpisodeDetailProps } from '@/features/EpisodeDetail/types/episode-detai
  */
 export const getStaticPaths: GetStaticPaths = async () => {
   // APIからエピソードの総数を取得（ここでは1件だけ取得して総数情報だけ使用）
-  const res = await fetch(`${process.env.API_BASE_URL}/episodes?limit=1000`);
+  const res = await fetchData('/episodes?limit=1000');
   const { episodes } = await res.json();
 
   // 各エピソードIDからパスを生成
@@ -32,9 +33,7 @@ export const getStaticProps: GetStaticProps<EpisodeDetailProps> = async ({ param
   const id = Number(params?.id);
 
   try {
-    const res = await fetch(
-      `${process.env.API_BASE_URL}/episodes/${id}?limit=1000`,
-    );
+    const res = await fetchData(`/episodes/${id}?limit=1000`);
 
     if (!res.ok) {
       return {
