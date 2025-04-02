@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { PaginationParams } from '@/common/dto/PaginationParams';
 import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { PostsFindAllRequestDto, PostsFindEpisodeTargetsRequestDto } from './dto/posts.dto';
-import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
+import { FindPostsByCharacterResponse, PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -149,6 +150,53 @@ export class PostsService {
           { episodeId },
         ],
       },
+      orderBy: {
+        postedAt: sort,
+      },
+      take: limit,
+      skip: offset,
+    });
+
+    return {
+      posts,
+      total,
+    };
+  }
+
+  async findPostsByCharacter(nameKey: string, query: PaginationParams): Promise<FindPostsByCharacterResponse> {
+    const {
+      limit = 12,
+      offset = 0,
+      sort = 'asc',
+    } = query;
+
+    // キャラクターでフィルタリングする条件
+    const whereCondition = {
+      characters: {
+        some: {
+          nameKey,
+        },
+      },
+    };
+
+    // キャラクター条件で全体の件数を取得
+    const total = await this.prisma.post.count({
+      where: whereCondition,
+    });
+
+    // キャラクター条件で投稿を取得
+    const posts = await this.prisma.post.findMany({
+      select: {
+        id: true,
+        filename: true,
+        postedAt: true,
+        characters: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      where: whereCondition,
       orderBy: {
         postedAt: sort,
       },
