@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
 import Home from '@/features/Home/Home';
 import { HomeProps } from '@/features/Home/types/home-types';
+import { fetchData } from '@/utils/fetch';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
 
@@ -12,7 +13,7 @@ const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
  */
 export const getStaticPaths: GetStaticPaths = async () => {
   // APIから投稿の総数を取得（ここでは1件だけ取得して総数情報だけ使用）
-  const res = await fetch(`${process.env.API_BASE_URL}/posts?limit=1`);
+  const res = await fetchData('/posts?limit=1');
   const { total } = await res.json();
 
   // 必要なページ数を計算（切り上げ）
@@ -43,9 +44,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({ params }) => {
 
   try {
     // 指定されたページの投稿データをAPIから取得
-    const res = await fetch(
-      `${process.env.API_BASE_URL}/posts?limit=${PER_PAGE}&offset=${offset}`,
-    );
+    const res = await fetchData(`/posts?limit=${PER_PAGE}&offset=${offset}`);
 
     if (!res.ok) {
       return {

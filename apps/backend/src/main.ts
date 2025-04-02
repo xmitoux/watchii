@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter';
 import { PrismaClientValidationFilter } from './common/filters/prisma-validation-exception.filter';
+import { ApiKeyGuard } from './common/guard/api-key.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -29,6 +30,7 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.useGlobalFilters(new HttpExceptionFilter(), new PrismaClientValidationFilter());
+  app.useGlobalGuards(new ApiKeyGuard());
 
   // リクエストボディのサイズ制限を10MBに設定
   app.use(express.json({ limit: '10mb' }));
@@ -45,5 +47,4 @@ async function bootstrap() {
   });
 }
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
 bootstrap();

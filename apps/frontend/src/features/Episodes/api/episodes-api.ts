@@ -1,6 +1,8 @@
+import { fetchData } from '@/utils/fetch';
+
 import { EpisodeFindAllResponse } from '../types/episodes-types';
 
-const apiBaseUrl = `${process.env.API_BASE_URL}/episodes`;
+const endpoint = `/episodes`;
 
 type GetEpisodePagesByCategoryRequest = {
   category: number;
@@ -14,8 +16,8 @@ type GetEpisodePagesByCategoryResponse = {
 export async function getEpisodePagesByCategory(
   { category }: GetEpisodePagesByCategoryRequest,
 ): Promise<number> {
-  const apiUrl = `${apiBaseUrl}?limit=1&category=${category}`;
-  const res = await fetch(apiUrl);
+  const apiUrl = `${endpoint}?limit=1&category=${category}`;
+  const res = await fetchData(apiUrl);
 
   if (!res.ok) {
     throw new Error('エピソードカテゴリの総ページ数取得処理に失敗しました。');
@@ -37,8 +39,8 @@ type GetEpisodesByCategoryResponse = EpisodeFindAllResponse;
 export async function getEpisodesByCategory(
   { category, perPage, offset }: GetEpisodesByCategoryRequest,
 ): Promise<GetEpisodesByCategoryResponse> {
-  const apiUrl = `${apiBaseUrl}?category=${category}&limit=${perPage}&offset=${offset}`;
-  const res = await fetch(apiUrl);
+  const apiUrl = `${endpoint}?category=${category}&limit=${perPage}&offset=${offset}`;
+  const res = await fetchData(apiUrl);
 
   if (!res.ok) {
     throw new Error('カテゴリごとのエピソード一覧取得処理に失敗しました。');
