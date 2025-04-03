@@ -18,16 +18,22 @@ const navigationItems: NavigationItem[] = [
     path: '/home/page/1',
     rootPath: '/home',
     name: 'ホーム',
-    activeIcon: '/icons/home-active.png',
-    inactiveIcon: '/icons/home-inactive.png',
+    activeIcon: '/images/icons/home-active.png',
+    inactiveIcon: '/images/icons/home-inactive.png',
   },
-
   {
     path: '/episodes/categories',
     rootPath: '/episodes',
     name: 'エピソード',
-    activeIcon: '/icons/episodes-active.png',
-    inactiveIcon: '/icons/episodes-inactive.png',
+    activeIcon: '/images/icons/episodes-active.png',
+    inactiveIcon: '/images/icons/episodes-inactive.png',
+  },
+  {
+    path: '/tags',
+    rootPath: '/tags',
+    name: 'キャラ・タグ',
+    activeIcon: '/images/icons/tags-active.png',
+    inactiveIcon: '/images/icons/tags-inactive.png',
   },
 ];
 
@@ -68,6 +74,9 @@ export default function Layout({
   const {
     currentPagePath: episodeDetailCurrentPagePath,
   } = useNavigationStore<StateSelector>('episodeDetail', stateSelector);
+  const {
+    currentPagePath: tagsCurrentPagePath,
+  } = useNavigationStore<StateSelector>('tags', stateSelector);
 
   // ナビゲーションアイテムのプリフェッチ
   useEffect(() => {
@@ -87,8 +96,11 @@ export default function Layout({
           router.prefetch(episodesCurrentPagePath);
         }
       }
+      else if (item.name === 'キャラ・タグ' && tagsCurrentPagePath) {
+        router.prefetch(tagsCurrentPagePath);
+      }
     });
-  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath]);
+  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath, tagsCurrentPagePath]);
 
   function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
     if (isRecursive) {
@@ -113,6 +125,9 @@ export default function Layout({
         // どちらもストアされていない場合はカテゴリ一覧に遷移
         router.push('/episodes/categories');
       }
+    }
+    else if (item.name === 'キャラ・タグ') {
+      router.push(tagsCurrentPagePath ?? '/tags');
     }
     else {
       router.push(item.path);

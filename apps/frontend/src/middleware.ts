@@ -77,7 +77,7 @@ async function updateSession(request: NextRequest) {
 
   // 認証済みユーザーがログインページなどにアクセスしたらホーム画面へ
   if (user && isPublicPath(path)) {
-    const homeUrl = new URL('/home', request.url);
+    const homeUrl = new URL('/home/page/1', request.url);
 
     // 新しいレスポンスを作成する場合はクッキーを維持する必要がある
     const redirectResponse = NextResponse.redirect(homeUrl);

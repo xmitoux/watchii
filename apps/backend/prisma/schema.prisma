@@ -9,14 +9,15 @@ datasource db {
 }
 
 model Post {
-  id           Int      @id @default(autoincrement())
-  filename     String   @unique
-  postedAt     DateTime @map("posted_at")
-  episodeId    Int?     @map("episode_id")
-  episode      Episode? @relation("EpisodePosts", fields: [episodeId], references: [id])
-  thumbnailFor Episode? @relation("ThumbnailPost")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           Int         @id @default(autoincrement())
+  filename     String      @unique
+  postedAt     DateTime    @map("posted_at")
+  episodeId    Int?        @map("episode_id")
+  episode      Episode?    @relation("EpisodePosts", fields: [episodeId], references: [id])
+  thumbnailFor Episode?    @relation("ThumbnailPost")
+  characters   Character[] @relation("PostCharacters")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
 
   @@map("posts")
 }
@@ -32,4 +33,17 @@ model Episode {
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("episodes")
+}
+
+model Character {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  nameKey      String   @unique @map("name_key")
+  order        Int
+  iconFilename String   @unique @map("icon_filename")
+  posts        Post[]   @relation("PostCharacters")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("characters")
 }

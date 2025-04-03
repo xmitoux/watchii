@@ -4,23 +4,10 @@ import { CSSProperties, useEffect, useRef, useState } from 'react';
 
 import { Skeleton } from '@repo/ui/chakra-ui/skeleton';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const CDN_BASE_URL = process.env.NEXT_PUBLIC_CDN_BASE_URL;
-const SUPABASE_STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
+import { useNextImage } from '../../hooks/useNextImage';
 
 // 固定のアスペクト比 (720:1024)
 const FIXED_ASPECT_RATIO = 720 / 1024;
-
-type ImageLoaderProps = {
-  src: string;
-  width: number;
-};
-
-const imageLoader = isProduction
-  ? ({ src, width }: ImageLoaderProps) => {
-    return `${CDN_BASE_URL}/w=${width},f=webp/${src}`;
-  }
-  : undefined;
 
 export type NextImageProps = {
   src: string;
@@ -47,12 +34,11 @@ export function NextImage({
   rounded = true,
   onClick,
 }: NextImageProps) {
+  const { imageLoader, imageSrc } = useNextImage({ src, width });
+
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [skeletonHeight, setSkeletonHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // 画像のURL
-  const imageSrc = isProduction ? src : `${SUPABASE_STORAGE_URL}/${src}`;
 
   // コンテナの幅を監視して高さを計算
   useEffect(() => {
