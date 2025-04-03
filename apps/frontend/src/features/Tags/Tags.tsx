@@ -1,10 +1,12 @@
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { Box, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
 import { useNextImage } from '@repo/ui/hooks';
 
 import Layout from '@/components/Layout/Layout';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { CharacterEntity, TagsProps } from './types/tags-types';
 
@@ -57,6 +59,14 @@ function CharacterTag({ character }: CharacterCardProps) {
 
 /** タグ一覧画面コンポーネント */
 export default function Tags({ characters }: TagsProps) {
+  const resetNavigationStore = useNavigationStore('tags', (state) => state.reset);
+
+  useEffect(() => {
+    // ナビゲーションストアをリセット
+    resetNavigationStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Layout title="キャラ・タグ一覧">
       <Flex direction="column" align="center">

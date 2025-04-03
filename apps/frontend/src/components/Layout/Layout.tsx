@@ -74,6 +74,9 @@ export default function Layout({
   const {
     currentPagePath: episodeDetailCurrentPagePath,
   } = useNavigationStore<StateSelector>('episodeDetail', stateSelector);
+  const {
+    currentPagePath: tagsCurrentPagePath,
+  } = useNavigationStore<StateSelector>('tags', stateSelector);
 
   // ナビゲーションアイテムのプリフェッチ
   useEffect(() => {
@@ -93,8 +96,11 @@ export default function Layout({
           router.prefetch(episodesCurrentPagePath);
         }
       }
+      else if (item.name === 'キャラ・タグ' && tagsCurrentPagePath) {
+        router.prefetch(tagsCurrentPagePath);
+      }
     });
-  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath]);
+  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath, tagsCurrentPagePath]);
 
   function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
     if (isRecursive) {
@@ -119,6 +125,9 @@ export default function Layout({
         // どちらもストアされていない場合はカテゴリ一覧に遷移
         router.push('/episodes/categories');
       }
+    }
+    else if (item.name === 'キャラ・タグ') {
+      router.push(tagsCurrentPagePath ?? '/tags');
     }
     else {
       router.push(item.path);

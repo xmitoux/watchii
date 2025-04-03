@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 import { Center } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
@@ -18,6 +20,8 @@ export default function CharacterPosts({
   currentPage,
   perPage,
 }: CharacterPostsProps) {
+  const router = useRouter();
+
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
@@ -26,10 +30,16 @@ export default function CharacterPosts({
     scrollRef,
   });
 
-  // useNavigationRestore('home', scrollRef);
+  useNavigationRestore('tags', scrollRef);
+
+  /** ヘッダーの戻るボタン処理 */
+  function handleNavigationBack() {
+    // エピソードカテゴリ一覧に戻る
+    router.push('/tags');
+  }
 
   return (
-    <Layout title={`${characterName}の漫画一覧`} scrollRef={scrollRef}>
+    <Layout title={`${characterName}の漫画一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
       {/* post一覧 */}
       <PostGallery posts={posts} />
 
