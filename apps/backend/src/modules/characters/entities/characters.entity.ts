@@ -1,4 +1,4 @@
-import { Character } from '@prisma/client';
+import { Character, Post } from '@prisma/client';
 
 type FindAllCharactersEntity = Pick<
   Character,
@@ -11,3 +11,19 @@ type FindAllCharactersEntity = Pick<
 export class FindAllCharactersResponse {
   characters: FindAllCharactersEntity[];
 }
+
+type GetCharactersPostCountEntity = Pick<Character, 'nameKey'> & { postCount: number };
+export type GetCharactersPostCountResponse = GetCharactersPostCountEntity[];
+
+type PostEntity = Pick<
+  Post,
+  'id'
+  | 'filename'
+  | 'postedAt'
+>;
+
+export type FindPostsByCharacterResponse = {
+  characterName: string;
+  posts: PostEntity[];
+  total: number;
+};

@@ -1,9 +1,7 @@
 import { Body, Controller, Get, Logger, Param, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { StringParam } from '@/common/dto/StringParam';
-
-import { FindPostsByCharacterResponse, PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
+import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
 @Controller('/api/posts')
@@ -51,23 +49,6 @@ export class PostsController {
       offset: offset ? Number(offset) : undefined,
       sort,
       episodeId,
-    });
-  }
-
-  @Get('/character/:param')
-  async findPostsByCharacter(
-    @Param() { param }: StringParam,
-    @Query('limit') limit?: number,
-    @Query('offset') offset?: number,
-    @Query('sort') sort?: 'asc' | 'desc',
-  ): Promise<FindPostsByCharacterResponse> {
-    this.logger.log('findPostsByCharacter');
-    this.logger.log('%o', { param, limit, offset, sort });
-
-    return this.postsService.findPostsByCharacter(param, {
-      limit: limit ? Number(limit) : undefined,
-      offset: offset ? Number(offset) : undefined,
-      sort,
     });
   }
 }
