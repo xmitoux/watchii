@@ -1,5 +1,5 @@
 import NextImage from 'next/image';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { Box, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
@@ -16,43 +16,41 @@ type CharacterCardProps = {
 
 /** キャラクタータグコンポーネント */
 function CharacterTag({ character }: CharacterCardProps) {
-  const router = useRouter();
-
   const src = `chara-icons/${character.iconFilename}`;
   const { imageLoader, imageSrc } = useNextImage({ src, width: 80 });
 
-  function goToCharacterPosts() {
-    // キャラクターの投稿一覧ページに遷移
-    router.push(`/tags/${character.nameKey}/page/1`);
-  }
+  // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
+  const prefetchLink = `/tags/${character.nameKey}/page/1`;
 
   return (
-    <Flex direction="column" align="center" cursor="pointer" onClick={goToCharacterPosts}>
-      {/* アイコン */}
-      <Image
-        asChild
-        mb={2}
-        border="2px solid"
-        borderColor="hachiBlue"
-        borderRadius="full"
-        objectFit="cover"
-        alt=""
-      >
-        <NextImage
-          src={imageSrc}
-          loader={imageLoader}
-          width={80}
-          height={0}
-          style={{ width: '80px', height: 'auto' }}
-          priority
-          alt={character.name}
-        />
-      </Image>
+    <Flex direction="column" align="center">
+      <Link href={prefetchLink}>
+        {/* アイコン */}
+        <Image
+          asChild
+          mb={2}
+          border="2px solid"
+          borderColor="hachiBlue"
+          borderRadius="full"
+          objectFit="cover"
+          alt=""
+        >
+          <NextImage
+            src={imageSrc}
+            loader={imageLoader}
+            width={80}
+            height={0}
+            style={{ width: '80px', height: 'auto' }}
+            priority
+            alt={character.name}
+          />
+        </Image>
 
-      {/* キャラ名 */}
-      <Text color="blackSwitch" fontWeight="bold" fontSize="md" textAlign="center">
-        {character.name}
-      </Text>
+        {/* キャラ名 */}
+        <Text color="blackSwitch" fontWeight="bold" fontSize="md" textAlign="center">
+          {character.name}
+        </Text>
+      </Link>
     </Flex>
   );
 }
