@@ -40,7 +40,7 @@ export default function Login() {
       }
 
       // ホーム画面にリダイレクト
-      router.push('/home');
+      router.push('/home/page/1');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {

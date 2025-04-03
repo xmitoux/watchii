@@ -23,7 +23,7 @@ function CharacterTag({ character }: CharacterCardProps) {
 
   function goToCharacterPosts() {
     // キャラクターの投稿一覧ページに遷移
-    router.push(`/tags/${character.nameKey}`);
+    router.push(`/tags/${character.nameKey}/page/1`);
   }
 
   return (
