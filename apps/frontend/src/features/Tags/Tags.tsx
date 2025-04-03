@@ -1,4 +1,5 @@
 import NextImage from 'next/image';
+import { useRouter } from 'next/router';
 
 import { Box, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
 import { useNextImage } from '@repo/ui/hooks';
@@ -13,11 +14,18 @@ type CharacterCardProps = {
 
 /** キャラクタータグコンポーネント */
 function CharacterTag({ character }: CharacterCardProps) {
+  const router = useRouter();
+
   const src = `chara-icons/${character.iconFilename}`;
   const { imageLoader, imageSrc } = useNextImage({ src, width: 80 });
 
+  function goToCharacterPosts() {
+    // キャラクターの投稿一覧ページに遷移
+    router.push(`/tags/${character.nameKey}`);
+  }
+
   return (
-    <Flex direction="column" align="center">
+    <Flex direction="column" align="center" cursor="pointer" onClick={goToCharacterPosts}>
       {/* アイコン */}
       <Image
         asChild
@@ -26,7 +34,6 @@ function CharacterTag({ character }: CharacterCardProps) {
         borderColor="hachiBlue"
         borderRadius="full"
         objectFit="cover"
-        cursor="pointer"
         alt=""
       >
         <NextImage
