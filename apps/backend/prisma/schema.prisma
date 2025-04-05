@@ -16,6 +16,7 @@ model Post {
   episode      Episode?    @relation("EpisodePosts", fields: [episodeId], references: [id])
   thumbnailFor Episode?    @relation("ThumbnailPost")
   characters   Character[] @relation("PostCharacters")
+  tags         Tag[]       @relation("PostTags")
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
 
@@ -46,4 +47,15 @@ model Character {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("characters")
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  order     Int
+  posts     Post[]   @relation("PostTags")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("tags")
 }
