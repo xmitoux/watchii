@@ -17,7 +17,7 @@ export default createSystem(defaultConfig, {
         },
         chiiWhite: { value: '#FFFFFF' },
         usaYellow: { value: '#FDEFCA' },
-        blackPrimary: { value: '{colors.gray.800}' },
+        blackPrimary: { value: '{colors.gray.700}' },
       },
     },
     semanticTokens: {

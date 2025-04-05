@@ -8,6 +8,7 @@ import { CharactersModule } from './modules/characters/characters.module';
 import { EpisodesModule } from './modules/episodes/episodes.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { TagsModule } from './modules/tags/tags.module';
 
 const pinoHttp = {
   level: process.env.PINO_LOG_LEVEL || 'trace',
@@ -28,6 +29,7 @@ const pinoHttp = {
     HealthCheckModule,
     EpisodesModule,
     CharactersModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

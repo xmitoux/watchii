@@ -90,11 +90,13 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
               >
                 <NextImage
                   src={isItemActive ? item.activeIcon : item.inactiveIcon}
-                  width={isItemActive ? 40 : 30}
-                  height={isItemActive ? 40 : 30}
+                  width={80}
+                  height={80}
                   alt={item.path}
                   priority
                   style={{
+                    width: isItemActive ? '40px' : '30px',
+                    height: 'auto',
                     transition: 'opacity 0.2s ease',
                     opacity: 1,
                   }}

@@ -10,23 +10,23 @@ import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 
-import { CharacterPostsProps } from '../types/tags-types';
+import { TagPostsProps } from '../types/tags-types';
 
-export default function CharacterPosts({
+export default function TagPosts({
   posts,
   total,
-  characterNameKey,
-  characterName,
+  id,
+  tagName,
   currentPage,
   perPage,
-}: CharacterPostsProps) {
+}: TagPostsProps) {
   const router = useRouter();
 
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
     currentPage,
-    destinationPage: `/tags/character/${characterNameKey}/page`,
+    destinationPage: `/tags/tag/${id}/page`,
     scrollRef,
   });
 
@@ -39,7 +39,7 @@ export default function CharacterPosts({
   }
 
   return (
-    <Layout title={`${characterName}の漫画一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
+    <Layout title={`${tagName}の漫画一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
       {/* post一覧 */}
       <PostGallery posts={posts} />
 
