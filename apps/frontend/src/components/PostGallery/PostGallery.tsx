@@ -27,7 +27,7 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
         >
           <NextImage
             src={post.filename}
-            width={500}
+            width={700}
             styleWidth={imageWidth}
             alt={post.filename}
             priority
