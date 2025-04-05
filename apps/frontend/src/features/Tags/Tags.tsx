@@ -1,69 +1,13 @@
-import NextImage from 'next/image';
-// import Link from 'next/link';
 import { useEffect } from 'react';
 
-import { Box, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
-import { useNextImage } from '@repo/ui/hooks';
+import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { CharacterEntity, TagsProps } from './types/tags-types';
-
-type CharacterCardProps = {
-  character: CharacterEntity;
-};
-
-/** キャラクタータグコンポーネント */
-function CharacterTag({ character }: CharacterCardProps) {
-  const src = `chara-icons/${character.iconFilename}`;
-  const width = 200;
-  const { imageLoader, imageSrc } = useNextImage({ src, width });
-
-  // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
-  const prefetchLink = `/tags/${character.nameKey}/page/1`;
-
-  // TODO: Linkを使用するときに削除する
-  function handleLinkClick() {
-    if (typeof window !== 'undefined') {
-      window.location.href = prefetchLink;
-    }
-  }
-
-  return (
-    <Flex direction="column" align="center" cursor="pointer" onClick={handleLinkClick}>
-      {/* TODO: キャラクター分類が終わったらLinkを使用  */}
-      {/* 未分類状態だと404にしたいが、本番環境だと出ない リダイレクトだと出るので一時的にそうしている */}
-      {/* <Link href={prefetchLink}> */}
-      {/* アイコン */}
-      <Image
-        asChild
-        mb={2}
-        border="2px solid"
-        borderColor="hachiBlue"
-        borderRadius="full"
-        objectFit="cover"
-        alt=""
-      >
-        <NextImage
-          src={imageSrc}
-          loader={imageLoader}
-          width={width}
-          height={0}
-          style={{ width: '80px', height: 'auto' }}
-          priority
-          alt={character.name}
-        />
-      </Image>
-
-      {/* キャラ名 */}
-      <Text color="blackSwitch" fontWeight="bold" fontSize="md" textAlign="center">
-        {character.name}
-      </Text>
-      {/* </Link> */}
-    </Flex>
-  );
-}
+import { CharacterTag } from './components/CharacterTag';
+import { CuteTag } from './components/CuteTag';
+import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
 export default function Tags({ characters, tags }: TagsProps) {
@@ -75,15 +19,27 @@ export default function Tags({ characters, tags }: TagsProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
+
   return (
     <Layout title="キャラ・タグ一覧">
       <Flex direction="column" align="center">
-        <Text color="blackSwitch" fontSize="xl" fontWeight="bold" mb={2}>
-          キャラクター
-        </Text>
+        {/* キャラクターセクション */}
+        <Box
+          w="full"
+          bg={bgColor}
+          borderRadius="lg"
+          py={2}
+          mb={4}
+          textAlign="center"
+        >
+          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
+            キャラクター
+          </Text>
+        </Box>
 
         {/* キャラタグ一覧 */}
-        <SimpleGrid columns={3}>
+        <SimpleGrid columns={3} mb={8}>
           {characters?.map((character) => (
             <Box key={character.id} m={4}>
               <CharacterTag character={character} />
@@ -91,18 +47,28 @@ export default function Tags({ characters, tags }: TagsProps) {
           ))}
         </SimpleGrid>
 
-        <Text color="blackSwitch" fontSize="xl" fontWeight="bold" mt={2} mb={2}>
-          タグ
-        </Text>
-
-        {/* タグ一覧 */}
-        <Box>
-          {tags?.map((tag) => (
-            <Box key={tag.id} m={4}>
-              <Text>{tag.name}</Text>
-            </Box>
-          ))}
+        {/* タグセクション */}
+        <Box
+          w="full"
+          bg={bgColor}
+          borderRadius="lg"
+          py={2}
+          mb={4}
+          textAlign="center"
+        >
+          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
+            タグ
+          </Text>
         </Box>
+
+        {/* タグ一覧 - Wrapを使って自動的に折り返す */}
+        <Wrap justify="center">
+          {tags?.map((tag) => (
+            <WrapItem key={tag.id} m={1}>
+              <CuteTag tag={tag} />
+            </WrapItem>
+          ))}
+        </Wrap>
       </Flex>
     </Layout>
   );
