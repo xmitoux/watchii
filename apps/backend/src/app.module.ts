@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { CharactersModule } from './modules/characters/characters.module';
 import { EpisodesModule } from './modules/episodes/episodes.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
+import { PopularWordsModule } from './modules/popular_words/popular_words.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { TagsModule } from './modules/tags/tags.module';
 
@@ -30,6 +31,7 @@ const pinoHttp = {
     EpisodesModule,
     CharactersModule,
     TagsModule,
+    PopularWordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
