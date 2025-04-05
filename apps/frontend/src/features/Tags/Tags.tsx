@@ -1,5 +1,5 @@
 import NextImage from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { Box, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
@@ -22,35 +22,44 @@ function CharacterTag({ character }: CharacterCardProps) {
   // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
   const prefetchLink = `/tags/${character.nameKey}/page/1`;
 
-  return (
-    <Flex direction="column" align="center">
-      <Link href={prefetchLink}>
-        {/* アイコン */}
-        <Image
-          asChild
-          mb={2}
-          border="2px solid"
-          borderColor="hachiBlue"
-          borderRadius="full"
-          objectFit="cover"
-          alt=""
-        >
-          <NextImage
-            src={imageSrc}
-            loader={imageLoader}
-            width={80}
-            height={0}
-            style={{ width: '80px', height: 'auto' }}
-            priority
-            alt={character.name}
-          />
-        </Image>
+  // TODO: Linkを使用するときに削除する
+  function handleLinkClick() {
+    if (typeof window !== 'undefined') {
+      window.location.href = prefetchLink;
+    }
+  }
 
-        {/* キャラ名 */}
-        <Text color="blackSwitch" fontWeight="bold" fontSize="md" textAlign="center">
-          {character.name}
-        </Text>
-      </Link>
+  return (
+    <Flex direction="column" align="center" cursor="pointer" onClick={handleLinkClick}>
+      {/* TODO: キャラクター分類が終わったらLinkを使用  */}
+      {/* 未分類状態だと404にしたいが、本番環境だと出ない リダイレクトだと出るので一時的にそうしている */}
+      {/* <Link href={prefetchLink}> */}
+      {/* アイコン */}
+      <Image
+        asChild
+        mb={2}
+        border="2px solid"
+        borderColor="hachiBlue"
+        borderRadius="full"
+        objectFit="cover"
+        alt=""
+      >
+        <NextImage
+          src={imageSrc}
+          loader={imageLoader}
+            width={80}
+          height={0}
+          style={{ width: '80px', height: 'auto' }}
+          priority
+          alt={character.name}
+        />
+      </Image>
+
+      {/* キャラ名 */}
+      <Text color="blackSwitch" fontWeight="bold" fontSize="md" textAlign="center">
+        {character.name}
+      </Text>
+      {/* </Link> */}
     </Flex>
   );
 }
