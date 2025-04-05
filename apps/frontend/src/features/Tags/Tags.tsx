@@ -66,7 +66,7 @@ function CharacterTag({ character }: CharacterCardProps) {
 }
 
 /** タグ一覧画面コンポーネント */
-export default function Tags({ characters }: TagsProps) {
+export default function Tags({ characters, tags }: TagsProps) {
   const resetNavigationStore = useNavigationStore('tags', (state) => state.reset);
 
   useEffect(() => {
@@ -91,11 +91,18 @@ export default function Tags({ characters }: TagsProps) {
           ))}
         </SimpleGrid>
 
-        {/* 後で実装するタグ一覧セクション */}
-        <Text fontSize="xl" fontWeight="bold" my={6}>
+        <Text color="blackSwitch" fontSize="xl" fontWeight="bold" mt={2} mb={2}>
           タグ
         </Text>
-        <Text>タグ機能は近日実装予定です！</Text>
+
+        {/* タグ一覧 */}
+        <Box>
+          {tags?.map((tag) => (
+            <Box key={tag.id} m={4}>
+              <Text>{tag.name}</Text>
+            </Box>
+          ))}
+        </Box>
       </Flex>
     </Layout>
   );

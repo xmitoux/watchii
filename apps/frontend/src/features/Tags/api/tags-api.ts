@@ -2,14 +2,20 @@ import { fetchData } from '@/utils/fetch';
 
 import {
   FindAllCharactersResponse,
+  FindAllTagsResponse,
   FindPostsByCharacterRequest,
   FindPostsByCharacterResponse,
+  FindPostsByTagRequest,
+  FindPostsByTagResponse,
   GetCharactersPostCountResponse,
+  GetTagsPostCountResponse,
 } from './tags-api-types';
 
 export class TagsApi {
-  private endpointCharacters: string = '/characters';
+  private endpointCharacters = '/characters';
+  private endpointTags = '/tags';
 
+  /** キャラクター一覧を取得する */
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
     const url = this.endpointCharacters;
 
@@ -46,6 +52,49 @@ export class TagsApi {
 
     if (!res.ok) {
       throw new Error('キャラクターごとのPost一覧取得処理に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
+  }
+
+  /** タグ一覧を取得する */
+  async findAllTags(): Promise<FindAllTagsResponse> {
+    const url = this.endpointTags;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('タグ一覧取得に失敗しました。');
+    }
+
+    return await res.json();
+  }
+
+  /** タグごとのPost数を取得する */
+  async getTagsPostCount(): Promise<GetTagsPostCountResponse> {
+    const url = `${this.endpointTags}/get-tags-post-count`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('タグごとのPost数取得に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
+  }
+
+  /** タグのPost一覧を取得する */
+  async findPostsByTag(
+    { id, perPage, offset }: FindPostsByTagRequest,
+  ): Promise<FindPostsByTagResponse> {
+    const url = `${this.endpointTags}/find-posts-by-tag/${id}?limit=${perPage}&offset=${offset}`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('タグごとのPost一覧取得処理に失敗しました。');
     }
 
     const data = await res.json();

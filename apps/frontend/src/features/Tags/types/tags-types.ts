@@ -7,8 +7,14 @@ export type CharacterEntity = {
   iconFilename: string;
 };
 
+export type TagEntity = {
+  id: number;
+  name: string;
+};
+
 export type TagsProps = {
   characters: CharacterEntity[];
+  tags: TagEntity[];
 };
 
 export type GetCharactersPostCountEntity = {
@@ -20,6 +26,19 @@ export type CharacterPostsProps = {
   posts: PostEntity[];
   characterNameKey: string;
   characterName: string;
+  total: number;
+  currentPage: number;
+  perPage: number;
+};
+
+export type GetTagsPostCountEntity = {
+  id: number;
+  postCount: number;
+};
+
+export type TagPostsProps = {
+  posts: PostEntity[];
+  tagName: string;
   total: number;
   currentPage: number;
   perPage: number;

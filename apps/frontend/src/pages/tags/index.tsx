@@ -7,12 +7,15 @@ import { TagsProps } from '@/features/Tags/types/tags-types';
 export const getStaticProps: GetStaticProps<TagsProps> = async () => {
   try {
     // キャラクター一覧をAPIから取得
-    const data = await tagsApi.findAllCharacters();
+    const { characters } = await tagsApi.findAllCharacters();
+    // タグ一覧をAPIから取得
+    const { tags } = await tagsApi.findAllTags();
 
     // ページコンポーネントに渡すpropsを返す
     return {
       props: {
-        characters: data.characters,
+        characters,
+        tags,
       },
     };
   }
