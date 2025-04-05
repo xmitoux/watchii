@@ -10,12 +10,15 @@ export const getStaticProps: GetStaticProps<TagsProps> = async () => {
     const { characters } = await tagsApi.findAllCharacters();
     // タグ一覧をAPIから取得
     const { tags } = await tagsApi.findAllTags();
+    // 語録一覧をAPIから取得
+    const { popularWordSpeakers } = await tagsApi.findAllPopularWords();
 
     // ページコンポーネントに渡すpropsを返す
     return {
       props: {
         characters,
         tags,
+        popularWordSpeakers,
       },
     };
   }

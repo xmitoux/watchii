@@ -12,9 +12,33 @@ export type TagEntity = {
   name: string;
 };
 
+export type PopularWordEntity = {
+  id: number;
+  word: string;
+  kana: string;
+};
+
+export type SpeakerEntity = {
+  id: number;
+  name: string;
+  iconFilename: string;
+  order: number;
+};
+
+export type PopularWordSpeakerEntity = {
+  speaker: SpeakerEntity;
+  words: PopularWordEntity[];
+};
+
+export type GetPopularWordsPostCountEntity = {
+  id: number;
+  postCount: number;
+};
+
 export type TagsProps = {
   characters: CharacterEntity[];
   tags: TagEntity[];
+  popularWordSpeakers: PopularWordSpeakerEntity[];
 };
 
 export type GetCharactersPostCountEntity = {
