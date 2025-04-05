@@ -16,14 +16,18 @@ export default createSystem(defaultConfig, {
           light: { value: '#BFE9FF' },
         },
         chiiWhite: { value: '#FFFFFF' },
-        usaYellow: { value: '#FDEFCA' },
+        usaYellow: {
+          DEFAULT: { value: '#FDEFCA' },
+          dark: { value: '#E0C072 ' },
+          light: { value: '#FFF7E0' },
+        },
         blackPrimary: { value: '{colors.gray.700}' },
       },
     },
     semanticTokens: {
       colors: {
         blackSwitch: { value: { base: '{colors.blackPrimary}', _dark: '{colors.chiiWhite}' } },
-        whiteSwitch: { value: { base: '{colors.chiiWhite}', _dark: '{colors.blackPrimary}' } },
+        whiteSwitch: { value: { base: '{colors.chiiWhite}', _dark: '{colors.gray.800}' } },
       },
     },
   },

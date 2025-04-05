@@ -7,6 +7,7 @@ import { useNavigationStore } from '@/stores/navigationStore';
 
 import { CharacterTag } from './components/CharacterTag';
 import { CuteTag } from './components/CuteTag';
+import { PopularWords } from './components/PopularWords';
 import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
@@ -85,18 +86,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </Box>
 
         {/* 語録一覧 */}
-        <Box>
-          {popularWordSpeakers?.map((popularWordSpeakers) => (
-            <Box key={popularWordSpeakers.speaker.id} m={4}>
-              <Text fontWeight="bold">{popularWordSpeakers.speaker.name}</Text>
-              {popularWordSpeakers.words.map((word) => (
-                <Box key={word.id} m={1}>
-                  <Text>{word.word}</Text>
-                </Box>
-              ))}
-            </Box>
-          ))}
-        </Box>
+        <PopularWords popularWordSpeakers={popularWordSpeakers} />
       </Flex>
     </Layout>
   );
