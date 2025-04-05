@@ -38,6 +38,7 @@ export type GetTagsPostCountEntity = {
 
 export type TagPostsProps = {
   posts: PostEntity[];
+  id: number;
   tagName: string;
   total: number;
   currentPage: number;

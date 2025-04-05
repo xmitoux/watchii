@@ -17,7 +17,7 @@ export function CharacterTag({ character }: CharacterCardProps) {
   const { imageLoader, imageSrc } = useNextImage({ src, width });
 
   // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
-  const prefetchLink = `/tags/${character.nameKey}/page/1`;
+  const prefetchLink = `/tags/character/${character.nameKey}/page/1`;
 
   // TODO: Linkを使用するときに削除する
   function handleLinkClick() {
