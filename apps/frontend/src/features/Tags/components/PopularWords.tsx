@@ -1,7 +1,6 @@
-import NextImage from 'next/image';
+import { Box, Card, Flex, SimpleGrid, Text } from '@repo/ui/chakra-ui';
 
-import { Box, Card, Flex, Image, SimpleGrid, Text } from '@repo/ui/chakra-ui';
-import { useNextImage } from '@repo/ui/hooks';
+import { CharacterIcon } from '@/components/CharacterIcon';
 
 type PopularWordProps = {
   popularWordSpeakers: Array<{
@@ -32,7 +31,7 @@ export function PopularWords({ popularWordSpeakers }: PopularWordProps) {
           {/* キャラクター情報 */}
           <Flex align="center">
             {/* キャラクターアイコン */}
-            <CharacterIcon character={speakerData.speaker} />
+            <CharacterIcon character={speakerData.speaker} priority />
 
             {/* キャラクター名 */}
             <Text
@@ -53,44 +52,6 @@ export function PopularWords({ popularWordSpeakers }: PopularWordProps) {
           </SimpleGrid>
         </Card.Root>
       ))}
-    </Box>
-  );
-}
-
-type CharacterIconProps = {
-  character: {
-    id: number;
-    name: string;
-    iconFilename: string;
-  };
-};
-
-/** キャラクターアイコンコンポーネント */
-function CharacterIcon({ character }: CharacterIconProps) {
-  const src = `chara-icons/${character.iconFilename}`;
-  const width = 120;
-  const { imageLoader, imageSrc } = useNextImage({ src, width });
-
-  return (
-    <Box
-      bg="hachiBlue"
-      borderRadius="full"
-      p={1}
-      transition="all 0.2s"
-      _hover={{
-        transform: 'scale(1.05)',
-      }}
-    >
-      <Image asChild borderRadius="full" objectFit="cover" alt="">
-        <NextImage
-          src={imageSrc}
-          loader={imageLoader}
-          width={width}
-          height={0}
-          style={{ width: '50px', height: 'auto' }}
-          alt={character.name}
-        />
-      </Image>
     </Box>
   );
 }
