@@ -2,18 +2,23 @@ import { fetchData } from '@/utils/fetch';
 
 import {
   FindAllCharactersResponse,
+  FindAllPopularWordsResponse,
   FindAllTagsResponse,
   FindPostsByCharacterRequest,
   FindPostsByCharacterResponse,
+  FindPostsByPopularWordRequest,
+  FindPostsByPopularWordResponse,
   FindPostsByTagRequest,
   FindPostsByTagResponse,
   GetCharactersPostCountResponse,
+  GetPopularWordsPostCountResponse,
   GetTagsPostCountResponse,
 } from './tags-api-types';
 
 export class TagsApi {
   private endpointCharacters = '/characters';
   private endpointTags = '/tags';
+  private endpointPopularWords = '/popular-words';
 
   /** キャラクター一覧を取得する */
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
@@ -95,6 +100,49 @@ export class TagsApi {
 
     if (!res.ok) {
       throw new Error('タグごとのPost一覧取得処理に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
+  }
+
+  /** 語録一覧を取得する */
+  async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
+    const url = this.endpointPopularWords;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('語録一覧取得に失敗しました。');
+    }
+
+    return await res.json();
+  }
+
+  /** 語録ごとのPost数を取得する */
+  async getPopularWordsPostCount(): Promise<GetPopularWordsPostCountResponse> {
+    const url = `${this.endpointPopularWords}/get-popular-words-post-count`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('語録ごとのPost数取得に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
+  }
+
+  /** 語録のPost一覧を取得する */
+  async findPostsByPopularWord(
+    { id, perPage, offset }: FindPostsByPopularWordRequest,
+  ): Promise<FindPostsByPopularWordResponse> {
+    const url = `${this.endpointPopularWords}/find-posts-by-popular-word/${id}?limit=${perPage}&offset=${offset}`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('語録ごとのPost一覧取得処理に失敗しました。');
     }
 
     const data = await res.json();

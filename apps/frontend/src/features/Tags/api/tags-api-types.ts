@@ -1,6 +1,13 @@
 import { PostEntity } from '@/types/post-types';
 
-import { CharacterEntity, GetCharactersPostCountEntity, GetTagsPostCountEntity, TagEntity } from '../types/tags-types';
+import {
+  CharacterEntity,
+  GetCharactersPostCountEntity,
+  GetPopularWordsPostCountEntity,
+  GetTagsPostCountEntity,
+  PopularWordSpeakerEntity,
+  TagEntity,
+} from '../types/tags-types';
 
 export type FindAllCharactersResponse = {
   characters: CharacterEntity[];
@@ -32,6 +39,25 @@ export type FindPostsByTagRequest = {
 
 export type FindPostsByTagResponse = {
   tagName: string;
+  posts: PostEntity[];
+  total: number;
+};
+
+export type FindAllPopularWordsResponse = {
+  popularWordSpeakers: PopularWordSpeakerEntity[];
+};
+
+export type GetPopularWordsPostCountResponse = GetPopularWordsPostCountEntity[];
+
+export type FindPostsByPopularWordRequest = {
+  id: number;
+  perPage: number;
+  offset: number;
+};
+
+export type FindPostsByPopularWordResponse = {
+  word: string;
+  speakerName: string;
   posts: PostEntity[];
   total: number;
 };

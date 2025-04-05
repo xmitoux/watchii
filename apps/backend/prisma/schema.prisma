@@ -9,16 +9,17 @@ datasource db {
 }
 
 model Post {
-  id           Int         @id @default(autoincrement())
-  filename     String      @unique
-  postedAt     DateTime    @map("posted_at")
-  episodeId    Int?        @map("episode_id")
-  episode      Episode?    @relation("EpisodePosts", fields: [episodeId], references: [id])
-  thumbnailFor Episode?    @relation("ThumbnailPost")
-  characters   Character[] @relation("PostCharacters")
-  tags         Tag[]       @relation("PostTags")
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  id           Int           @id @default(autoincrement())
+  filename     String        @unique
+  postedAt     DateTime      @map("posted_at")
+  episodeId    Int?          @map("episode_id")
+  episode      Episode?      @relation("EpisodePosts", fields: [episodeId], references: [id])
+  thumbnailFor Episode?      @relation("ThumbnailPost")
+  characters   Character[]   @relation("PostCharacters")
+  tags         Tag[]         @relation("PostTags")
+  popularWords PopularWord[] @relation("PostPopularWords")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
 
   @@map("posts")
 }
@@ -37,14 +38,15 @@ model Episode {
 }
 
 model Character {
-  id           Int      @id @default(autoincrement())
-  name         String   @unique
-  nameKey      String   @unique @map("name_key")
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  nameKey      String        @unique @map("name_key")
   order        Int
-  iconFilename String   @unique @map("icon_filename")
-  posts        Post[]   @relation("PostCharacters")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  iconFilename String        @unique @map("icon_filename")
+  posts        Post[]        @relation("PostCharacters")
+  popularWords PopularWord[] @relation("CharacterPopularWords")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
 
   @@map("characters")
 }
@@ -58,4 +60,17 @@ model Tag {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("tags")
+}
+
+model PopularWord {
+  id        Int       @id @default(autoincrement())
+  word      String    @unique
+  kana      String
+  speakerId Int       @map("speaker_id")
+  speaker   Character @relation("CharacterPopularWords", fields: [speakerId], references: [id])
+  posts     Post[]    @relation("PostPopularWords")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("popular_words")
 }
