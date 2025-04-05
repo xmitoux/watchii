@@ -67,13 +67,13 @@ type WordBubbleProps = {
 
 /** 語録吹き出しコンポーネント */
 function WordBubble({ word, speakerName }: WordBubbleProps) {
-  // キャラクターごとに色を変える（簡易的な実装）
+  // キャラクターごとに色を変える
+  // TODO: 簡易的な実装 DBにキャラクターごとの色を持たせる
   const getBubbleColor = (name: string) => {
     const colors = {
       ちいかわ: { bg: 'pink.100', _darkBg: 'pink.800' },
       ハチワレ: { bg: 'hachiBlue.light', _darkBg: 'hachiBlue.dark' },
       うさぎ: { bg: 'usaYellow', _darkBg: 'usaYellow.dark' },
-      // デフォルト
       default: { bg: 'gray.100', _darkBg: 'gray.700' },
     };
 
@@ -82,8 +82,18 @@ function WordBubble({ word, speakerName }: WordBubbleProps) {
 
   const bubbleColor = getBubbleColor(speakerName);
 
+  // プリフェッチ用のリンク
+  const prefetchLink = `/tags/popular-word/${word.id}/page/1`;
+
+  // TODO: Linkを使用するときに削除する
+  function handleLinkClick() {
+    if (typeof window !== 'undefined') {
+      window.location.href = prefetchLink;
+    }
+  }
+
   return (
-    <Box position="relative">
+    <Box position="relative" cursor="pointer" onClick={handleLinkClick}>
       {/* 吹き出しの本体 */}
       <Box
         bg={{ base: bubbleColor.bg, _dark: bubbleColor._darkBg }}
