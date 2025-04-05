@@ -17,7 +17,8 @@ type CharacterCardProps = {
 /** キャラクタータグコンポーネント */
 function CharacterTag({ character }: CharacterCardProps) {
   const src = `chara-icons/${character.iconFilename}`;
-  const { imageLoader, imageSrc } = useNextImage({ src, width: 80 });
+  const width = 200;
+  const { imageLoader, imageSrc } = useNextImage({ src, width });
 
   // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
   const prefetchLink = `/tags/${character.nameKey}/page/1`;
@@ -47,7 +48,7 @@ function CharacterTag({ character }: CharacterCardProps) {
         <NextImage
           src={imageSrc}
           loader={imageLoader}
-            width={80}
+          width={width}
           height={0}
           style={{ width: '80px', height: 'auto' }}
           priority
