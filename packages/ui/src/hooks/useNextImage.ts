@@ -1,4 +1,4 @@
-const isProduction = process.env.NODE_ENV === 'production';
+const isProductionEnv = process.env.NODE_ENV === 'production';
 const CDN_BASE_URL = process.env.NEXT_PUBLIC_CDN_BASE_URL;
 const SUPABASE_STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
 
@@ -15,17 +15,19 @@ function productionImageLoader({ src, width, format = 'webp' }: ImageLoaderProps
   return `${CDN_BASE_URL}/w=${width},f=${format}/${src}`;
 }
 
-type NextImageProps = ImageLoaderProps;
+type NextImageProps = { forceProd?: boolean } & ImageLoaderProps;
 
 /** NextImageを使うためのカスタムフック(実行環境に応じたloaderとsrcを返す) */
-export function useNextImage({ src, width, format }: NextImageProps) {
-  const imageLoader = isProduction
+export function useNextImage({ src, width, format, forceProd }: NextImageProps) {
+  const isProd = forceProd || isProductionEnv;
+
+  const imageLoader = isProd
     // 本番環境用の画像ローダー
     ? () => productionImageLoader({ src, width, format })
     // 開発環境ではローダーを使用せずSupabase Storeageの画像を直接取得
     : undefined;
 
-  const imageSrc = isProduction ? src : `${SUPABASE_STORAGE_URL}/${src}`;
+  const imageSrc = isProd ? src : `${SUPABASE_STORAGE_URL}/${src}`;
 
   return {
     imageLoader,
