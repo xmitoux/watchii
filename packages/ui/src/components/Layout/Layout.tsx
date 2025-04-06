@@ -1,6 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import { ReactNode, RefObject } from 'react';
 
+import { Toaster } from '@repo/ui/chakra-ui/toaster';
+
 import Footer, { NavigationItem } from './Footer';
 import Header from './Header';
 
@@ -58,6 +60,9 @@ export const Layout: React.FC<LayoutProps> = ({
       </Box>
 
       {!noFooter && <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />}
+
+      {/* トースト用 */}
+      <Toaster />
     </Box>
   );
 };

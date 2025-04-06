@@ -11,7 +11,7 @@ import {
 } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
-import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
+import { toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -107,9 +107,6 @@ export function Login() {
           </Fieldset.Root>
         </form>
       </Center>
-
-      {/* トースト用 */}
-      <Toaster />
     </>
 
   );
