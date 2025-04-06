@@ -3,8 +3,7 @@ import { Post, Tag } from '@prisma/client';
 type FindAllTagsEntity = Pick<
   Tag,
   'id' |
-  'name' |
-  'order'
+  'name'
 >;
 
 export type FindAllTagsResponse = {

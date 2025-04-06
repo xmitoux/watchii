@@ -18,10 +18,9 @@ export class TagsService {
       select: {
         id: true,
         name: true,
-        order: true,
       },
       orderBy: {
-        order: 'asc',
+        kana: 'asc',
       },
     });
 
