@@ -6,14 +6,14 @@ import { toaster } from '@repo/ui/chakra-ui/toaster';
 export const useToast = () => {
   /** 完了トーストを表示する */
   const showCompleteToast = useCallback(
-    (message: string) => {
+    (message: string, timeout: number = 500) => {
       setTimeout(() => {
         toaster.create({
           title: message,
           type: 'success',
           duration: 3000,
         });
-      }, 500);
+      }, timeout);
     },
     [],
   );

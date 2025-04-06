@@ -4,10 +4,11 @@ import {
   FindAllPopularWordsResponse,
   FindAllTagsResponse,
 } from '@repo/ui/api';
+import { fetchData } from '@repo/ui/utils';
 
 import { apiClient } from '@/lib/api/api-client';
 
-import { CreateTagRequest, UpdateTagRequest } from './tags-api-types';
+import { CreateTagRequest, FindTagResponse, UpdateTagRequest } from './tags-api-types';
 
 export class TagsApi {
   private endpointCharacters = '/characters';
@@ -30,6 +31,18 @@ export class TagsApi {
   /** タグを登録する */
   async createTag(request: CreateTagRequest): Promise<void> {
     await apiClient.post(this.endpointTags, request);
+  }
+
+  /** タグ詳細を取得する */
+  async findTag(id: number): Promise<FindTagResponse> {
+    const url = `${this.endpointTags}/${id}`;
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('タグ詳細取得に失敗しました。');
+    }
+
+    return await res.json();
   }
 
   /** タグを更新する */

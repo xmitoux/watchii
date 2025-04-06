@@ -1,10 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
+import { tagsApi } from '@/features/Tags/api/tags-api';
 import TagEdit from '@/features/Tags/Tag/TagEdit/TagEdit';
 import { TagEditProps } from '@/features/Tags/types/tags-types';
-
-// TODO: SSR props
-// [id]でタグ詳細取得APIを実行
 
 export const getServerSideProps: GetServerSideProps<TagEditProps>
   = async ({ params }: GetServerSidePropsContext) => {
@@ -14,12 +12,15 @@ export const getServerSideProps: GetServerSideProps<TagEditProps>
         return { notFound: true };
       }
 
-      // TODO: タグ詳細をAPIから取得
-      // const { tag } = await tagsApi.findAllTags();
+      // タグ詳細をAPIから取得
+      const { tag } = await tagsApi.findTag(id);
+      if (!tag) {
+        return { notFound: true };
+      }
 
       return {
         props: {
-          tag: { id: 1, name: `ID: ${id}`, kana: 'りこ' },
+          tag,
         },
       };
     }
