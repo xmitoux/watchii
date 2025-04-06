@@ -26,6 +26,7 @@ type LayoutProps = {
   title: string;
   actionButton?: React.ReactNode;
   canBack?: boolean;
+  noFooter?: boolean;
 };
 
 export default function Layout({
@@ -33,6 +34,7 @@ export default function Layout({
   title,
   actionButton,
   canBack,
+  noFooter,
 }: LayoutProps) {
   const router = useRouter();
 
@@ -46,6 +48,7 @@ export default function Layout({
       actionButton={actionButton}
       canBack={canBack}
       footerNavigationItems={navigationItems}
+      noFooter={noFooter}
       onNavigationClick={handleNavigationClick}
     >
       {children}
