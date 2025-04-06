@@ -14,10 +14,11 @@ type PopularWordProps = {
       kana: string;
     }>;
   }>;
+  to: (id: number) => string;
 };
 
 /** 語録コンポーネント */
-export function PopularWords({ popularWordSpeakers }: PopularWordProps) {
+export function PopularWords({ popularWordSpeakers, to }: PopularWordProps) {
   return (
     <Box w="full">
       {popularWordSpeakers?.map((speakerData) => (
@@ -46,7 +47,7 @@ export function PopularWords({ popularWordSpeakers }: PopularWordProps) {
           {/* 語録一覧 */}
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} pt={4}>
             {speakerData.words.map((word) => (
-              <WordBubble key={word.id} word={word} speakerName={speakerData.speaker.name} />
+              <WordBubble key={word.id} word={word} speakerName={speakerData.speaker.name} to={to(word.id)} />
             ))}
           </SimpleGrid>
         </Card.Root>
@@ -62,10 +63,11 @@ type WordBubbleProps = {
     kana: string;
   };
   speakerName: string;
+  to: string;
 };
 
 /** 語録吹き出しコンポーネント */
-function WordBubble({ word, speakerName }: WordBubbleProps) {
+function WordBubble({ word, speakerName, to }: WordBubbleProps) {
   // キャラクターごとに色を変える
   // TODO: 簡易的な実装 DBにキャラクターごとの色を持たせる
   const getBubbleColor = (name: string) => {
@@ -82,7 +84,7 @@ function WordBubble({ word, speakerName }: WordBubbleProps) {
   const bubbleColor = getBubbleColor(speakerName);
 
   // プリフェッチ用のリンク
-  const prefetchLink = `/tags/popular-word/${word.id}/page/1`;
+  const prefetchLink = to;
 
   // TODO: Linkを使用するときに削除する
   function handleLinkClick() {

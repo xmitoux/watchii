@@ -10,7 +10,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
   const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
 
   return (
-    <Layout title="キャラ・タグ一覧">
+    <Layout title="タグ管理">
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <Box
@@ -30,7 +30,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <SimpleGrid columns={3} mb={8}>
           {characters?.map((character) => (
             <Box key={character.id} m={4}>
-              <CharacterTag character={character} />
+              <CharacterTag character={character} to={`/tags/character/${character.nameKey}`} />
             </Box>
           ))}
         </SimpleGrid>
@@ -53,7 +53,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag tag={tag} />
+              <CuteTag tag={tag} to={`/tags/tag/${tag.id}`} />
             </WrapItem>
           ))}
         </Wrap>
@@ -73,7 +73,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </Box>
 
         {/* 語録一覧 */}
-        <PopularWords popularWordSpeakers={popularWordSpeakers} />
+        <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/${id}`} />
       </Flex>
     </Layout>
   );

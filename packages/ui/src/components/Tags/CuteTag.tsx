@@ -2,8 +2,13 @@ import { Text } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
 import { TagEntity } from '@repo/ui/types';
 
+type CuteTagProps = {
+  tag: TagEntity;
+  to: string;
+};
+
 /** かわいいタグコンポーネント */
-export function CuteTag({ tag }: { tag: TagEntity }) {
+export function CuteTag({ tag, to }: CuteTagProps) {
   // カラーパレット - パステルカラーをランダムに選択
   const tagColors = [
     { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
@@ -17,10 +22,10 @@ export function CuteTag({ tag }: { tag: TagEntity }) {
 
   // タグごとに固定のカラーを選ぶ（タグのIDに基づく）
   const colorIndex = tag.id % tagColors.length;
-  const tagColor = tagColors[colorIndex];
+  const tagColor = tagColors[colorIndex]!;
 
   // プリフェッチ用のリンク
-  const prefetchLink = `/tags/tag/${tag.id}/page/1`;
+  const prefetchLink = to;
 
   // TODO: Linkを使用するときに削除する
   function handleLinkClick() {
