@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
+import { fetchData } from '@repo/ui/utils';
+
 import EpisodeDetail from '@/features/EpisodeDetail/EpisodeDetail';
 import { EpisodeDetailProps } from '@/features/EpisodeDetail/types/episode-detail-types';
-import { fetchData } from '@/utils/fetch';
 
 /**
  * ビルド時に生成する全ページのパスを定義する

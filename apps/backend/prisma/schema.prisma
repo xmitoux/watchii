@@ -54,7 +54,7 @@ model Character {
 model Tag {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  order     Int
+  kana      String
   posts     Post[]   @relation("PostTags")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

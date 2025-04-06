@@ -3,7 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { FindAllTagsResponse, FindPostsByTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
+import { CreateTagRequestDto, UpdateTagRequestDto } from './dto/tags.dto';
+import { FindAllTagsResponse, FindPostsByTagResponse, FindTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
 
 @Injectable()
 export class TagsService {
@@ -18,10 +19,9 @@ export class TagsService {
       select: {
         id: true,
         name: true,
-        order: true,
       },
       orderBy: {
-        order: 'asc',
+        kana: 'asc',
       },
     });
 
@@ -101,5 +101,40 @@ export class TagsService {
       posts,
       total,
     };
+  }
+
+  /** タグを取得 */
+  async findTag(id: number): Promise<FindTagResponse> {
+    const tag = await this.prisma.tag.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        kana: true,
+      },
+    });
+
+    return { tag };
+  }
+
+  /** タグを作成 */
+  async create(createTagDto: CreateTagRequestDto) {
+    return this.prisma.tag.create({
+      data: {
+        name: createTagDto.name,
+        kana: createTagDto.kana,
+      },
+    });
+  }
+
+  /** タグを更新 */
+  async update(id: number, updateTagDto: UpdateTagRequestDto) {
+    return this.prisma.tag.update({
+      where: { id },
+      data: {
+        name: updateTagDto.name,
+        kana: updateTagDto.kana,
+      },
+    });
   }
 }

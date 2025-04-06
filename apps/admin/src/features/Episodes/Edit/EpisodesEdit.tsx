@@ -5,7 +5,6 @@ import { MdBook, MdCategory, MdDescription, MdListAlt, MdMenuBook, MdPhotoAlbum,
 import { Field, Fieldset, HStack, Input, Show, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { RadioCardItem, RadioCardRoot } from '@repo/ui/chakra-ui/radio-card';
-import { Toaster } from '@repo/ui/chakra-ui/toaster';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -152,8 +151,6 @@ export default function EpisodesEdit() {
           更新する
         </Button>
       </Fieldset.Root>
-
-      <Toaster />
 
       {/* エピソードPost選択ダイアログ */}
       <EpisodePostSelectDialog

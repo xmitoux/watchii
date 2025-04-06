@@ -1,17 +1,16 @@
 import { Box, Flex, Text } from '@repo/ui/chakra-ui';
-
-import { CharacterIcon } from '@/components/CharacterIcon';
-
-import { CharacterEntity } from '../types/tags-types';
+import { CharacterIcon } from '@repo/ui/components';
+import { CharacterEntity } from '@repo/ui/types';
 
 type CharacterTagProps = {
   character: CharacterEntity;
+  to: string;
 };
 
 /** キャラクタータグコンポーネント */
-export function CharacterTag({ character }: CharacterTagProps) {
+export function CharacterTag({ character, to }: CharacterTagProps) {
   // プリフェッチ用のリンク(キャラクターPost一覧の最初のページ)
-  const prefetchLink = `/tags/character/${character.nameKey}/page/1`;
+  const prefetchLink = to;
 
   // TODO: Linkを使用するときに削除する
   function handleLinkClick() {

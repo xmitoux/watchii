@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 
 import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { CharacterTag, CuteTag, PopularWords } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { CharacterTag } from './components/CharacterTag';
-import { CuteTag } from './components/CuteTag';
-import { PopularWords } from './components/PopularWords';
 import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
@@ -43,7 +41,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <SimpleGrid columns={3} mb={8}>
           {characters?.map((character) => (
             <Box key={character.id} m={4}>
-              <CharacterTag character={character} />
+              <CharacterTag character={character} to={`/tags/character/${character.nameKey}/page/1`} />
             </Box>
           ))}
         </SimpleGrid>
@@ -66,7 +64,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag tag={tag} />
+              <CuteTag tag={tag} to={`/tags/tag/${tag.id}/page/1`} />
             </WrapItem>
           ))}
         </Wrap>
@@ -86,7 +84,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </Box>
 
         {/* 語録一覧 */}
-        <PopularWords popularWordSpeakers={popularWordSpeakers} />
+        <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/${id}/page/1`} />
       </Flex>
     </Layout>
   );
