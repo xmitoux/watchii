@@ -8,7 +8,7 @@ const options: SupabaseSessionMiddlewareOptions = {
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/login',
-  homeUrl: '/home/page/1',
+  homeUrl: '/home',
 };
 
 export async function middleware(request: NextRequest) {
