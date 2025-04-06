@@ -3,6 +3,8 @@ import { ReactNode } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
+import { MenuDrawer } from '../Menu/MenuDrawer';
+
 const navigationItems: NavigationItem[] = [
   {
     path: '/home',
@@ -27,6 +29,7 @@ type LayoutProps = {
   actionButton?: React.ReactNode;
   canBack?: boolean;
   noFooter?: boolean;
+  noMenu?: boolean;
 };
 
 export default function Layout({
@@ -35,6 +38,7 @@ export default function Layout({
   actionButton,
   canBack,
   noFooter,
+  noMenu,
 }: LayoutProps) {
   const router = useRouter();
 
@@ -45,7 +49,7 @@ export default function Layout({
   return (
     <UiLayout
       title={title}
-      actionButton={actionButton}
+      actionButton={actionButton || (!noMenu && <MenuDrawer />)}
       canBack={canBack}
       footerNavigationItems={navigationItems}
       noFooter={noFooter}

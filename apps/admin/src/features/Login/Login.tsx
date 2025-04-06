@@ -4,7 +4,7 @@ import Layout from '@/components/Layout/Layout';
 
 export default function Login() {
   return (
-    <Layout title="Watchiiへようこそ！" noFooter>
+    <Layout title="Watchii Adminにログイン" noFooter noMenu>
       <BaseLogin />
     </Layout>
   );
