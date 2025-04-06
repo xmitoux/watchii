@@ -98,9 +98,11 @@ function AddButton({ to }: AddButtonProps) {
         position="absolute"
         right={4}
         top="11px"
-        color="hachiBlue.dark"
+        color="blackSwitch"
         size="lg"
         cursor="pointer"
+        _hover={{ color: 'whiteSwitch' }}
+        transition="all 0.2s"
       >
         <MdAdd />
       </Icon>
