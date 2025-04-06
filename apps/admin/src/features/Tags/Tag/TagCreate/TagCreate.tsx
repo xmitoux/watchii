@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Layout from '@/components/Layout/Layout';
+import { tagsApi } from '@/features/Tags/api/tags-api';
 import { TagForm } from '@/features/Tags/components/TagForm';
 import { TagFormData } from '@/features/Tags/types/tags-types';
 import { useToast } from '@/hooks/useToast';
@@ -13,10 +14,10 @@ export default function TagCreate() {
   const { showCompleteToast, showErrorToast } = useToast();
 
   /** 登録処理 */
-  async function handleCreate({ name, kana }: TagFormData) {
+  async function handleCreate(form: TagFormData) {
     try {
-      // TODO: 登録API実行
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // 登録API実行
+      await tagsApi.createTag(form);
 
       showCompleteToast('タグ登録完了！🏷️');
       router.back();
@@ -27,6 +28,7 @@ export default function TagCreate() {
         message: 'タグ登録に失敗しました😢',
         errorMessage: error.message,
       });
+      console.error('タグ登録に失敗しました。', error);
     }
   }
 

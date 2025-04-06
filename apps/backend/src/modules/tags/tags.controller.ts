@@ -14,12 +14,15 @@ export class TagsController {
 
   @Post()
   createTag(@Body() createTagDto: CreateTagRequestDto) {
+    this.logger.log('createTag');
+    this.logger.log('%o', { createTagDto });
+
     return this.tagsService.create(createTagDto);
   }
 
   @Get()
   async findAllTags(): Promise<FindAllTagsResponse> {
-    this.logger.log('findAllTags');
+    this.logger.log('findAllTags started');
 
     return this.tagsService.findAllTags();
   }
