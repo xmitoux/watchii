@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Center, Field, Fieldset, Input } from '@repo/ui/chakra-ui';
+import { Field, Fieldset, Flex, Input } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 
 import { TagFormData } from '@/features/Tags/types/tags-types';
@@ -32,40 +32,41 @@ export function TagForm({ editData, onSubmit }: TagFormProps) {
   }
 
   return (
-    <Center>
-      <form onSubmit={handleSubmit}>
-        <Fieldset.Root size="lg">
-          <Fieldset.Content>
-            <Field.Root required>
-              <Field.Label>
-                タグ名
-                <Field.RequiredIndicator />
-              </Field.Label>
+    <Flex direction="column" justify="center" align="center" minH="80vh">
+      <Fieldset.Root size="lg" maxW="xs">
+        <Fieldset.Content>
+          <Field.Root required>
+            <Field.Label>
+              タグ名
+              <Field.RequiredIndicator />
+            </Field.Label>
 
-              <Input value={tagName} onChange={(e) => setTagName(e.target.value)} />
-            </Field.Root>
+            <Input value={tagName} onChange={(e) => setTagName(e.target.value)} />
+          </Field.Root>
 
-            <Field.Root required>
-              <Field.Label>
-                タグ名(かな)
-                <Field.RequiredIndicator />
-              </Field.Label>
+          <Field.Root required>
+            <Field.Label>
+              タグ名(かな)
+              <Field.RequiredIndicator />
+            </Field.Label>
 
-              <Input value={tagKana} onChange={(e) => setTagKana(e.target.value)} />
-            </Field.Root>
-          </Fieldset.Content>
+            <Input value={tagKana} onChange={(e) => setTagKana(e.target.value)} />
+          </Field.Root>
+        </Fieldset.Content>
 
-          <Button
-            color="chiiWhite"
-            bg="hachiBlue"
-            type="submit"
-            disabled={!tagName.trim() || !tagKana.trim()}
-            loading={loading}
-          >
-            {submitText}
-          </Button>
-        </Fieldset.Root>
-      </form>
-    </Center>
+        <Button
+          color="chiiWhite"
+          bg="hachiBlue"
+          type="submit"
+          disabled={!tagName.trim() || !tagKana.trim()}
+          loading={loading}
+          _hover={{ transform: 'scale(1.02)' }}
+          transition="all 0.2s"
+          onClick={handleSubmit}
+        >
+          {submitText}
+        </Button>
+      </Fieldset.Root>
+    </Flex>
   );
 }
