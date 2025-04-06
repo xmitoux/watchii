@@ -10,16 +10,23 @@ const navigationItems: NavigationItem[] = [
     path: '/home',
     rootPath: '/home',
     name: 'Post管理',
-    activeIcon: '/icons/home-active.png',
-    inactiveIcon: '/icons/home-inactive.png',
+    activeIcon: '/images/icons/home-active.png',
+    inactiveIcon: '/images/icons/home-inactive.png',
   },
 
   {
     path: '/episodes',
     rootPath: '/episodes',
     name: 'エピソード管理',
-    activeIcon: '/icons/episodes-active.png',
-    inactiveIcon: '/icons/episodes-inactive.png',
+    activeIcon: '/images/icons/episodes-active.png',
+    inactiveIcon: '/images/icons/episodes-inactive.png',
+  },
+  {
+    path: '/tags',
+    rootPath: '/tags',
+    name: 'タグ管理',
+    activeIcon: '/images/icons/tags-active.png',
+    inactiveIcon: '/images/icons/tags-inactive.png',
   },
 ];
 
