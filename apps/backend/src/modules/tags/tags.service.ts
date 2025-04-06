@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
+import { CreateTagRequestDto, UpdateTagRequestDto } from './dto/tags.dto';
 import { FindAllTagsResponse, FindPostsByTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
 
 @Injectable()
@@ -100,5 +101,26 @@ export class TagsService {
       posts,
       total,
     };
+  }
+
+  /** タグを作成 */
+  async create(createTagDto: CreateTagRequestDto) {
+    return this.prisma.tag.create({
+      data: {
+        name: createTagDto.name,
+        kana: createTagDto.kana,
+      },
+    });
+  }
+
+  /** タグを更新 */
+  async update(id: number, updateTagDto: UpdateTagRequestDto) {
+    return this.prisma.tag.update({
+      where: { id },
+      data: {
+        name: updateTagDto.name,
+        kana: updateTagDto.kana,
+      },
+    });
   }
 }
