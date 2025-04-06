@@ -1,27 +1,18 @@
-import React, { useState } from 'react';
-
-import { Center, Field, Fieldset, Input } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import React from 'react';
 
 import Layout from '@/components/Layout/Layout';
+import { TagForm } from '@/features/Tags/components/TagForm';
+import { TagFormData } from '@/features/Tags/types/tags-types';
 import { useToast } from '@/hooks/useToast';
 
 /** タグ登録画面コンポーネント */
 export default function TagCreate() {
   const { showCompleteToast, showErrorToast } = useToast();
 
-  const [tagName, setTagName] = useState('');
-  const [tagKana, setTagKana] = useState('');
-
-  const [loading, setLoading] = useState(false);
-
   /** 登録処理 */
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function handleCreate({ name, kana }: TagFormData) {
     try {
-      setLoading(true);
-
       // TODO: 登録API実行
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -38,48 +29,11 @@ export default function TagCreate() {
         errorMessage: error.message,
       });
     }
-    finally {
-      setLoading(false);
-    }
   }
 
   return (
     <Layout title="タグ登録" canBack>
-      <Center>
-        <form onSubmit={handleCreate}>
-          <Fieldset.Root size="lg">
-            <Fieldset.Content>
-              <Field.Root required>
-                <Field.Label>
-                  タグ名
-                  <Field.RequiredIndicator />
-                </Field.Label>
-
-                <Input value={tagName} onChange={(e) => setTagName(e.target.value)} />
-              </Field.Root>
-
-              <Field.Root required>
-                <Field.Label>
-                  読み仮名
-                  <Field.RequiredIndicator />
-                </Field.Label>
-
-                <Input value={tagKana} onChange={(e) => setTagKana(e.target.value)} />
-              </Field.Root>
-            </Fieldset.Content>
-
-            <Button
-              color="chiiWhite"
-              bg="hachiBlue"
-              type="submit"
-              disabled={!tagName.trim() || !tagKana.trim()}
-              loading={loading}
-            >
-              登録する
-            </Button>
-          </Fieldset.Root>
-        </form>
-      </Center>
+      <TagForm onSubmit={handleCreate} />
     </Layout>
   );
 }

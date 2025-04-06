@@ -14,3 +14,9 @@ export type TagDetailEntity = TagEntity & { kana: string };
 export type TagEditProps = {
   tag: TagDetailEntity;
 };
+
+/** タグフォームデータ */
+export type TagFormData = {
+  name: string;
+  kana: string;
+};
