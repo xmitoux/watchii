@@ -27,16 +27,6 @@ export class TagsController {
     return this.tagsService.findAllTags();
   }
 
-  @Get(':id')
-  async findTag(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<FindTagResponse> {
-    this.logger.log('findTag started');
-    this.logger.log('%o', { id });
-
-    return this.tagsService.findTag(id);
-  }
-
   @Get('/get-tags-post-count')
   async getTagsPostCount(): Promise<GetTagsPostCountResponse> {
     this.logger.log('getTagsPostCount');
@@ -59,6 +49,16 @@ export class TagsController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Get(':id')
+  async findTag(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<FindTagResponse> {
+    this.logger.log('findTag started');
+    this.logger.log('%o', { id });
+
+    return this.tagsService.findTag(id);
   }
 
   @Put(':id')
