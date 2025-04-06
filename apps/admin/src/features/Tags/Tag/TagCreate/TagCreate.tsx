@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import Layout from '@/components/Layout/Layout';
@@ -7,20 +8,18 @@ import { useToast } from '@/hooks/useToast';
 
 /** タグ登録画面コンポーネント */
 export default function TagCreate() {
+  const router = useRouter();
+
   const { showCompleteToast, showErrorToast } = useToast();
 
   /** 登録処理 */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function handleCreate({ name, kana }: TagFormData) {
     try {
       // TODO: 登録API実行
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // 完了トーストを表示して、タグ一覧画面に遷移
-      showCompleteToast({
-        message: 'タグ登録完了！🏷️',
-        path: '/tags',
-      });
+      showCompleteToast('タグ登録完了！🏷️');
+      router.back();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {

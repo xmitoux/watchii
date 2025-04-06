@@ -1,16 +1,12 @@
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 import { toaster } from '@repo/ui/chakra-ui/toaster';
 
 /** トースト用のカスタムフック */
 export const useToast = () => {
-  const router = useRouter();
-
-  /** 遷移と同時にトーストを表示する */
+  /** 完了トーストを表示する */
   const showCompleteToast = useCallback(
-    ({ message, path }: { message: string; path: string }) => {
-      // まずトーストをセットアップ
+    (message: string) => {
       setTimeout(() => {
         toaster.create({
           title: message,
@@ -18,11 +14,8 @@ export const useToast = () => {
           duration: 3000,
         });
       }, 500);
-
-      // 画面遷移
-      router.push(path);
     },
-    [router],
+    [],
   );
 
   /** エラーメッセージトーストを表示する */
