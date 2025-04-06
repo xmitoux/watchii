@@ -6,3 +6,11 @@ export type TagsProps = {
   tags: TagEntity[];
   popularWordSpeakers: PopularWordSpeakerEntity[];
 };
+
+/** タグ詳細(編集画面用)エンティティ */
+export type TagDetailEntity = TagEntity & { kana: string };
+
+/** タグ編集画面のProps */
+export type TagEditProps = {
+  tag: TagDetailEntity;
+};
