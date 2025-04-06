@@ -4,7 +4,7 @@ import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { CreateTagRequestDto, UpdateTagRequestDto } from './dto/tags.dto';
-import { FindAllTagsResponse, FindPostsByTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
+import { FindAllTagsResponse, FindPostsByTagResponse, FindTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
 
 @Injectable()
 export class TagsService {
@@ -101,6 +101,20 @@ export class TagsService {
       posts,
       total,
     };
+  }
+
+  /** タグを取得 */
+  async findTag(id: number): Promise<FindTagResponse> {
+    const tag = await this.prisma.tag.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        kana: true,
+      },
+    });
+
+    return { tag };
   }
 
   /** タグを作成 */

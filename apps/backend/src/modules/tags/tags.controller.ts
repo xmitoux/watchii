@@ -3,7 +3,7 @@ import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Put, Query } 
 import { IdParam } from '@/common/dto/IdParam';
 
 import { CreateTagRequestDto, UpdateTagRequestDto } from './dto/tags.dto';
-import { FindAllTagsResponse, FindPostsByTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
+import { FindAllTagsResponse, FindPostsByTagResponse, FindTagResponse, GetTagsPostCountResponse } from './entities/tags.entity';
 import { TagsService } from './tags.service';
 
 @Controller('/api/tags')
@@ -25,6 +25,16 @@ export class TagsController {
     this.logger.log('findAllTags started');
 
     return this.tagsService.findAllTags();
+  }
+
+  @Get(':id')
+  async findTag(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<FindTagResponse> {
+    this.logger.log('findTag started');
+    this.logger.log('%o', { id });
+
+    return this.tagsService.findTag(id);
   }
 
   @Get('/get-tags-post-count')
