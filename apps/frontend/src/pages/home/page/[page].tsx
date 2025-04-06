@@ -1,9 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 
+import { fetchData } from '@repo/ui/utils';
+
 import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
 import Home from '@/features/Home/Home';
 import { HomeProps } from '@/features/Home/types/home-types';
-import { fetchData } from '@/utils/fetch';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
 

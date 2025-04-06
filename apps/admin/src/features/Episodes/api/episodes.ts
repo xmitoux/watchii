@@ -1,4 +1,4 @@
-import { fetchData } from '@/utils/fetch';
+import { fetchData } from '@repo/ui/utils';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
