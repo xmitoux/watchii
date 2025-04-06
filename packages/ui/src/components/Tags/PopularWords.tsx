@@ -1,6 +1,5 @@
 import { Box, Card, Flex, SimpleGrid, Text } from '@repo/ui/chakra-ui';
-
-import { CharacterIcon } from '@/components/CharacterIcon';
+import { CharacterIcon } from '@repo/ui/components';
 
 type PopularWordProps = {
   popularWordSpeakers: Array<{

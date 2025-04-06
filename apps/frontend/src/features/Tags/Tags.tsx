@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 
 import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { CharacterTag, CuteTag, PopularWords } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { useNavigationStore } from '@/stores/navigationStore';
 
-import { CharacterTag } from './components/CharacterTag';
-import { CuteTag } from './components/CuteTag';
-import { PopularWords } from './components/PopularWords';
 import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
