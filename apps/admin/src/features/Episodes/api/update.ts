@@ -19,6 +19,7 @@ export default async function handler(
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': process.env.API_KEY || '',
         },
         body: JSON.stringify(req.body),
       });

@@ -1,3 +1,5 @@
+import { fetchData } from '@/utils/fetch';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // エピソード選択対象のpostsを取得するAPI
@@ -5,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const apiUrl = `${process.env.API_BASE_URL}/posts/episode-targets`;
+  const endpoint = `/posts/episode-targets`;
 
   const params = new URLSearchParams();
   params.append('limit', req.query.limit!.toString());
@@ -20,7 +22,7 @@ export default async function handler(
 
   const queryString = params.toString();
 
-  const endpoint = `${apiUrl}?${queryString}`;
+  const apiUrl = `${endpoint}?${queryString}`;
 
   if (!process.env.API_BASE_URL) {
     return res.status(500).json({ message: 'API_BASE_URL is not defined' });
@@ -28,8 +30,13 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const response = await fetch(endpoint);
+      const response = await fetchData(apiUrl);
+
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error('エピソードPost一覧取得処理に失敗しました。');
+      }
 
       return res.status(200).json(data);
     }

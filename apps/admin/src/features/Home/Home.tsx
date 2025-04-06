@@ -42,7 +42,10 @@ async function uploadImages(
     url,
     formData,
     {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'x-api-key': process.env.API_KEY || '',
+      },
       // タイムアウト時間を長めに設定(Post登録APIに上げる枚数が多いとタイムアウトするため)
       timeout: 30000,
     },

@@ -1,15 +1,17 @@
+import { fetchData } from '@/utils/fetch';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const apiUrl = `${process.env.API_BASE_URL}/episodes/edit-data`;
+  const endpoint = `/episodes/edit-data`;
 
   // パスパラメータのIDを取得
   const pathParamId = req.query.id;
 
-  const endpoint = `${apiUrl}/${pathParamId}`;
+  const apiUrl = `${endpoint}/${pathParamId}`;
 
   if (!process.env.API_BASE_URL) {
     return res.status(500).json({ message: 'API_BASE_URL is not defined' });
@@ -17,8 +19,13 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const response = await fetch(endpoint);
+      const response = await fetchData(apiUrl);
+
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error('エピソード編集データ取得処理に失敗しました。');
+      }
 
       return res.status(200).json(data);
     }
