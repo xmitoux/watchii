@@ -1,9 +1,12 @@
-import { fetchData } from '@repo/ui/utils';
-
+import { tagsApiBase } from '@repo/ui/api';
 import {
   FindAllCharactersResponse,
   FindAllPopularWordsResponse,
   FindAllTagsResponse,
+} from '@repo/ui/api';
+import { fetchData } from '@repo/ui/utils';
+
+import {
   FindPostsByCharacterRequest,
   FindPostsByCharacterResponse,
   FindPostsByPopularWordRequest,
@@ -20,17 +23,11 @@ export class TagsApi {
   private endpointTags = '/tags';
   private endpointPopularWords = '/popular-words';
 
+  private tagsApiBase = tagsApiBase;
+
   /** キャラクター一覧を取得する */
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
-    const url = this.endpointCharacters;
-
-    const res = await fetchData(url);
-
-    if (!res.ok) {
-      throw new Error('キャラクター一覧取得に失敗しました。');
-    }
-
-    return await res.json();
+    return await this.tagsApiBase.findAllCharacters();
   }
 
   /** キャラクターごとのPost数を取得する */
@@ -65,15 +62,7 @@ export class TagsApi {
 
   /** タグ一覧を取得する */
   async findAllTags(): Promise<FindAllTagsResponse> {
-    const url = this.endpointTags;
-
-    const res = await fetchData(url);
-
-    if (!res.ok) {
-      throw new Error('タグ一覧取得に失敗しました。');
-    }
-
-    return await res.json();
+    return await this.tagsApiBase.findAllTags();
   }
 
   /** タグごとのPost数を取得する */
@@ -108,15 +97,7 @@ export class TagsApi {
 
   /** 語録一覧を取得する */
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
-    const url = this.endpointPopularWords;
-
-    const res = await fetchData(url);
-
-    if (!res.ok) {
-      throw new Error('語録一覧取得に失敗しました。');
-    }
-
-    return await res.json();
+    return await this.tagsApiBase.findAllPopularWords();
   }
 
   /** 語録ごとのPost数を取得する */

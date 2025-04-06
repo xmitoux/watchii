@@ -1,7 +1,6 @@
 import { Text } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
-
-import { TagEntity } from '../types/tags-types';
+import { TagEntity } from '@repo/ui/types';
 
 /** かわいいタグコンポーネント */
 export function CuteTag({ tag }: { tag: TagEntity }) {

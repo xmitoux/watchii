@@ -1,8 +1,7 @@
 import { Box, Flex, Text } from '@repo/ui/chakra-ui';
+import { CharacterEntity } from '@repo/ui/types';
 
 import { CharacterIcon } from '@/components/CharacterIcon';
-
-import { CharacterEntity } from '../types/tags-types';
 
 type CharacterTagProps = {
   character: CharacterEntity;
