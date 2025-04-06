@@ -1,4 +1,7 @@
-import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import Link from 'next/link';
+import { MdAdd } from 'react-icons/md';
+
+import { Box, Flex, Icon, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { CharacterTag, CuteTag, PopularWords } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
@@ -37,6 +40,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
 
         {/* タグセクション */}
         <Box
+          position="relative"
           w="full"
           bg={bgColor}
           borderRadius="lg"
@@ -47,6 +51,9 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
           <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
             タグ
           </Text>
+
+          {/* 登録ボタン */}
+          <AddButton to="/tags/tag/create" />
         </Box>
 
         {/* タグ一覧 - Wrapを使って自動的に折り返す */}
@@ -76,5 +83,27 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/${id}`} />
       </Flex>
     </Layout>
+  );
+}
+
+type AddButtonProps = {
+  to: string;
+};
+
+/** 登録ボタン */
+function AddButton({ to }: AddButtonProps) {
+  return (
+    <Link href={to}>
+      <Icon
+        position="absolute"
+        right={4}
+        top="11px"
+        color="hachiBlue.dark"
+        size="lg"
+        cursor="pointer"
+      >
+        <MdAdd />
+      </Icon>
+    </Link>
   );
 }
