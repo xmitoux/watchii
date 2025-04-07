@@ -3,15 +3,25 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { FindAllPopularWordsEntity, FindAllPopularWordsResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
+import { CreatePopularWordRequestDto, UpdatePopularWordRequestDto } from './dto/popular_words.dto';
+import { FindAllPopularWordsEntity, FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
 
 @Injectable()
 export class PopularWordsService {
-  constructor(
-    private prisma: PrismaService,
-  ) { }
+  constructor(private prisma: PrismaService) { }
 
   private readonly logger = new Logger(PopularWordsService.name);
+
+  /** 語録を作成 */
+  async createPopularWord(dto: CreatePopularWordRequestDto) {
+    return this.prisma.popularWord.create({
+      data: {
+        word: dto.word,
+        kana: dto.kana,
+        speakerId: dto.speakerId,
+      },
+    });
+  }
 
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
     // まず発言者情報も含めて全ての語録を取得
@@ -150,5 +160,38 @@ export class PopularWordsService {
       posts,
       total,
     };
+  }
+
+  /** 語録を取得 */
+  async findPopularWord(id: number): Promise<FindPopularWordResponse> {
+    const popularWord = await this.prisma.popularWord.findUnique({
+      select: {
+        id: true,
+        word: true,
+        kana: true,
+        speaker: {
+          select: {
+            id: true,
+            name: true,
+            iconFilename: true,
+          },
+        },
+      },
+      where: { id },
+    });
+
+    return { popularWord };
+  }
+
+  /** 語録を更新 */
+  async update(id: number, updatePopularWordDto: UpdatePopularWordRequestDto) {
+    return this.prisma.popularWord.update({
+      where: { id },
+      data: {
+        word: updatePopularWordDto.word,
+        kana: updatePopularWordDto.kana,
+        speakerId: updatePopularWordDto.speakerId,
+      },
+    });
   }
 }

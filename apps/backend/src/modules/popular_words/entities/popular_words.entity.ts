@@ -19,6 +19,24 @@ export class FindAllPopularWordsResponse {
   popularWordSpeakers: FindAllPopularWordsEntity[];
 }
 
+type FindPopularWordEntity = Pick<
+  PopularWord,
+  'id' |
+  'word' |
+  'kana'
+>;
+
+type FindPopularWordSpeakerEntity = Pick<
+  Character,
+  'id' |
+  'name' |
+  'iconFilename'
+>;
+
+export type FindPopularWordResponse = {
+  popularWord: FindPopularWordEntity & { speaker: FindPopularWordSpeakerEntity } | null;
+};
+
 type GetPopularWordsPostCountEntity = Pick<PopularWord, 'id'> & { postCount: number };
 export type GetPopularWordsPostCountResponse = GetPopularWordsPostCountEntity[];
 
