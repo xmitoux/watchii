@@ -27,3 +27,15 @@ export type FindPostsByCharacterResponse = {
   posts: PostEntity[];
   total: number;
 };
+
+type FindCharacterEntity = Pick<
+  Character,
+  'id' |
+  'name' |
+  'nameKey' |
+  'order'
+>;
+
+export type FindCharacterResponse = {
+  character: FindCharacterEntity | null;
+};

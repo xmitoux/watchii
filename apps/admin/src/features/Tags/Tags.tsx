@@ -17,6 +17,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <Box
+          position="relative"
           w="full"
           bg={bgColor}
           borderRadius="lg"
@@ -27,13 +28,16 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
           <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
             キャラクター
           </Text>
+
+          {/* 登録ボタン */}
+          <AddButton to="/tags/character/create" />
         </Box>
 
         {/* キャラタグ一覧 */}
         <SimpleGrid columns={3} mb={8}>
           {characters?.map((character) => (
             <Box key={character.id} m={4}>
-              <CharacterTag character={character} to={`/tags/character/${character.nameKey}`} />
+              <CharacterTag character={character} to={`/tags/character/edit/${character.nameKey}`} />
             </Box>
           ))}
         </SimpleGrid>

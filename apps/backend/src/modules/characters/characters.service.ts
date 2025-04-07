@@ -3,7 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
-import { FindAllCharactersResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
+import { CreateCharacterRequestDto, UpdateCharacterRequestDto } from './dto/character.dto';
+import { FindAllCharactersResponse, FindCharacterResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
 
 @Injectable()
 export class CharactersService {
@@ -12,6 +13,24 @@ export class CharactersService {
   ) { }
 
   private readonly logger = new Logger(CharactersService.name);
+
+  private getIconFilename(nameKey: string): string {
+    return `chara-icon-${nameKey}.webp`;
+  }
+
+  /** キャラクターを登録する */
+  async create(dto: CreateCharacterRequestDto): Promise<void> {
+    const iconFilename = this.getIconFilename(dto.nameKey);
+
+    await this.prisma.character.create({
+      data: {
+        name: dto.name,
+        nameKey: dto.nameKey,
+        order: Number(dto.order),
+        iconFilename,
+      },
+    });
+  }
 
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
     const characters = await this.prisma.character.findMany({
@@ -102,5 +121,35 @@ export class CharactersService {
       posts,
       total,
     };
+  }
+
+  /** キャラを取得 */
+  async findCharacter(nameKey: string): Promise<FindCharacterResponse> {
+    const character = await this.prisma.character.findUnique({
+      where: { nameKey },
+      select: {
+        id: true,
+        name: true,
+        nameKey: true,
+        order: true,
+      },
+    });
+
+    return { character };
+  }
+
+  /** キャラクターを更新する */
+  async update(id: number, dto: UpdateCharacterRequestDto): Promise<void> {
+    const iconFilename = this.getIconFilename(dto.nameKey);
+
+    await this.prisma.character.update({
+      where: { id },
+      data: {
+        name: dto.name,
+        nameKey: dto.nameKey,
+        order: Number(dto.order),
+        iconFilename,
+      },
+    });
   }
 }
