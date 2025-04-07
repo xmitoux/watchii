@@ -1,8 +1,9 @@
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 
 import { StringParam } from '@/common/dto/StringParam';
 
 import { CharactersService } from './characters.service';
+import { CreateCharacterRequestDto, UpdateCharacterRequestDto } from './dto/character.dto';
 import { FindAllCharactersResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
 
 @Controller('/api/characters')
@@ -10,6 +11,11 @@ export class CharactersController {
   private readonly logger = new Logger(CharactersController.name);
 
   constructor(private readonly charactersService: CharactersService) {}
+
+  @Post()
+  async create(@Body() dto: CreateCharacterRequestDto): Promise<void> {
+    await this.charactersService.create(dto);
+  }
 
   @Get()
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
@@ -40,5 +46,13 @@ export class CharactersController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateCharacterRequestDto,
+  ): Promise<void> {
+    await this.charactersService.update(id, dto);
   }
 }
