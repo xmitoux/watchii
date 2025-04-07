@@ -7,6 +7,13 @@ export type TagsProps = {
   popularWordSpeakers: PopularWordSpeakerEntity[];
 };
 
+/** キャラフォームデータ */
+export type CharacterFormData = {
+  name: string;
+  nameKey: string;
+  order: string;
+};
+
 /** タグ詳細(編集画面用)エンティティ */
 export type TagDetailEntity = TagEntity & { kana: string };
 

@@ -1,4 +1,6 @@
-import { TagDetailEntity, TagFormData } from '../types/tags-types';
+import { CharacterFormData, TagDetailEntity, TagFormData } from '../types/tags-types';
+
+export type CreateCharacterRequest = CharacterFormData;
 
 export type CreateTagRequest = TagFormData;
 export type FindTagResponse = { tag: TagDetailEntity | null };

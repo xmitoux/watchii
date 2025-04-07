@@ -8,20 +8,30 @@ import { fetchData } from '@repo/ui/utils';
 
 import { apiClient } from '@/lib/api/api-client';
 
-import { CreateTagRequest, FindTagResponse, UpdateTagRequest } from './tags-api-types';
+import {
+  CreateCharacterRequest,
+  CreateTagRequest,
+  FindTagResponse,
+  UpdateTagRequest,
+} from './tags-api-types';
 
 export class TagsApi {
-  private endpointCharacters = '/characters';
-  private endpointTags = '/tags';
-  private endpointPopularWords = '/popular-words';
-
   private tagsApiBase = tagsApiBase;
   private apiClient = apiClient;
 
-  /** キャラクター一覧を取得する */
+  private endpointCharacters = '/characters';
+
+  /** キャラ一覧を取得する */
   async findAllCharacters(): Promise<FindAllCharactersResponse> {
     return await this.tagsApiBase.findAllCharacters();
   }
+
+  /** キャラを登録する */
+  async createCharacter(request: CreateCharacterRequest): Promise<void> {
+    await this.apiClient.post(this.endpointCharacters, request);
+  }
+
+  private endpointTags = '/tags';
 
   /** タグ一覧を取得する */
   async findAllTags(): Promise<FindAllTagsResponse> {
@@ -30,7 +40,7 @@ export class TagsApi {
 
   /** タグを登録する */
   async createTag(request: CreateTagRequest): Promise<void> {
-    await apiClient.post(this.endpointTags, request);
+    await this.apiClient.post(this.endpointTags, request);
   }
 
   /** タグ詳細を取得する */
@@ -47,8 +57,10 @@ export class TagsApi {
 
   /** タグを更新する */
   async updateTag(request: UpdateTagRequest): Promise<void> {
-    await apiClient.put(`${this.endpointTags}/${request.id}`, request.form);
+    await this.apiClient.put(`${this.endpointTags}/${request.id}`, request.form);
   }
+
+  private endpointPopularWords = '/popular-words';
 
   /** 語録一覧を取得する */
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {

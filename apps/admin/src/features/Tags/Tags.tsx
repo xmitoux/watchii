@@ -17,6 +17,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <Box
+          position="relative"
           w="full"
           bg={bgColor}
           borderRadius="lg"
@@ -27,6 +28,9 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
           <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
             キャラクター
           </Text>
+
+          {/* 登録ボタン */}
+          <AddButton to="/tags/character/create" />
         </Box>
 
         {/* キャラタグ一覧 */}
