@@ -4,7 +4,7 @@ import { StringParam } from '@/common/dto/StringParam';
 
 import { CharactersService } from './characters.service';
 import { CreateCharacterRequestDto, UpdateCharacterRequestDto } from './dto/character.dto';
-import { FindAllCharactersResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
+import { FindAllCharactersResponse, FindCharacterResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
 
 @Controller('/api/characters')
 export class CharactersController {
@@ -46,6 +46,16 @@ export class CharactersController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Get(':param')
+  async findCharacter(
+    @Param('param') nameKey: string,
+  ): Promise<FindCharacterResponse> {
+    this.logger.log('findCharacter started');
+    this.logger.log('%o', { nameKey });
+
+    return this.charactersService.findCharacter(nameKey);
   }
 
   @Put(':id')

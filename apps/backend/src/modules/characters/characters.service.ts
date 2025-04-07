@@ -4,7 +4,7 @@ import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { CreateCharacterRequestDto, UpdateCharacterRequestDto } from './dto/character.dto';
-import { FindAllCharactersResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
+import { FindAllCharactersResponse, FindCharacterResponse, FindPostsByCharacterResponse, GetCharactersPostCountResponse } from './entities/characters.entity';
 
 @Injectable()
 export class CharactersService {
@@ -121,6 +121,21 @@ export class CharactersService {
       posts,
       total,
     };
+  }
+
+  /** キャラを取得 */
+  async findCharacter(nameKey: string): Promise<FindCharacterResponse> {
+    const character = await this.prisma.character.findUnique({
+      where: { nameKey },
+      select: {
+        id: true,
+        name: true,
+        nameKey: true,
+        order: true,
+      },
+    });
+
+    return { character };
   }
 
   /** キャラクターを更新する */
