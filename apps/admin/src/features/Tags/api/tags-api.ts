@@ -11,7 +11,9 @@ import { apiClient } from '@/lib/api/api-client';
 import {
   CreateCharacterRequest,
   CreateTagRequest,
+  FindCharacterResponse as FindCharacterApiResponse,
   FindTagResponse,
+  UpdateCharacterRequest,
   UpdateTagRequest,
 } from './tags-api-types';
 
@@ -29,6 +31,23 @@ export class TagsApi {
   /** キャラを登録する */
   async createCharacter(request: CreateCharacterRequest): Promise<void> {
     await this.apiClient.post(this.endpointCharacters, request);
+  }
+
+  /** キャラ詳細を取得する */
+  async findCharacter(nameKey: string): Promise<FindCharacterApiResponse> {
+    const url = `${this.endpointCharacters}/${nameKey}`;
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('キャラクター詳細取得に失敗しました。');
+    }
+
+    return await res.json();
+  }
+
+  /** キャラを更新する */
+  async updateCharacter(request: UpdateCharacterRequest): Promise<void> {
+    await this.apiClient.put(`${this.endpointCharacters}/${request.id}`, request.form);
   }
 
   private endpointTags = '/tags';

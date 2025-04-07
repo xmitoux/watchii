@@ -1,4 +1,11 @@
-import { CharacterEntity, PopularWordSpeakerEntity, TagEntity } from '@repo/ui/types';
+import {
+  CharacterEntity,
+  PopularWordSpeakerEntity,
+  TagEntity,
+} from '@repo/ui/types';
+
+/** キャラクター詳細(編集画面用)エンティティ */
+export type CharacterDetailEntity = CharacterEntity & { order: number };
 
 /** タグ一覧ページコンポーネントのProps */
 export type TagsProps = {
@@ -12,6 +19,11 @@ export type CharacterFormData = {
   name: string;
   nameKey: string;
   order: string;
+};
+
+/** キャラクター編集画面のProps */
+export type CharacterEditProps = {
+  character: CharacterDetailEntity;
 };
 
 /** タグ詳細(編集画面用)エンティティ */
