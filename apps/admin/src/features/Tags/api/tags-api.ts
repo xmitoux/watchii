@@ -10,10 +10,13 @@ import { apiClient } from '@/lib/api/api-client';
 
 import {
   CreateCharacterRequest,
+  CreatePopularWordRequest,
   CreateTagRequest,
   FindCharacterResponse as FindCharacterApiResponse,
+  FindPopularWordResponse,
   FindTagResponse,
   UpdateCharacterRequest,
+  UpdatePopularWordRequest,
   UpdateTagRequest,
 } from './tags-api-types';
 
@@ -84,6 +87,26 @@ export class TagsApi {
   /** 語録一覧を取得する */
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
     return await this.tagsApiBase.findAllPopularWords();
+  }
+
+  /** 語録を登録する */
+  async createPopularWord(request: CreatePopularWordRequest): Promise<void> {
+    await this.apiClient.post(this.endpointPopularWords, request);
+  }
+
+  /** 語録詳細を取得する */
+  async findPopularWord(id: number): Promise<FindPopularWordResponse> {
+    const url = `${this.endpointPopularWords}/${id}`;
+    const res = await fetchData(url);
+    if (!res.ok) {
+      throw new Error('語録詳細取得に失敗しました。');
+    }
+    return await res.json();
+  }
+
+  /** 語録を更新する */
+  async updatePopularWord(request: UpdatePopularWordRequest): Promise<void> {
+    await this.apiClient.put(`${this.endpointPopularWords}/${request.id}`, request.form);
   }
 }
 
