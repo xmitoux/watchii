@@ -4,11 +4,11 @@ import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import { tagsApi } from '@/features/Tags/api/tags-api';
 import { PopularWordForm } from '@/features/Tags/components/PopularWordForm';
-import { PopularWordFormData } from '@/features/Tags/types/tags-types';
+import { PopularWordCreateProps, PopularWordFormData } from '@/features/Tags/types/tags-types';
 import { useToast } from '@/hooks/useToast';
 
 /** 語録登録画面コンポーネント */
-export default function PopularWordCreate() {
+export default function PopularWordCreate({ characters }: PopularWordCreateProps) {
   const router = useRouter();
 
   const { showCompleteToast, showErrorToast } = useToast();
@@ -34,7 +34,7 @@ export default function PopularWordCreate() {
 
   return (
     <Layout title="語録登録" canBack>
-      <PopularWordForm onSubmit={handleCreate} />
+      <PopularWordForm characters={characters} onSubmit={handleCreate} />
     </Layout>
   );
 }

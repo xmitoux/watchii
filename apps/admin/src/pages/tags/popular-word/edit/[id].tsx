@@ -18,9 +18,13 @@ export const getServerSideProps: GetServerSideProps<PopularWordEditProps>
         return { notFound: true };
       }
 
+      // キャラクター一覧をAPIから取得
+      const { characters } = await tagsApi.findAllCharacters();
+
       return {
         props: {
           popularWord,
+          characters,
         },
       };
     }

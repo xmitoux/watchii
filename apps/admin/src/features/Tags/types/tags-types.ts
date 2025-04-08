@@ -49,8 +49,14 @@ export type PopularWordFormData = {
   speakerId: number;
 };
 
+/** 語録登録画面のProps */
+export type PopularWordCreateProps = {
+  characters: CharacterEntity[];
+};
+
 /** 語録編集画面のProps */
 export type PopularWordEditProps = {
+  characters: CharacterEntity[];
   popularWord: PopularWordDetailEntity;
 };
 

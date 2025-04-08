@@ -9,7 +9,7 @@ import { PopularWordEditProps, PopularWordFormData } from '@/features/Tags/types
 import { useToast } from '@/hooks/useToast';
 
 /** 語録編集画面コンポーネント */
-export default function PopularWordEdit({ popularWord }: PopularWordEditProps) {
+export default function PopularWordEdit({ popularWord, characters }: PopularWordEditProps) {
   const router = useRouter();
   const { showCompleteToast, showErrorToast } = useToast();
 
@@ -27,7 +27,7 @@ export default function PopularWordEdit({ popularWord }: PopularWordEditProps) {
       await tagsApi.updatePopularWord(request);
 
       // 登録画面と違ってなぜかback後にトーストが出ないので、この画面ですぐ出す
-      showCompleteToast('語録更新完了！🏷️', 100);
+      showCompleteToast('語録更新完了！📜', 100);
       router.back();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,7 +41,7 @@ export default function PopularWordEdit({ popularWord }: PopularWordEditProps) {
 
   return (
     <Layout title="語録編集" canBack>
-      <PopularWordForm editData={editData} onSubmit={handleUpdate} />
+      <PopularWordForm characters={characters} editData={editData} onSubmit={handleUpdate} />
     </Layout>
   );
 }
