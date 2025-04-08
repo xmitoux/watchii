@@ -161,4 +161,45 @@ export class PostsService {
       total,
     };
   }
+
+  async findPost(id: number) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        filename: true,
+        postedAt: true,
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+          orderBy: {
+            kana: 'asc',
+          },
+        },
+        characters: {
+          select: {
+            id: true,
+            name: true,
+            iconFilename: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+        popularWords: {
+          select: {
+            id: true,
+            word: true,
+          },
+          orderBy: {
+            kana: 'asc',
+          },
+        },
+      },
+    });
+
+    return { post };
+  }
 }

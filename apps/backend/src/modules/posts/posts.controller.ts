@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Logger, Param, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
+import { FindPostResponse, PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
 @Controller('/api/posts')
@@ -50,5 +50,15 @@ export class PostsController {
       sort,
       episodeId,
     });
+  }
+
+  @Get(':id')
+  async findPost(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<FindPostResponse> {
+    this.logger.log('findPost started');
+    this.logger.log('%o', { id });
+
+    return this.postsService.findPost(id);
   }
 }
