@@ -1,8 +1,9 @@
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 
 import { IdParam } from '@/common/dto/IdParam';
 
-import { FindAllPopularWordsResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
+import { CreatePopularWordRequestDto, UpdatePopularWordRequestDto } from './dto/popular_words.dto';
+import { FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
 import { PopularWordsService } from './popular_words.service';
 
 @Controller('/api/popular-words')
@@ -10,6 +11,14 @@ export class PopularWordsController {
   private readonly logger = new Logger(PopularWordsController.name);
 
   constructor(private readonly popularWordsService: PopularWordsService) {}
+
+  @Post()
+  createPopularWord(@Body() dto: CreatePopularWordRequestDto) {
+    this.logger.log('createPopularWord started');
+    this.logger.log('%o', { dto });
+
+    return this.popularWordsService.createPopularWord(dto);
+  }
 
   @Get()
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
@@ -39,5 +48,26 @@ export class PopularWordsController {
       offset: offset ? Number(offset) : undefined,
       sort,
     });
+  }
+
+  @Get(':id')
+  async findPopularWord(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<FindPopularWordResponse> {
+    this.logger.log('findPopularWord started');
+    this.logger.log('%o', { id });
+
+    return this.popularWordsService.findPopularWord(id);
+  }
+
+  @Put(':id')
+  updatePopularWord(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePopularWordRequestDto,
+  ) {
+    this.logger.log('updatePopularWord started');
+    this.logger.log('%o', { id, dto });
+
+    return this.popularWordsService.update(id, dto);
   }
 }

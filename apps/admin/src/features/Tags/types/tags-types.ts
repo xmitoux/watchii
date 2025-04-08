@@ -1,11 +1,10 @@
 import {
   CharacterEntity,
+  PopularWordEntity,
   PopularWordSpeakerEntity,
+  SpeakerEntity,
   TagEntity,
 } from '@repo/ui/types';
-
-/** キャラクター詳細(編集画面用)エンティティ */
-export type CharacterDetailEntity = CharacterEntity & { order: number };
 
 /** タグ一覧ページコンポーネントのProps */
 export type TagsProps = {
@@ -26,16 +25,42 @@ export type CharacterEditProps = {
   character: CharacterDetailEntity;
 };
 
-/** タグ詳細(編集画面用)エンティティ */
-export type TagDetailEntity = TagEntity & { kana: string };
+/** キャラクター詳細(編集画面用)エンティティ */
+export type CharacterDetailEntity = CharacterEntity & { order: number };
+
+/** タグフォームデータ */
+export type TagFormData = {
+  name: string;
+  kana: string;
+};
 
 /** タグ編集画面のProps */
 export type TagEditProps = {
   tag: TagDetailEntity;
 };
 
-/** タグフォームデータ */
-export type TagFormData = {
-  name: string;
+/** タグ詳細(編集画面用)エンティティ */
+export type TagDetailEntity = TagEntity & { kana: string };
+
+/** 語録フォームデータ */
+export type PopularWordFormData = {
+  word: string;
   kana: string;
+  speakerId: number;
+};
+
+/** 語録登録画面のProps */
+export type PopularWordCreateProps = {
+  characters: CharacterEntity[];
+};
+
+/** 語録編集画面のProps */
+export type PopularWordEditProps = {
+  characters: CharacterEntity[];
+  popularWord: PopularWordDetailEntity;
+};
+
+/** 語録詳細(編集画面用)エンティティ */
+export type PopularWordDetailEntity = PopularWordEntity & {
+  speaker: Omit<SpeakerEntity, 'order'>;
 };

@@ -22,7 +22,7 @@ export function CharacterIcon({ character, size = 120, iconSize = '50px', priori
     <Box
       bg="hachiBlue"
       borderRadius="full"
-      p={1}
+      p="2px"
       transition="all 0.2s"
       _hover={{
         transform: 'scale(1.05)',

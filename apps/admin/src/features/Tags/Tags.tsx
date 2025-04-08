@@ -71,6 +71,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
 
         {/* 語録セクション */}
         <Box
+          position="relative"
           w="full"
           bg={bgColor}
           borderRadius="lg"
@@ -81,10 +82,13 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
           <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
             語録
           </Text>
+
+          {/* 登録ボタン */}
+          <AddButton to="/tags/popular-word/create" />
         </Box>
 
         {/* 語録一覧 */}
-        <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/${id}`} />
+        <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/edit/${id}`} />
       </Flex>
     </Layout>
   );
