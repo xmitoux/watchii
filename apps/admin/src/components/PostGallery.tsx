@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Flex, Text } from '@repo/ui/chakra-ui';
 import { NextImage } from '@repo/ui/components';
 import { PostEntity } from '@repo/ui/types';
@@ -22,19 +24,21 @@ export function PostGallery({ posts }: PostGalleryProps) {
           align="end"
           gap={1}
         >
-          <NextImage
-            src={post.filename}
-            width={700}
-            styleWidth={imageWidth}
-            alt={post.filename}
-            priority
-          />
+          <Link href={`/posts/${post.id}`}>
+            <NextImage
+              src={post.filename}
+              width={700}
+              styleWidth={imageWidth}
+              alt={post.filename}
+              priority
+            />
 
-          <Text fontSize="xs" color="gray">
-            投稿:
-            {' '}
-            {formatToJST(post.postedAt)}
-          </Text>
+            <Text fontSize="xs" color="gray">
+              投稿:
+              {' '}
+              {formatToJST(post.postedAt)}
+            </Text>
+          </Link>
         </Flex>
       ))}
     </Flex>
