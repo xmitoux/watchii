@@ -15,7 +15,10 @@ import { toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
-export function Login() {
+type LoginProps = {
+  homeUrl?: string;
+};
+export function Login({ homeUrl = '/home' }: LoginProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -40,7 +43,7 @@ export function Login() {
       // ホーム画面にリダイレクト
       // (/home/page/1 には行かないよう注意！)
       // (本番環境だとなぜか固まる)
-      router.push('/home');
+      router.push(homeUrl);
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {

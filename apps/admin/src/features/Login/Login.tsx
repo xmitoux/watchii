@@ -2,10 +2,14 @@ import { Login as BaseLogin } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 
-export default function Login() {
+type LoginProps = {
+  homeUrl: string;
+};
+
+export default function Login({ homeUrl }: LoginProps) {
   return (
     <Layout title="Watchii Adminにログイン" noFooter noMenu>
-      <BaseLogin />
+      <BaseLogin homeUrl={homeUrl} />
     </Layout>
   );
 }

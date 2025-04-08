@@ -7,8 +7,8 @@ import { MenuDrawer } from '../Menu/MenuDrawer';
 
 const navigationItems: NavigationItem[] = [
   {
-    path: '/home',
-    rootPath: '/home',
+    path: '/posts',
+    rootPath: '/posts',
     name: 'Post管理',
     activeIcon: '/images/icons/home-active.png',
     inactiveIcon: '/images/icons/home-inactive.png',
