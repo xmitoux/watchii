@@ -2,7 +2,7 @@ import { fetchData } from '../../utils/fetchData';
 
 import {
   FindAllCharactersResponse,
-  FindAllPopularWordsResponse,
+  FindAllPopularWordSpeakersResponse,
   FindAllTagsResponse,
 } from './tags-api-types';
 
@@ -38,8 +38,8 @@ export class TagsApiBase {
   }
 
   /** 語録一覧を取得する */
-  async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
-    const url = this.endpointPopularWords;
+  async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
+    const url = `${this.endpointPopularWords}/find-all-popular-word-speakers`;
 
     const res = await fetchData(url);
 

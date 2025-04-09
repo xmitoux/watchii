@@ -8,6 +8,6 @@ export type FindAllTagsResponse = {
   tags: TagEntity[];
 };
 
-export type FindAllPopularWordsResponse = {
+export type FindAllPopularWordSpeakersResponse = {
   popularWordSpeakers: PopularWordSpeakerEntity[];
 };

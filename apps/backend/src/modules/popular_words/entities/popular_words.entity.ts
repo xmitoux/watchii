@@ -10,13 +10,13 @@ type SpeakerEntity = Pick<
   'id' | 'name' | 'iconFilename' | 'order'
 >;
 
-export type FindAllPopularWordsEntity = {
+export type FindAllPopularWordSpeakersEntity = {
   speaker: SpeakerEntity;
   words: PopularWordEntity[];
 };
 
-export class FindAllPopularWordsResponse {
-  popularWordSpeakers: FindAllPopularWordsEntity[];
+export class FindAllPopularWordSpeakersResponse {
+  popularWordSpeakers: FindAllPopularWordSpeakersEntity[];
 }
 
 type FindPopularWordEntity = Pick<
