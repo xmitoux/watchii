@@ -1,6 +1,9 @@
-import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, ParseIntPipe, Patch, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
+import { UpdatePostCharactersRequest } from './dto/UpdatePostCharactersRequest.dto';
+import { UpdatePostPopularWordsRequest } from './dto/UpdatePostPopularWordsRequest.dto';
+import { UpdatePostTagsRequest } from './dto/UpdatePostTagsRequest.dto';
 import { FindPostResponse, PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
@@ -60,5 +63,38 @@ export class PostsController {
     this.logger.log('%o', { id });
 
     return this.postsService.findPost(id);
+  }
+
+  @Patch(':id/update-post-characters')
+  async updatePostCharacters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePostCharactersRequest,
+  ) {
+    this.logger.log('updatePostCharacters started');
+    this.logger.log('%o', { id, characterIds: dto.characterIds });
+
+    await this.postsService.updatePostCharacters(id, dto);
+  }
+
+  @Patch(':id/update-post-tags')
+  async updateTags(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePostTagsRequest,
+  ): Promise<void> {
+    this.logger.log('updateTags started');
+    this.logger.log('%o', { id, tagIds: dto.tagIds });
+
+    await this.postsService.updatePostTags(id, dto);
+  }
+
+  @Patch(':id/update-post-popular-words')
+  async updatePopularWords(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePostPopularWordsRequest,
+  ): Promise<void> {
+    this.logger.log('updatePopularWords started');
+    this.logger.log('%o', { id, popularWordIds: dto.popularWordIds });
+
+    await this.postsService.updatePostPopularWords(id, dto);
   }
 }
