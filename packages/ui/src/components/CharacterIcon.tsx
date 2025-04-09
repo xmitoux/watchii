@@ -10,19 +10,28 @@ type CharacterIconProps = {
   };
   size?: number;
   iconSize?: string;
+  borderSize?: string | number;
+  borderColor?: string;
   priority?: boolean;
 };
 
 /** キャラクターアイコンコンポーネント */
-export function CharacterIcon({ character, size = 120, iconSize = '50px', priority }: CharacterIconProps) {
+export function CharacterIcon({
+  character,
+  size = 120,
+  iconSize = '50px',
+  priority,
+  borderSize = '2px',
+  borderColor = 'hachiBlue',
+}: CharacterIconProps) {
   const src = `chara-icons/${character.iconFilename}`;
   const { imageLoader, imageSrc } = useNextImage({ src, width: size });
 
   return (
     <Box
-      bg="hachiBlue"
+      bg={borderColor}
       borderRadius="full"
-      p="2px"
+      p={borderSize}
       transition="all 0.2s"
       _hover={{
         transform: 'scale(1.05)',
