@@ -6,7 +6,10 @@ import { CharacterIcon, NextImage } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
+import { useToast } from '@/hooks/useToast';
 
+import { postsApi } from './api/posts-api';
+import { UpdatePostCharactersRequest, UpdatePostPopularWordsRequest, UpdatePostTagsRequest } from './api/posts-api-types';
 import { PostDetailCharacterEntity, PostDetailPopularWordEntity, PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
@@ -16,6 +19,8 @@ export function PostDetail({
   tagsMaster,
   popularWordsMaster,
 }: PostDetailProps) {
+  const { showCompleteToast, showErrorToast } = useToast();
+
   const imageWidth = usePostImageWidth({
     tabletWidth: '60vw',
     desktopWidth: '40vh',
@@ -50,21 +55,56 @@ export function PostDetail({
       prev.includes(id) ? prev.filter((wordId) => wordId !== id) : [...prev, id]);
   };
 
-  // 更新処理（APIリクエストはここに実装予定）
-  const updateCharacters = () => {
-    console.log('キャラ更新:', selectedCharacters);
-    // ここにAPI呼び出しを実装予定
-  };
+  async function updateCharacters() {
+    try {
+      // 更新API実行
+      const request: UpdatePostCharactersRequest = { postId: post.id, characterIds: selectedCharacters };
+      await postsApi.updatePostCharacters(request);
 
-  const updateTags = () => {
-    console.log('タグ更新:', selectedTags);
-    // ここにAPI呼び出しを実装予定
-  };
+      showCompleteToast('キャラ更新完了！🪄');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: 'キャラ更新に失敗しました😢',
+        errorMessage: error.message,
+      });
+    }
+  }
 
-  const updatePopularWords = () => {
-    console.log('語録更新:', selectedPopularWords);
-    // ここにAPI呼び出しを実装予定
-  };
+  async function updateTags() {
+    try {
+      // 更新API実行
+      const request: UpdatePostTagsRequest = { postId: post.id, tagIds: selectedTags };
+      await postsApi.updatePostTags(request);
+
+      showCompleteToast('タグ更新完了！🏷️');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: 'タグ更新に失敗しました😢',
+        errorMessage: error.message,
+      });
+    }
+  }
+
+  async function updatePopularWords() {
+    try {
+      // 更新API実行
+      const request: UpdatePostPopularWordsRequest = { postId: post.id, popularWordIds: selectedPopularWords };
+      await postsApi.updatePostPopularWords(request);
+
+      showCompleteToast('語録更新完了！📜');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: '語録更新に失敗しました😢',
+        errorMessage: error.message,
+      });
+    }
+  }
 
   return (
     <Layout title="Post詳細" canBack>
