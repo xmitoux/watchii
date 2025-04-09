@@ -1,11 +1,11 @@
-import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { Box, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
-import { NextImage } from '@repo/ui/components';
+import { CharacterIcon, NextImage } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 
-import { PostDetailPopularWordEntity, PostDetailProps, PostDetailTagEntity } from './types/posts-types';
+import { PostDetailCharacterEntity, PostDetailPopularWordEntity, PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
 export function PostDetail({ post }: PostDetailProps) {
@@ -29,39 +29,35 @@ export function PostDetail({ post }: PostDetailProps) {
         {/* キャラセクション */}
         <SectionText title="キャラ" />
 
-        {/* TODO: 見た目の調整 */}
         {/* キャラタグ一覧 */}
-        <SimpleGrid columns={3} mb={8}>
-          {post.characters.map((character) => (
-            <Box key={character.id} m={4}>
-              {character.name}
-            </Box>
-          ))}
-        </SimpleGrid>
+        <TagList
+          items={post.characters}
+          renderItem={(character) => (
+            <CharacterTag character={character} />
+          )}
+        />
 
         {/* タグセクション */}
         <SectionText title="タグ" />
 
         {/* タグ一覧 */}
-        <Wrap justify="center" mb={8}>
-          {post.tags.map((tag) => (
-            <WrapItem key={tag.id} m={1}>
-              <PostTag item={tag} />
-            </WrapItem>
-          ))}
-        </Wrap>
+        <TagList
+          items={post.tags}
+          renderItem={(tag) => (
+            <PostTag item={tag} />
+          )}
+        />
 
         {/* 語録セクション */}
         <SectionText title="語録" />
 
         {/* 語録一覧 */}
-        <Wrap justify="center" mb={8}>
-          {post.popularWords.map((popularWord) => (
-            <WrapItem key={popularWord.id} m={1}>
-              <PostTag item={popularWord} />
-            </WrapItem>
-          ))}
-        </Wrap>
+        <TagList
+          items={post.popularWords}
+          renderItem={(word) => (
+            <PostTag item={word} />
+          )}
+        />
       </Flex>
     </Layout>
   );
@@ -88,6 +84,74 @@ function SectionText({ title }: SectionTextProps) {
         {title}
       </Text>
     </Box>
+  );
+}
+
+type TagListItem = PostDetailCharacterEntity | PostDetailTagEntity | PostDetailPopularWordEntity;
+
+type TagListProps<T extends TagListItem> = {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+};
+
+function TagList<T extends TagListItem>({ items, renderItem }: TagListProps<T>) {
+  return (
+    <Wrap justify="center" mb={8}>
+      {items.map((item) => (
+        <WrapItem key={item.id} m={1}>
+          {renderItem(item)}
+        </WrapItem>
+      ))}
+    </Wrap>
+  );
+}
+
+type CharacterTagProps = {
+  character: PostDetailCharacterEntity;
+};
+
+function CharacterTag({ character }: CharacterTagProps) {
+  // カラーパレット - パステルカラーをランダムに選択
+  const tagColors = [
+    { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
+    { bg: 'purple.100', hover: 'purple.200', border: 'purple.300', text: 'purple.800' },
+    { bg: 'blue.100', hover: 'blue.200', border: 'blue.300', text: 'blue.800' },
+    { bg: 'teal.100', hover: 'teal.200', border: 'teal.300', text: 'teal.800' },
+    { bg: 'green.100', hover: 'green.200', border: 'green.300', text: 'green.800' },
+    { bg: 'yellow.100', hover: 'yellow.200', border: 'yellow.300', text: 'yellow.800' },
+    { bg: 'orange.100', hover: 'orange.200', border: 'orange.300', text: 'orange.800' },
+  ];
+
+  // タグごとに固定のカラーを選ぶ（タグのIDに基づく）
+  const colorIndex = character.id % tagColors.length;
+  const tagColor = tagColors[colorIndex]!;
+
+  return (
+    <Tag
+      size="xl"
+      variant="solid"
+      bg={tagColor.bg}
+      borderWidth="1px"
+      borderColor={tagColor.border}
+      borderRadius="full"
+      boxShadow="sm"
+      py={2}
+      px={4}
+      cursor="pointer"
+      startElement={
+        <CharacterIcon character={character} iconSize="40px" borderSize={0} />
+      }
+      transition="all 0.2s"
+      _hover={{
+        bg: tagColor.hover,
+        transform: 'translateY(-2px)',
+        boxShadow: 'md',
+      }}
+    >
+      <Text color={tagColor.text} fontSize="md">
+        {character.name}
+      </Text>
+    </Tag>
   );
 }
 
