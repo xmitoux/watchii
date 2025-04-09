@@ -3,7 +3,7 @@ import { Body, Controller, Get, Logger, Param, ParseIntPipe, Post, Put, Query } 
 import { IdParam } from '@/common/dto/IdParam';
 
 import { CreatePopularWordRequestDto, UpdatePopularWordRequestDto } from './dto/popular_words.dto';
-import { FindAllPopularWordSpeakersResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
+import { FindAllPopularWordSpeakersResponse, FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
 import { PopularWordsService } from './popular_words.service';
 
 @Controller('/api/popular-words')
@@ -18,6 +18,13 @@ export class PopularWordsController {
     this.logger.log('%o', { dto });
 
     return this.popularWordsService.createPopularWord(dto);
+  }
+
+  @Get()
+  async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
+    this.logger.log('findAllPopularWords');
+
+    return this.popularWordsService.findAllPopularWords();
   }
 
   @Get('/find-all-popular-word-speakers')

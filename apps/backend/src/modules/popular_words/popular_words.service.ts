@@ -4,7 +4,7 @@ import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { CreatePopularWordRequestDto, UpdatePopularWordRequestDto } from './dto/popular_words.dto';
-import { FindAllPopularWordSpeakersEntity, FindAllPopularWordSpeakersResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
+import { FindAllPopularWordSpeakersEntity, FindAllPopularWordSpeakersResponse, FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
 
 @Injectable()
 export class PopularWordsService {
@@ -21,6 +21,23 @@ export class PopularWordsService {
         speakerId: dto.speakerId,
       },
     });
+  }
+
+  async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
+    const popularWords = await this.prisma.popularWord.findMany({
+      select: {
+        id: true,
+        word: true,
+        kana: true,
+      },
+      orderBy: {
+        kana: 'asc',
+      },
+    });
+
+    return {
+      popularWords,
+    };
   }
 
   async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
