@@ -1,4 +1,6 @@
-import { Box, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { useState } from 'react';
+
+import { Box, Button, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
 import { CharacterIcon, NextImage } from '@repo/ui/components';
 
@@ -19,6 +21,51 @@ export function PostDetail({
     desktopWidth: '40vh',
   });
 
+  // 選択中のタグを状態として保持
+  const [selectedCharacters, setSelectedCharacters] = useState<number[]>(
+    post.characters.map((character) => character.id),
+  );
+  const [selectedTags, setSelectedTags] = useState<number[]>(
+    post.tags.map((tag) => tag.id),
+  );
+  const [selectedPopularWords, setSelectedPopularWords] = useState<number[]>(
+    post.popularWords.map((word) => word.id),
+  );
+
+  // キャラクターのトグル処理
+  const toggleCharacter = (id: number) => {
+    setSelectedCharacters((prev) =>
+      prev.includes(id) ? prev.filter((charId) => charId !== id) : [...prev, id]);
+  };
+
+  // タグのトグル処理
+  const toggleTag = (id: number) => {
+    setSelectedTags((prev) =>
+      prev.includes(id) ? prev.filter((tagId) => tagId !== id) : [...prev, id]);
+  };
+
+  // 語録のトグル処理
+  const togglePopularWord = (id: number) => {
+    setSelectedPopularWords((prev) =>
+      prev.includes(id) ? prev.filter((wordId) => wordId !== id) : [...prev, id]);
+  };
+
+  // 更新処理（APIリクエストはここに実装予定）
+  const updateCharacters = () => {
+    console.log('キャラ更新:', selectedCharacters);
+    // ここにAPI呼び出しを実装予定
+  };
+
+  const updateTags = () => {
+    console.log('タグ更新:', selectedTags);
+    // ここにAPI呼び出しを実装予定
+  };
+
+  const updatePopularWords = () => {
+    console.log('語録更新:', selectedPopularWords);
+    // ここにAPI呼び出しを実装予定
+  };
+
   return (
     <Layout title="Post詳細" canBack>
       <Flex direction="column" align="center" gap={4}>
@@ -36,33 +83,48 @@ export function PostDetail({
 
         {/* キャラタグ一覧 */}
         <TagList
-          items={post.characters}
-          renderItem={(character) => (
-            <CharacterTag character={character} />
+          items={charactersMaster}
+          selectedIds={selectedCharacters}
+          toggleItem={toggleCharacter}
+          renderItem={(character, isSelected) => (
+            <CharacterTag character={character} isSelected={isSelected} />
           )}
         />
+        <Button colorScheme="blue" mb={8} onClick={updateCharacters}>
+          キャラを更新する
+        </Button>
 
         {/* タグセクション */}
         <SectionText title="タグ" />
 
         {/* タグ一覧 */}
         <TagList
-          items={post.tags}
-          renderItem={(tag) => (
-            <PostTag item={tag} />
+          items={tagsMaster}
+          selectedIds={selectedTags}
+          toggleItem={toggleTag}
+          renderItem={(tag, isSelected) => (
+            <PostTag item={tag} isSelected={isSelected} />
           )}
         />
+        <Button colorScheme="blue" mb={8} onClick={updateTags}>
+          タグを更新する
+        </Button>
 
         {/* 語録セクション */}
         <SectionText title="語録" />
 
         {/* 語録一覧 */}
         <TagList
-          items={post.popularWords}
-          renderItem={(word) => (
-            <PostTag item={word} />
+          items={popularWordsMaster}
+          selectedIds={selectedPopularWords}
+          toggleItem={togglePopularWord}
+          renderItem={(word, isSelected) => (
+            <PostTag item={word} isSelected={isSelected} />
           )}
         />
+        <Button colorScheme="blue" mb={8} onClick={updatePopularWords}>
+          語録を更新する
+        </Button>
       </Flex>
     </Layout>
   );
@@ -96,15 +158,17 @@ type TagListItem = PostDetailCharacterEntity | PostDetailTagEntity | PostDetailP
 
 type TagListProps<T extends TagListItem> = {
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  selectedIds: number[];
+  toggleItem: (id: number) => void;
+  renderItem: (item: T, isSelected: boolean) => React.ReactNode;
 };
 
-function TagList<T extends TagListItem>({ items, renderItem }: TagListProps<T>) {
+function TagList<T extends TagListItem>({ items, selectedIds, toggleItem, renderItem }: TagListProps<T>) {
   return (
-    <Wrap justify="center" mb={8}>
+    <Wrap justify="center" mb={4}>
       {items.map((item) => (
-        <WrapItem key={item.id} m={1}>
-          {renderItem(item)}
+        <WrapItem key={item.id} m={1} onClick={() => toggleItem(item.id)}>
+          {renderItem(item, selectedIds.includes(item.id))}
         </WrapItem>
       ))}
     </Wrap>
@@ -113,9 +177,10 @@ function TagList<T extends TagListItem>({ items, renderItem }: TagListProps<T>) 
 
 type CharacterTagProps = {
   character: PostDetailCharacterEntity;
+  isSelected: boolean;
 };
 
-function CharacterTag({ character }: CharacterTagProps) {
+function CharacterTag({ character, isSelected }: CharacterTagProps) {
   // カラーパレット - パステルカラーをランダムに選択
   const tagColors = [
     { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
@@ -131,13 +196,19 @@ function CharacterTag({ character }: CharacterTagProps) {
   const colorIndex = character.id % tagColors.length;
   const tagColor = tagColors[colorIndex]!;
 
+  // 選択されているかどうかでスタイルを変更
+  const bgColor = isSelected ? tagColor.bg : 'gray.100';
+  const borderColor = isSelected ? tagColor.border : 'gray.300';
+  const textColor = isSelected ? tagColor.text : 'gray.500';
+  const hoverBg = isSelected ? tagColor.hover : 'gray.200';
+
   return (
     <Tag
       size="xl"
       variant="solid"
-      bg={tagColor.bg}
+      bg={bgColor}
       borderWidth="1px"
-      borderColor={tagColor.border}
+      borderColor={borderColor}
       borderRadius="full"
       boxShadow="sm"
       py={2}
@@ -148,12 +219,12 @@ function CharacterTag({ character }: CharacterTagProps) {
       }
       transition="all 0.2s"
       _hover={{
-        bg: tagColor.hover,
+        bg: hoverBg,
         transform: 'translateY(-2px)',
         boxShadow: 'md',
       }}
     >
-      <Text color={tagColor.text} fontSize="md">
+      <Text color={textColor} fontSize="md">
         {character.name}
       </Text>
     </Tag>
@@ -162,9 +233,10 @@ function CharacterTag({ character }: CharacterTagProps) {
 
 type PostTagProps = {
   item: PostDetailTagEntity | PostDetailPopularWordEntity;
+  isSelected: boolean;
 };
 
-function PostTag({ item }: PostTagProps) {
+function PostTag({ item, isSelected }: PostTagProps) {
   // カラーパレット - パステルカラーをランダムに選択
   const tagColors = [
     { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
@@ -180,13 +252,19 @@ function PostTag({ item }: PostTagProps) {
   const colorIndex = item.id % tagColors.length;
   const tagColor = tagColors[colorIndex]!;
 
+  // 選択されているかどうかでスタイルを変更
+  const bgColor = isSelected ? tagColor.bg : 'gray.100';
+  const borderColor = isSelected ? tagColor.border : 'gray.300';
+  const textColor = isSelected ? tagColor.text : 'gray.500';
+  const hoverBg = isSelected ? tagColor.hover : 'gray.200';
+
   return (
     <Tag
       size="lg"
       variant="solid"
-      bg={tagColor.bg}
+      bg={bgColor}
       borderWidth="1px"
-      borderColor={tagColor.border}
+      borderColor={borderColor}
       borderRadius="full"
       boxShadow="sm"
       py={2}
@@ -194,12 +272,12 @@ function PostTag({ item }: PostTagProps) {
       cursor="pointer"
       transition="all 0.2s"
       _hover={{
-        bg: tagColor.hover,
+        bg: hoverBg,
         transform: 'translateY(-2px)',
         boxShadow: 'md',
       }}
     >
-      <Text color={tagColor.text} fontSize="md">
+      <Text color={textColor} fontSize="md">
         {'name' in item ? item.name : item.word}
       </Text>
     </Tag>
