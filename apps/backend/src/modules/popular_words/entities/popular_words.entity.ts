@@ -5,18 +5,22 @@ type PopularWordEntity = Pick<
   'id' | 'word' | 'kana'
 >;
 
+export class FindAllPopularWordsResponse {
+  popularWords: PopularWordEntity[];
+}
+
 type SpeakerEntity = Pick<
   Character,
   'id' | 'name' | 'iconFilename' | 'order'
 >;
 
-export type FindAllPopularWordsEntity = {
+export type FindAllPopularWordSpeakersEntity = {
   speaker: SpeakerEntity;
   words: PopularWordEntity[];
 };
 
-export class FindAllPopularWordsResponse {
-  popularWordSpeakers: FindAllPopularWordsEntity[];
+export class FindAllPopularWordSpeakersResponse {
+  popularWordSpeakers: FindAllPopularWordSpeakersEntity[];
 }
 
 type FindPopularWordEntity = Pick<

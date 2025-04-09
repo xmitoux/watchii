@@ -4,6 +4,9 @@ import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { PostsFindAllRequestDto, PostsFindEpisodeTargetsRequestDto } from './dto/posts.dto';
+import { UpdatePostCharactersRequest } from './dto/UpdatePostCharactersRequest.dto';
+import { UpdatePostPopularWordsRequest } from './dto/UpdatePostPopularWordsRequest.dto';
+import { UpdatePostTagsRequest } from './dto/UpdatePostTagsRequest.dto';
 import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 
 @Injectable()
@@ -160,5 +163,139 @@ export class PostsService {
       posts,
       total,
     };
+  }
+
+  async findPost(id: number) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        filename: true,
+        postedAt: true,
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+          orderBy: {
+            kana: 'asc',
+          },
+        },
+        characters: {
+          select: {
+            id: true,
+            name: true,
+            iconFilename: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+        popularWords: {
+          select: {
+            id: true,
+            word: true,
+          },
+          orderBy: {
+            kana: 'asc',
+          },
+        },
+      },
+    });
+
+    return { post };
+  }
+
+  async updatePostCharacters(dto: UpdatePostCharactersRequest) {
+    try {
+      const { postId, characterIds } = dto;
+
+      await this.prisma.$transaction(async (tx) => {
+        // 現在のキャラリレーションをすべて削除
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            characters: {
+              set: [],
+            },
+          },
+        });
+
+        // 新しいキャラリレーションで置き換える
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            characters: {
+              connect: characterIds.map((characterId) => ({ id: characterId })),
+            },
+          },
+        });
+      });
+    }
+    catch (error) {
+      throw new Error(`Postのキャラ更新に失敗しました: ${error.message}`);
+    }
+  }
+
+  async updatePostTags(dto: UpdatePostTagsRequest) {
+    try {
+      const { postId, tagIds } = dto;
+
+      // 現在のタグリレーションをすべて削除
+      await this.prisma.$transaction(async (tx) => {
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            tags: {
+              set: [],
+            },
+          },
+        });
+
+        // 新しいタグリレーションで置き換える
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            tags: {
+              connect: tagIds.map((tagId) => ({ id: tagId })),
+            },
+          },
+        });
+      });
+    }
+    catch (error) {
+      throw new Error(`Postのタグ更新に失敗しました: ${error.message}`);
+    }
+  }
+
+  async updatePostPopularWords(dto: UpdatePostPopularWordsRequest) {
+    try {
+      const { postId, popularWordIds } = dto;
+
+      await this.prisma.$transaction(async (tx) => {
+        // 現在の語録リレーションをすべて削除
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            popularWords: {
+              set: [],
+            },
+          },
+        });
+
+        // 新しい語録リレーションで置き換える
+        await tx.post.update({
+          where: { id: postId },
+          data: {
+            popularWords: {
+              connect: popularWordIds.map((popularWordId) => ({ id: popularWordId })),
+            },
+          },
+        });
+      });
+    }
+    catch (error) {
+      throw new Error(`Postの語録更新に失敗しました: ${error.message}`);
+    }
   }
 }

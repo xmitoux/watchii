@@ -1,7 +1,7 @@
-import { tagsApiBase } from '@repo/ui/api';
+import { FindAllPopularWordsResponse, tagsApiBase } from '@repo/ui/api';
 import {
   FindAllCharactersResponse,
-  FindAllPopularWordsResponse,
+  FindAllPopularWordSpeakersResponse,
   FindAllTagsResponse,
 } from '@repo/ui/api';
 import { fetchData } from '@repo/ui/utils';
@@ -87,6 +87,11 @@ export class TagsApi {
   /** 語録一覧を取得する */
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
     return await this.tagsApiBase.findAllPopularWords();
+  }
+
+  /** 語録発言キャラ一覧を取得する */
+  async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
+    return await this.tagsApiBase.findAllPopularWordSpeakers();
   }
 
   /** 語録を登録する */

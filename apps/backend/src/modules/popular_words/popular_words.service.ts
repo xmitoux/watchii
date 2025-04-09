@@ -4,7 +4,7 @@ import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 
 import { CreatePopularWordRequestDto, UpdatePopularWordRequestDto } from './dto/popular_words.dto';
-import { FindAllPopularWordsEntity, FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
+import { FindAllPopularWordSpeakersEntity, FindAllPopularWordSpeakersResponse, FindAllPopularWordsResponse, FindPopularWordResponse, FindPostsByPopularWordResponse, GetPopularWordsPostCountResponse } from './entities/popular_words.entity';
 
 @Injectable()
 export class PopularWordsService {
@@ -24,6 +24,23 @@ export class PopularWordsService {
   }
 
   async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
+    const popularWords = await this.prisma.popularWord.findMany({
+      select: {
+        id: true,
+        word: true,
+        kana: true,
+      },
+      orderBy: {
+        kana: 'asc',
+      },
+    });
+
+    return {
+      popularWords,
+    };
+  }
+
+  async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
     // まず発言者情報も含めて全ての語録を取得
     const allPopularWords = await this.prisma.popularWord.findMany({
       select: {
@@ -52,7 +69,7 @@ export class PopularWordsService {
     });
 
     // 発言者ごとにグループ化
-    const speakerMap = new Map<number, FindAllPopularWordsEntity>();
+    const speakerMap = new Map<number, FindAllPopularWordSpeakersEntity>();
 
     allPopularWords.forEach((word) => {
       const speakerId = word.speaker.id;
