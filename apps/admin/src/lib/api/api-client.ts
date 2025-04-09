@@ -98,6 +98,30 @@ export class ApiRoutesClient {
     }
   }
 
+  // PATCHリクエスト🩹
+  async patch<T>(endpoint: string, data: any): Promise<T> {
+    try {
+      const apiUrl = this.getApiRoutesUrl(endpoint);
+      const response = await fetch(apiUrl, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return this.handleResponse<T>(response);
+    }
+    catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw new ApiError(
+        error instanceof Error ? error.message : 'Unknown error occurred',
+        500,
+      );
+    }
+  }
+
   // DELETEリクエスト🗑️
   async delete<T>(endpoint: string): Promise<T> {
     try {

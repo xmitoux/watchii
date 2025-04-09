@@ -17,7 +17,7 @@ export const callExternalApi = async (
     },
   };
 
-  if (body && (method === 'POST' || method === 'PUT')) {
+  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
     options.body = JSON.stringify(body);
   }
 
