@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { useState } from 'react';
+import { MdAdd } from 'react-icons/md';
 
-import { Box, Button, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { Box, Button, Flex, Icon, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
 import { CharacterIcon, NextImage } from '@repo/ui/components';
 
@@ -119,7 +121,7 @@ export function PostDetail({
         />
 
         {/* キャラセクション */}
-        <SectionText title="キャラ" />
+        <SectionText title="キャラ" to="/tags/character/create" />
 
         {/* キャラタグ一覧 */}
         <TagList
@@ -135,7 +137,7 @@ export function PostDetail({
         </Button>
 
         {/* タグセクション */}
-        <SectionText title="タグ" />
+        <SectionText title="タグ" to="/tags/tag/create" />
 
         {/* タグ一覧 */}
         <TagList
@@ -151,7 +153,7 @@ export function PostDetail({
         </Button>
 
         {/* 語録セクション */}
-        <SectionText title="語録" />
+        <SectionText title="語録" to="/tags/popular-word/create" />
 
         {/* 語録一覧 */}
         <TagList
@@ -172,9 +174,10 @@ export function PostDetail({
 
 type SectionTextProps = {
   title: string;
+  to: string;
 };
 
-function SectionText({ title }: SectionTextProps) {
+function SectionText({ title, to }: SectionTextProps) {
   return (
     <Box
       position="relative"
@@ -188,6 +191,21 @@ function SectionText({ title }: SectionTextProps) {
       <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
         {title}
       </Text>
+
+      <Link href={to}>
+        <Icon
+          position="absolute"
+          right={4}
+          top="11px"
+          color="blackSwitch"
+          size="lg"
+          cursor="pointer"
+          _hover={{ color: 'whiteSwitch' }}
+          transition="all 0.2s"
+        >
+          <MdAdd />
+        </Icon>
+      </Link>
     </Box>
   );
 }
