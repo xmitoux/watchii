@@ -13,13 +13,15 @@ export const getServerSideProps: GetServerSideProps<PostDetailProps>
         return { notFound: true };
       }
 
-      const [{ post }, { characters }, { tags }] = await Promise.all([
+      const [{ post }, { characters }, { tags }, { popularWords }] = await Promise.all([
         // Post詳細を取得
         postsApi.findPost(id),
         // キャラクター一覧をAPIから取得
         tagsApi.findAllCharacters(),
         // タグ一覧をAPIから取得
         tagsApi.findAllTags(),
+        // 語録一覧をAPIから取得
+        tagsApi.findAllPopularWords(),
       ]);
 
       if (!post) {
@@ -29,6 +31,9 @@ export const getServerSideProps: GetServerSideProps<PostDetailProps>
       return {
         props: {
           post,
+          charactersMaster: characters,
+          tagsMaster: tags,
+          popularWordsMaster: popularWords,
         },
       };
     }

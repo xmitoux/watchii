@@ -18,6 +18,9 @@ export type PostDetailEntity = {
     characters: PostDetailCharacterEntity[];
     popularWords: PostDetailPopularWordEntity[];
   };
+  tagsMaster: PostDetailTagEntity[];
+  charactersMaster: PostDetailCharacterEntity[];
+  popularWordsMaster: PostDetailPopularWordEntity[];
 };
 
 /** Post詳細に紐づくキャラ */

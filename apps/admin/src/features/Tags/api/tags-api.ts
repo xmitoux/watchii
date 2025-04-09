@@ -1,4 +1,4 @@
-import { tagsApiBase } from '@repo/ui/api';
+import { FindAllPopularWordsResponse, tagsApiBase } from '@repo/ui/api';
 import {
   FindAllCharactersResponse,
   FindAllPopularWordSpeakersResponse,
@@ -85,6 +85,11 @@ export class TagsApi {
   private endpointPopularWords = '/popular-words';
 
   /** 語録一覧を取得する */
+  async findAllPopularWords(): Promise<FindAllPopularWordsResponse> {
+    return await this.tagsApiBase.findAllPopularWords();
+  }
+
+  /** 語録発言キャラ一覧を取得する */
   async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
     return await this.tagsApiBase.findAllPopularWordSpeakers();
   }

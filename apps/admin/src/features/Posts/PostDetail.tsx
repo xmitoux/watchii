@@ -8,7 +8,12 @@ import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 import { PostDetailCharacterEntity, PostDetailPopularWordEntity, PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
-export function PostDetail({ post }: PostDetailProps) {
+export function PostDetail({
+  post,
+  charactersMaster,
+  tagsMaster,
+  popularWordsMaster,
+}: PostDetailProps) {
   const imageWidth = usePostImageWidth({
     tabletWidth: '60vw',
     desktopWidth: '40vh',
