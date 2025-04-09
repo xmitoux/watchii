@@ -130,7 +130,7 @@ export function PostDetail({
             <CharacterTag character={character} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updateCharacters}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updateCharacters}>
           キャラを更新する
         </Button>
 
@@ -146,7 +146,7 @@ export function PostDetail({
             <PostTag item={tag} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updateTags}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updateTags}>
           タグを更新する
         </Button>
 
@@ -162,7 +162,7 @@ export function PostDetail({
             <PostTag item={word} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updatePopularWords}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updatePopularWords}>
           語録を更新する
         </Button>
       </Flex>
@@ -175,13 +175,11 @@ type SectionTextProps = {
 };
 
 function SectionText({ title }: SectionTextProps) {
-  const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
-
   return (
     <Box
       position="relative"
       w="full"
-      bg={bgColor}
+      bg="hachiBlueSwitch"
       borderRadius="lg"
       py={2}
       mb={4}
