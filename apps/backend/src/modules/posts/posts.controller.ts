@@ -65,36 +65,33 @@ export class PostsController {
     return this.postsService.findPost(id);
   }
 
-  @Patch(':id/update-post-characters')
+  @Patch('/update-post-characters')
   async updatePostCharacters(
-    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePostCharactersRequest,
   ) {
     this.logger.log('updatePostCharacters started');
-    this.logger.log('%o', { id, characterIds: dto.characterIds });
+    this.logger.log('%o', { dto });
 
-    await this.postsService.updatePostCharacters(id, dto);
+    await this.postsService.updatePostCharacters(dto);
   }
 
-  @Patch(':id/update-post-tags')
+  @Patch('/update-post-tags')
   async updateTags(
-    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePostTagsRequest,
   ): Promise<void> {
     this.logger.log('updateTags started');
-    this.logger.log('%o', { id, tagIds: dto.tagIds });
+    this.logger.log('%o', { dto });
 
-    await this.postsService.updatePostTags(id, dto);
+    await this.postsService.updatePostTags(dto);
   }
 
-  @Patch(':id/update-post-popular-words')
+  @Patch('/update-post-popular-words')
   async updatePopularWords(
-    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePostPopularWordsRequest,
   ): Promise<void> {
     this.logger.log('updatePopularWords started');
-    this.logger.log('%o', { id, popularWordIds: dto.popularWordIds });
+    this.logger.log('%o', { dto });
 
-    await this.postsService.updatePostPopularWords(id, dto);
+    await this.postsService.updatePostPopularWords(dto);
   }
 }

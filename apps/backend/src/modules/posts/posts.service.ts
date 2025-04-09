@@ -206,14 +206,14 @@ export class PostsService {
     return { post };
   }
 
-  async updatePostCharacters(id: number, dto: UpdatePostCharactersRequest) {
+  async updatePostCharacters(dto: UpdatePostCharactersRequest) {
     try {
-      const { characterIds } = dto;
+      const { postId, characterIds } = dto;
 
       await this.prisma.$transaction(async (tx) => {
         // 現在のキャラリレーションをすべて削除
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             characters: {
               set: [],
@@ -223,7 +223,7 @@ export class PostsService {
 
         // 新しいキャラリレーションで置き換える
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             characters: {
               connect: characterIds.map((characterId) => ({ id: characterId })),
@@ -237,14 +237,14 @@ export class PostsService {
     }
   }
 
-  async updatePostTags(id: number, dto: UpdatePostTagsRequest) {
+  async updatePostTags(dto: UpdatePostTagsRequest) {
     try {
-      const { tagIds } = dto;
+      const { postId, tagIds } = dto;
 
       // 現在のタグリレーションをすべて削除
       await this.prisma.$transaction(async (tx) => {
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             tags: {
               set: [],
@@ -254,7 +254,7 @@ export class PostsService {
 
         // 新しいタグリレーションで置き換える
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             tags: {
               connect: tagIds.map((tagId) => ({ id: tagId })),
@@ -268,14 +268,14 @@ export class PostsService {
     }
   }
 
-  async updatePostPopularWords(id: number, dto: UpdatePostPopularWordsRequest) {
+  async updatePostPopularWords(dto: UpdatePostPopularWordsRequest) {
     try {
-      const { popularWordIds } = dto;
+      const { postId, popularWordIds } = dto;
 
       await this.prisma.$transaction(async (tx) => {
         // 現在の語録リレーションをすべて削除
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             popularWords: {
               set: [],
@@ -285,7 +285,7 @@ export class PostsService {
 
         // 新しい語録リレーションで置き換える
         await tx.post.update({
-          where: { id },
+          where: { id: postId },
           data: {
             popularWords: {
               connect: popularWordIds.map((popularWordId) => ({ id: popularWordId })),
