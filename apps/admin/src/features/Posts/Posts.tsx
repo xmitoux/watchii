@@ -45,7 +45,7 @@ export default function Posts({ posts, total, currentPage, perPage }: PostsProps
     const timer = setTimeout(() => {
       const savedPosition = sessionStorage.getItem('scrollPos');
       element.scrollTop = savedPosition ? Number(savedPosition) : 0;
-    }, 0);
+    }, 50);
 
     return () => clearTimeout(timer);
   }, []);
