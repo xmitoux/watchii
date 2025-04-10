@@ -31,7 +31,7 @@ export function CharacterTag({ character, to }: CharacterTagProps) {
       </Box>
 
       {/* キャラ名 */}
-      <Text color="blackSwitch" fontSize="md" fontWeight="bold">
+      <Text color="blackSwitch" fontSize="sm" fontWeight="bold" textAlign="center">
         {character.name}
       </Text>
       {/* </Link> */}

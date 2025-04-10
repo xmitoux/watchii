@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { useState } from 'react';
+import { MdAdd } from 'react-icons/md';
 
-import { Box, Button, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { Box, Button, Flex, Icon, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
 import { CharacterIcon, NextImage } from '@repo/ui/components';
 
@@ -55,8 +57,12 @@ export function PostDetail({
       prev.includes(id) ? prev.filter((wordId) => wordId !== id) : [...prev, id]);
   };
 
+  const [updateCharacterLoading, setUpdateCharacterLoading] = useState(false);
+
   async function updateCharacters() {
     try {
+      setUpdateCharacterLoading(true);
+
       // 更新API実行
       const request: UpdatePostCharactersRequest = { postId: post.id, characterIds: selectedCharacters };
       await postsApi.updatePostCharacters(request);
@@ -70,10 +76,17 @@ export function PostDetail({
         errorMessage: error.message,
       });
     }
+    finally {
+      setUpdateCharacterLoading(false);
+    }
   }
+
+  const [updateTagLoading, setUpdateTagLoading] = useState(false);
 
   async function updateTags() {
     try {
+      setUpdateTagLoading(true);
+
       // 更新API実行
       const request: UpdatePostTagsRequest = { postId: post.id, tagIds: selectedTags };
       await postsApi.updatePostTags(request);
@@ -87,10 +100,17 @@ export function PostDetail({
         errorMessage: error.message,
       });
     }
+    finally {
+      setUpdateTagLoading(false);
+    }
   }
+
+  const [updatePopularWordLoading, setUpdatePopularWordLoading] = useState(false);
 
   async function updatePopularWords() {
     try {
+      setUpdatePopularWordLoading(true);
+
       // 更新API実行
       const request: UpdatePostPopularWordsRequest = { postId: post.id, popularWordIds: selectedPopularWords };
       await postsApi.updatePostPopularWords(request);
@@ -103,6 +123,9 @@ export function PostDetail({
         message: '語録更新に失敗しました😢',
         errorMessage: error.message,
       });
+    }
+    finally {
+      setUpdatePopularWordLoading(false);
     }
   }
 
@@ -119,7 +142,7 @@ export function PostDetail({
         />
 
         {/* キャラセクション */}
-        <SectionText title="キャラ" />
+        <SectionText title="キャラ" to="/tags/character/create" />
 
         {/* キャラタグ一覧 */}
         <TagList
@@ -130,12 +153,12 @@ export function PostDetail({
             <CharacterTag character={character} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updateCharacters}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateCharacterLoading} onClick={updateCharacters}>
           キャラを更新する
         </Button>
 
         {/* タグセクション */}
-        <SectionText title="タグ" />
+        <SectionText title="タグ" to="/tags/tag/create" />
 
         {/* タグ一覧 */}
         <TagList
@@ -146,12 +169,12 @@ export function PostDetail({
             <PostTag item={tag} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updateTags}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateTagLoading} onClick={updateTags}>
           タグを更新する
         </Button>
 
         {/* 語録セクション */}
-        <SectionText title="語録" />
+        <SectionText title="語録" to="/tags/popular-word/create" />
 
         {/* 語録一覧 */}
         <TagList
@@ -162,7 +185,7 @@ export function PostDetail({
             <PostTag item={word} isSelected={isSelected} />
           )}
         />
-        <Button colorScheme="blue" mb={8} onClick={updatePopularWords}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updatePopularWordLoading} onClick={updatePopularWords}>
           語録を更新する
         </Button>
       </Flex>
@@ -172,16 +195,15 @@ export function PostDetail({
 
 type SectionTextProps = {
   title: string;
+  to: string;
 };
 
-function SectionText({ title }: SectionTextProps) {
-  const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
-
+function SectionText({ title, to }: SectionTextProps) {
   return (
     <Box
       position="relative"
       w="full"
-      bg={bgColor}
+      bg="hachiBlueSwitch"
       borderRadius="lg"
       py={2}
       mb={4}
@@ -190,6 +212,21 @@ function SectionText({ title }: SectionTextProps) {
       <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
         {title}
       </Text>
+
+      <Link href={to}>
+        <Icon
+          position="absolute"
+          right={4}
+          top="11px"
+          color="blackSwitch"
+          size="lg"
+          cursor="pointer"
+          _hover={{ color: 'whiteSwitch' }}
+          transition="all 0.2s"
+        >
+          <MdAdd />
+        </Icon>
+      </Link>
     </Box>
   );
 }

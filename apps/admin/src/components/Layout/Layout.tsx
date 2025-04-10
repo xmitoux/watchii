@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
@@ -37,6 +37,7 @@ type LayoutProps = {
   canBack?: boolean;
   noFooter?: boolean;
   noMenu?: boolean;
+  scrollRef?: RefObject<HTMLDivElement | null>;
 };
 
 export default function Layout({
@@ -46,6 +47,7 @@ export default function Layout({
   canBack,
   noFooter,
   noMenu,
+  scrollRef,
 }: LayoutProps) {
   const router = useRouter();
 
@@ -60,6 +62,7 @@ export default function Layout({
       canBack={canBack}
       footerNavigationItems={navigationItems}
       noFooter={noFooter}
+      scrollRef={scrollRef}
       onNavigationClick={handleNavigationClick}
     >
       {children}

@@ -26,8 +26,18 @@ export default createSystem(defaultConfig, {
     },
     semanticTokens: {
       colors: {
-        blackSwitch: { value: { base: '{colors.blackPrimary}', _dark: '{colors.chiiWhite}' } },
-        whiteSwitch: { value: { base: '{colors.chiiWhite}', _dark: '{colors.gray.800}' } },
+        blackSwitch: {
+          value: { base: '{colors.blackPrimary}', _dark: '{colors.chiiWhite}' },
+        },
+        whiteSwitch: {
+          value: { base: '{colors.chiiWhite}', _dark: '{colors.gray.800}' },
+        },
+        hachiBlueSwitch: {
+          value: { base: '{colors.hachiBlue.light}', _dark: '{colors.hachiBlue.dark}' },
+        },
+        usaYellowSwitch: {
+          value: { base: '{colors.usaYellow.light}', _dark: '{colors.usaYellow.dark}' },
+        },
       },
     },
   },
