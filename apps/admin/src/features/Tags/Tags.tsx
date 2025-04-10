@@ -34,7 +34,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </Box>
 
         {/* キャラタグ一覧 */}
-        <SimpleGrid columns={3} mb={8}>
+        <SimpleGrid columns={{ base: 3, sm: 4, md: 6 }} mb={8}>
           {characters?.map((character) => (
             <Box key={character.id} m={4}>
               <CharacterTag character={character} to={`/tags/character/edit/${character.nameKey}`} />
