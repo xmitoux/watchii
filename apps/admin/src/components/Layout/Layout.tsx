@@ -3,7 +3,11 @@ import { ReactNode, RefObject } from 'react';
 
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
+import LoadingAnimation from '@/components/LoadingAnimation';
+
 import { MenuDrawer } from '../Menu/MenuDrawer';
+
+import { useLoading } from './hooks/useLoading';
 
 const navigationItems: NavigationItem[] = [
   {
@@ -50,6 +54,7 @@ export default function Layout({
   scrollRef,
 }: LayoutProps) {
   const router = useRouter();
+  const { showLoading } = useLoading();
 
   function handleNavigationClick(item: NavigationItem) {
     router.push(item.path);
@@ -65,7 +70,8 @@ export default function Layout({
       scrollRef={scrollRef}
       onNavigationClick={handleNavigationClick}
     >
-      {children}
+      {/* ページ遷移中はローディング表示 */}
+      {showLoading ? <LoadingAnimation /> : children}
     </UiLayout>
   );
 }
