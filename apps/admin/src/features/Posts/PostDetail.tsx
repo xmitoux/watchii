@@ -57,8 +57,12 @@ export function PostDetail({
       prev.includes(id) ? prev.filter((wordId) => wordId !== id) : [...prev, id]);
   };
 
+  const [updateCharacterLoading, setUpdateCharacterLoading] = useState(false);
+
   async function updateCharacters() {
     try {
+      setUpdateCharacterLoading(true);
+
       // 更新API実行
       const request: UpdatePostCharactersRequest = { postId: post.id, characterIds: selectedCharacters };
       await postsApi.updatePostCharacters(request);
@@ -72,10 +76,17 @@ export function PostDetail({
         errorMessage: error.message,
       });
     }
+    finally {
+      setUpdateCharacterLoading(false);
+    }
   }
+
+  const [updateTagLoading, setUpdateTagLoading] = useState(false);
 
   async function updateTags() {
     try {
+      setUpdateTagLoading(true);
+
       // 更新API実行
       const request: UpdatePostTagsRequest = { postId: post.id, tagIds: selectedTags };
       await postsApi.updatePostTags(request);
@@ -89,10 +100,17 @@ export function PostDetail({
         errorMessage: error.message,
       });
     }
+    finally {
+      setUpdateTagLoading(false);
+    }
   }
+
+  const [updatePopularWordLoading, setUpdatePopularWordLoading] = useState(false);
 
   async function updatePopularWords() {
     try {
+      setUpdatePopularWordLoading(true);
+
       // 更新API実行
       const request: UpdatePostPopularWordsRequest = { postId: post.id, popularWordIds: selectedPopularWords };
       await postsApi.updatePostPopularWords(request);
@@ -105,6 +123,9 @@ export function PostDetail({
         message: '語録更新に失敗しました😢',
         errorMessage: error.message,
       });
+    }
+    finally {
+      setUpdatePopularWordLoading(false);
     }
   }
 
@@ -132,7 +153,7 @@ export function PostDetail({
             <CharacterTag character={character} isSelected={isSelected} />
           )}
         />
-        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updateCharacters}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateCharacterLoading} onClick={updateCharacters}>
           キャラを更新する
         </Button>
 
@@ -148,7 +169,7 @@ export function PostDetail({
             <PostTag item={tag} isSelected={isSelected} />
           )}
         />
-        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updateTags}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateTagLoading} onClick={updateTags}>
           タグを更新する
         </Button>
 
@@ -164,7 +185,7 @@ export function PostDetail({
             <PostTag item={word} isSelected={isSelected} />
           )}
         />
-        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} onClick={updatePopularWords}>
+        <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updatePopularWordLoading} onClick={updatePopularWords}>
           語録を更新する
         </Button>
       </Flex>
