@@ -98,7 +98,7 @@ export class PostsService {
 
   async findAll(query: PostsFindAllRequestDto = {}): Promise<PostFindAllResponseEntity> {
     const {
-      limit = 12,
+      limit,
       offset = 0,
       sort = 'desc',
     } = query;
