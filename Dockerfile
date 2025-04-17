@@ -1,5 +1,5 @@
 ##### dev-base #####
-FROM node:22.12 as dev-base
+FROM node:22.14 as dev-base
 WORKDIR /app
 EXPOSE 3000
 EXPOSE 3001
@@ -7,7 +7,7 @@ EXPOSE 3002
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN npm install -g pnpm && pnpm add -g pnpm@9.15.2
+RUN npm install -g pnpm && pnpm add -g pnpm@10.8.1
 
 ##### dev #####
 FROM dev-base as dev
