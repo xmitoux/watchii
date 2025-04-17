@@ -64,7 +64,7 @@ model Tag {
 
 model PopularWord {
   id        Int       @id @default(autoincrement())
-  word      String    @unique
+  word      String
   kana      String
   speakerId Int       @map("speaker_id")
   speaker   Character @relation("CharacterPopularWords", fields: [speakerId], references: [id])
@@ -72,5 +72,6 @@ model PopularWord {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
+  @@unique([word, speakerId])
   @@map("popular_words")
 }

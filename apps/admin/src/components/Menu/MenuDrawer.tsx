@@ -5,7 +5,7 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { MdDarkMode, MdExitToApp, MdMenu, MdOutlineLightMode } from '@repo/ui/icons';
+import { IoReload, MdDarkMode, MdExitToApp, MdMenu, MdOutlineLightMode } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 /** メニュードロワー */
@@ -47,6 +47,10 @@ export function MenuDrawer() {
     }
   }
 
+  function handleReloadPage() {
+    window.location.reload();
+  }
+
   return (
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
@@ -71,11 +75,14 @@ export function MenuDrawer() {
                     {colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
                     ダークモード切り替え
                   </Button>
+                  <Button variant="ghost" width="full" onClick={handleReloadPage}>
+                    <IoReload />
+                    ページリロード
+                  </Button>
                 </Flex>
               </Drawer.Body>
 
               <Drawer.Footer justifyContent="center">
-
                 <Button variant="ghost" color="red.400" width="full" onClick={handleLogout}>
                   <Icon><MdExitToApp /></Icon>
                   ログアウト
