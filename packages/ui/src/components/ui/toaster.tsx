@@ -13,6 +13,7 @@ import {
 export const toaster: any = createToaster({
   placement: 'top-end',
   pauseOnPageIdle: true,
+  offsets: '60px',
 });
 
 export const Toaster = () => {
