@@ -32,6 +32,7 @@ export class PopularWordsService {
       },
       orderBy: {
         kana: 'asc',
+        id: 'asc',
       },
     });
 
