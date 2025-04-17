@@ -106,7 +106,7 @@ type CharacterSelectorProps = {
 /** キャラセレクターコンポーネント */
 function CharacterSelector({ characters, selectedId, onValueChange }: CharacterSelectorProps) {
   const charactersSelection = createListCollection({
-    items: characters,
+    items: characters ?? [], // なぜかnullかundefinedっぽいエラーが出るので、空配列をデフォルト値にする
     itemToString: (item: CharacterEntity) => item.name,
     itemToValue: (item: CharacterEntity) => item.id.toString(),
   });
