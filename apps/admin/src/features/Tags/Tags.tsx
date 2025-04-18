@@ -29,7 +29,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag tag={tag} to={`/tags/tag/edit/${tag.id}`} />
+              <CuteTag id={tag.id} name={tag.name} to={`/tags/tag/edit/${tag.id}`} />
             </WrapItem>
           ))}
         </Wrap>
