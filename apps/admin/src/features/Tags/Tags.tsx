@@ -1,5 +1,5 @@
 import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
-import { CharacterTag, CuteTag, PopularWords, SectionText } from '@repo/ui/components';
+import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -29,7 +29,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag id={tag.id} name={tag.name} to={`/tags/tag/edit/${tag.id}`} />
+              <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/edit/${tag.id}`} />
             </WrapItem>
           ))}
         </Wrap>

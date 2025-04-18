@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
-import { CharacterTag, CuteTag, PopularWords, SectionText } from '@repo/ui/components';
+import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { useNavigationStore } from '@/stores/navigationStore';
@@ -40,7 +40,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag id={tag.id} name={tag.name} to={`/tags/tag/${tag.id}/page/1`} />
+              <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/${tag.id}/page/1`} />
             </WrapItem>
           ))}
         </Wrap>
