@@ -22,7 +22,7 @@ export function CharacterIcon({
   size = 120,
   iconSize = '50px',
   priority,
-  borderSize = '2px',
+  borderSize = '3px',
 }: CharacterIconProps) {
   const src = `chara-icons/${character.iconFilename}`;
   const { imageLoader, imageSrc } = useNextImage({ src, width: size });
