@@ -4,4 +4,5 @@ export * from './Image/NextImage';
 export * from './Layout/Footer';
 export * from './Layout/Layout';
 export * from './Login';
+export * from './SectionText';
 export * from './Tags';

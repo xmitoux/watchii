@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import { useState } from 'react';
-import { MdAdd } from 'react-icons/md';
 
-import { Box, Button, Flex, Icon, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { Button, Flex, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { Tag } from '@repo/ui/chakra-ui/tag';
-import { CharacterIcon, NextImage } from '@repo/ui/components';
+import { CharacterIcon, NextImage, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
@@ -190,44 +188,6 @@ export function PostDetail({
         </Button>
       </Flex>
     </Layout>
-  );
-}
-
-type SectionTextProps = {
-  title: string;
-  to: string;
-};
-
-function SectionText({ title, to }: SectionTextProps) {
-  return (
-    <Box
-      position="relative"
-      w="full"
-      bg="hachiBlueSwitch"
-      borderRadius="lg"
-      py={2}
-      mb={4}
-      textAlign="center"
-    >
-      <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-        {title}
-      </Text>
-
-      <Link href={to}>
-        <Icon
-          position="absolute"
-          right={4}
-          top="11px"
-          color="blackSwitch"
-          size="lg"
-          cursor="pointer"
-          _hover={{ color: 'whiteSwitch' }}
-          transition="all 0.2s"
-        >
-          <MdAdd />
-        </Icon>
-      </Link>
-    </Box>
   );
 }
 
