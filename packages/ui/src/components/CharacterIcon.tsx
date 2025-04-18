@@ -3,6 +3,8 @@ import NextImage from 'next/image';
 import { Box, Image } from '@repo/ui/chakra-ui';
 import { useNextImage } from '@repo/ui/hooks';
 
+import { getCharacterColor } from '../utils/character-colors';
+
 type CharacterIconProps = {
   character: {
     name: string;
@@ -11,7 +13,6 @@ type CharacterIconProps = {
   size?: number;
   iconSize?: string;
   borderSize?: string | number;
-  borderColor?: string;
   priority?: boolean;
 };
 
@@ -22,10 +23,12 @@ export function CharacterIcon({
   iconSize = '50px',
   priority,
   borderSize = '2px',
-  borderColor = 'hachiBlue',
 }: CharacterIconProps) {
   const src = `chara-icons/${character.iconFilename}`;
   const { imageLoader, imageSrc } = useNextImage({ src, width: size });
+
+  // キャラクターの名前から色を取得
+  const borderColor = getCharacterColor(character.name);
 
   return (
     <Box
