@@ -19,7 +19,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
   }, []);
 
   return (
-    <Layout title="キャラ・タグ一覧">
+    <Layout title="タグ一覧">
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <SectionText title="キャラ" />

@@ -31,7 +31,7 @@ const navigationItems: NavigationItem[] = [
   {
     path: '/tags',
     rootPath: '/tags',
-    name: 'キャラ・タグ',
+    name: 'タグ',
     activeIcon: '/images/icons/tags-active.png',
     inactiveIcon: '/images/icons/tags-inactive.png',
   },
@@ -96,7 +96,7 @@ export default function Layout({
           router.prefetch(episodesCurrentPagePath);
         }
       }
-      else if (item.name === 'キャラ・タグ' && tagsCurrentPagePath) {
+      else if (item.name === 'タグ' && tagsCurrentPagePath) {
         router.prefetch(tagsCurrentPagePath);
       }
     });
@@ -126,7 +126,7 @@ export default function Layout({
         router.push('/episodes/categories');
       }
     }
-    else if (item.name === 'キャラ・タグ') {
+    else if (item.name === 'タグ') {
       router.push(tagsCurrentPagePath ?? '/tags');
     }
     else {
