@@ -30,10 +30,10 @@ export class PopularWordsService {
         word: true,
         kana: true,
       },
-      orderBy: {
-        kana: 'asc',
-        id: 'asc',
-      },
+      orderBy: [
+        { kana: 'asc' },
+        { id: 'asc' },
+      ],
     });
 
     return {
