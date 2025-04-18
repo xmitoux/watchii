@@ -1,43 +1,32 @@
-/** キャラ名定数 */
-export const CHARACTER_NAMES = {
-  CHIIKAWA: 'ちいかわ',
-  HACHIWARE: 'ハチワレ',
-  USAGI: 'うさぎ',
-  KURIMANJU: 'くりまんじゅう',
-  MOMONGA: 'モモンガ',
-  SHISA: 'シーサー',
-  RAKKO: 'ラッコ',
-} as const;
-
 export type ColorVariant = 'DEFAULT' | 'dark' | 'light';
 
-// キャラクター名に対する色名のマッピング
-const CHARACTER_COLOR_MAP = {
-  [CHARACTER_NAMES.CHIIKAWA]: 'chiikawaPink',
-  [CHARACTER_NAMES.HACHIWARE]: 'hachiwareBlue',
-  [CHARACTER_NAMES.USAGI]: 'usagiYellow',
-  [CHARACTER_NAMES.KURIMANJU]: 'kurimanjuGreen',
-  [CHARACTER_NAMES.MOMONGA]: 'momongaPurple',
-  [CHARACTER_NAMES.SHISA]: 'shisaOrange',
-  [CHARACTER_NAMES.RAKKO]: 'rakkoGray',
-} as const;
+// キャラクターidをインデックスとする色名のマッピング
+// 例: 1 -> chiikawaPink, 2 -> hachiwareBlue, ...
+// ※ちいかわ～ラッコまではこの順番とIDが一致している前提でそれぞれの色を定義しているが
+// 　それ以降のキャラクターは定義がめんどいので使いまわしている
+const CHARACTER_COLOR_PALETTE = [
+  'chiikawaPink',
+  'hachiwareBlue',
+  'usagiYellow',
+  'kurimanjuGreen',
+  'momongaPurple',
+  'shisaOrange',
+  'rakkoGray',
+];
 
 /**
  * キャラクター名から対応する色を取得する関数
- * @param characterName キャラクター名
+ * @param characterId キャラクターID
  * @param variant 色のバリアント(DEFAULT, dark, light)
  * @returns 色名(例: chiikawaPink, hachiwareBlue)
  */
 export const getCharacterColor = (
-  characterName: string,
+  characterId: number,
   variant: ColorVariant = 'DEFAULT',
 ): string | undefined => {
-  // キャラクター名に対応する色名を取得
-  const colorKey = CHARACTER_COLOR_MAP[characterName as keyof typeof CHARACTER_COLOR_MAP];
-
-  if (!colorKey) {
-    return undefined;
-  }
+  // キャラクターIDに対応する色名を取得
+  const colorIndex = (characterId - 1) % CHARACTER_COLOR_PALETTE.length;
+  const colorKey = CHARACTER_COLOR_PALETTE[colorIndex]!;
 
   // バリアントを付けて返す (dark や light を使う場合)
   return variant === 'DEFAULT' ? colorKey : `${colorKey}.${variant}`;

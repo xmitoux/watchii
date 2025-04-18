@@ -51,7 +51,7 @@ export function PopularWords({ popularWordSpeakers, to }: PopularWordProps) {
           {/* 語録一覧 */}
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} pt={4}>
             {speakerData.words.map((word) => (
-              <WordBubble key={word.id} word={word} speakerName={speakerData.speaker.name} to={to(word.id)} />
+              <WordBubble key={word.id} word={word} speakerId={speakerData.speaker.id} to={to(word.id)} />
             ))}
           </SimpleGrid>
         </Card.Root>
@@ -66,15 +66,15 @@ type WordBubbleProps = {
     word: string;
     kana: string;
   };
-  speakerName: string;
+  speakerId: number;
   to: string;
 };
 
 /** 語録吹き出しコンポーネント */
-function WordBubble({ word, speakerName, to }: WordBubbleProps) {
+function WordBubble({ word, speakerId, to }: WordBubbleProps) {
   // キャラクターの名前から色を取得
-  const bubbleColorBase = getCharacterColor(speakerName, 'light');
-  const bubbleColorDark = getCharacterColor(speakerName, 'dark');
+  const bubbleColorBase = getCharacterColor(speakerId, 'light');
+  const bubbleColorDark = getCharacterColor(speakerId, 'dark');
 
   // プリフェッチ用のリンク
   const prefetchLink = to;

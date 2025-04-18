@@ -7,6 +7,7 @@ import { getCharacterColor } from '../utils/character-colors';
 
 type CharacterIconProps = {
   character: {
+    id: number;
     name: string;
     iconFilename: string;
   };
@@ -28,7 +29,7 @@ export function CharacterIcon({
   const { imageLoader, imageSrc } = useNextImage({ src, width: size });
 
   // キャラクターの名前から色を取得
-  const borderColor = getCharacterColor(character.name);
+  const borderColor = getCharacterColor(character.id);
 
   return (
     <Box
