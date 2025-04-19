@@ -2,10 +2,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { ReactNode, RefObject, useEffect } from 'react';
 
-import { Box } from '@repo/ui/chakra-ui';
+import { Box, Center } from '@repo/ui/chakra-ui';
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 import { MenuDrawer } from '@/components/Menu/MenuDrawer';
+import { usePagination } from '@/components/Pagination/hooks/usePagination';
+import { Pagination } from '@/components/Pagination/Pagination';
 import PWAInstallGuide from '@/features/PWAInstallGuide/PWAInstallGuide';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
@@ -43,6 +45,12 @@ type LayoutProps = {
   canBack?: boolean;
   noFooter?: boolean;
   noMenu?: boolean;
+  pagination?: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    pagination: ReturnType<typeof usePagination>['pagination'];
+  };
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationBack?: () => void;
 };
@@ -59,6 +67,7 @@ export default function Layout({
   canBack,
   noFooter,
   noMenu,
+  pagination,
   scrollRef,
   onNavigationBack,
 }: LayoutProps) {
@@ -164,7 +173,31 @@ export default function Layout({
         >
           <AnimatePresence mode="wait" custom={transitionProps.custom}>
             <motion.div key={router.asPath} {...transitionProps}>
+              {/* ページネーション */}
+              {pagination && (
+                <Center mb={3}>
+                  <Pagination
+                    totalPageCount={pagination.total}
+                    perPage={pagination.perPage}
+                    currentPage={pagination.currentPage}
+                    onPageChange={pagination.pagination}
+                  />
+                </Center>
+              )}
+
               {children}
+
+              {/* ページネーション(シャトルに隠れないよう余白) */}
+              {pagination && (
+                <Center mt={3} mb="60px">
+                  <Pagination
+                    totalPageCount={pagination.total}
+                    perPage={pagination.perPage}
+                    currentPage={pagination.currentPage}
+                    onPageChange={pagination.pagination}
+                  />
+                </Center>
+              )}
             </motion.div>
           </AnimatePresence>
         </UiLayout>

@@ -8,7 +8,6 @@ import { MdArrowBackIos } from '@repo/ui/icons';
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
-import { Pagination } from '@/components/Pagination/Pagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
@@ -47,7 +46,12 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
   }
 
   return (
-    <Layout title={`${categoryName}一覧`} scrollRef={scrollRef} onNavigationBack={handleNavigationBack}>
+    <Layout
+      title={`${categoryName}一覧`}
+      scrollRef={scrollRef}
+      onNavigationBack={handleNavigationBack}
+      pagination={{ total, currentPage, perPage, pagination }}
+    >
       {/* エピソード一覧 */}
       <Flex direction="column" align="center" gap={4}>
         {episodes?.map((episode, index) => (
@@ -64,16 +68,6 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
           </div>
         ))}
       </Flex>
-
-      {/* ページネーション */}
-      <Center mt={3}>
-        <Pagination
-          totalPageCount={total}
-          perPage={perPage}
-          currentPage={currentPage}
-          onPageChange={pagination}
-        />
-      </Center>
 
       {/* 一覧に戻るボタン */}
       <Center mt={3} mb="60px">
