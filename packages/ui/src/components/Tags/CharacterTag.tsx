@@ -24,7 +24,7 @@ export function CharacterTag({ character, to }: CharacterTagProps) {
         </Box>
 
         {/* キャラ名 */}
-        <Text color="blackSwitch" fontSize="sm" fontWeight="bold" textAlign="center" w="100px">
+        <Text color="blackSwitch" fontSize="13px" fontWeight="bold" textAlign="center" w="100px">
           {character.name}
         </Text>
       </Flex>
