@@ -21,10 +21,11 @@ const isIconActive = (currentPath: string, rootPath: string) => {
 
 type FooterProps = {
   navigationItems: NavigationItem[];
+  color: string;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
 
-export default function Footer({ navigationItems, onNavigationClick }: FooterProps) {
+export default function Footer({ navigationItems, onNavigationClick, color }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -52,7 +53,7 @@ export default function Footer({ navigationItems, onNavigationClick }: FooterPro
 
   return (
     <Box
-      backgroundColor="hachiBlue"
+      backgroundColor={color}
       height="60px"
       position="fixed"
       bottom="0"

@@ -1,3 +1,3 @@
 export * from './CharacterTag';
-export * from './CuteTag';
 export * from './PopularWords';
+export * from './TagSystem';

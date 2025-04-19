@@ -1,5 +1,9 @@
+import Link from 'next/link';
+
 import { Box, Card, Flex, SimpleGrid, Text } from '@repo/ui/chakra-ui';
 import { CharacterIcon } from '@repo/ui/components';
+
+import { getCharacterColor } from '../../utils/character-colors';
 
 type PopularWordProps = {
   popularWordSpeakers: Array<{
@@ -47,7 +51,7 @@ export function PopularWords({ popularWordSpeakers, to }: PopularWordProps) {
           {/* 語録一覧 */}
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} pt={4}>
             {speakerData.words.map((word) => (
-              <WordBubble key={word.id} word={word} speakerName={speakerData.speaker.name} to={to(word.id)} />
+              <WordBubble key={word.id} word={word} speakerId={speakerData.speaker.id} to={to(word.id)} />
             ))}
           </SimpleGrid>
         </Card.Root>
@@ -62,67 +66,51 @@ type WordBubbleProps = {
     word: string;
     kana: string;
   };
-  speakerName: string;
+  speakerId: number;
   to: string;
 };
 
 /** 語録吹き出しコンポーネント */
-function WordBubble({ word, speakerName, to }: WordBubbleProps) {
-  // キャラクターごとに色を変える
-  // TODO: 簡易的な実装 DBにキャラクターごとの色を持たせる
-  const getBubbleColor = (name: string) => {
-    const colors = {
-      ちいかわ: { bg: 'pink.100', _darkBg: 'pink.800' },
-      ハチワレ: { bg: 'hachiBlue.light', _darkBg: 'hachiBlue.dark' },
-      うさぎ: { bg: 'usaYellow', _darkBg: 'usaYellow.dark' },
-      default: { bg: 'gray.100', _darkBg: 'gray.700' },
-    };
-
-    return colors[name as keyof typeof colors] || colors.default;
-  };
-
-  const bubbleColor = getBubbleColor(speakerName);
+function WordBubble({ word, speakerId, to }: WordBubbleProps) {
+  // キャラクターの名前から色を取得
+  const bubbleColorBase = getCharacterColor(speakerId, 'light');
+  const bubbleColorDark = getCharacterColor(speakerId, 'dark');
 
   // プリフェッチ用のリンク
   const prefetchLink = to;
 
-  // TODO: Linkを使用するときに削除する
-  function handleLinkClick() {
-    if (typeof window !== 'undefined') {
-      window.location.href = prefetchLink;
-    }
-  }
-
   return (
-    <Box position="relative" cursor="pointer" onClick={handleLinkClick}>
-      {/* 吹き出しの本体 */}
-      <Box
-        bg={{ base: bubbleColor.bg, _dark: bubbleColor._darkBg }}
-        borderRadius="lg"
-        mb={1}
-        p={3}
-        transition="transform 0.15s, box-shadow 0.15s"
-        _hover={{
-          transform: 'translateY(-2px)',
-        }}
-      >
-        <Text fontWeight="medium" fontSize="md">
-          {word.word}
-        </Text>
-      </Box>
+    <Link href={prefetchLink}>
+      <Box position="relative" cursor="pointer">
+        {/* 吹き出しの本体 */}
+        <Box
+          bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
+          borderRadius="lg"
+          mb={1}
+          p={3}
+          transition="transform 0.15s, box-shadow 0.15s"
+          _hover={{
+            transform: 'translateY(-2px)',
+          }}
+        >
+          <Text fontWeight="medium" fontSize="md">
+            {word.word}
+          </Text>
+        </Box>
 
-      {/* シンプルな丸みを帯びた三角形 - CSSのみ */}
-      <Box
-        position="absolute"
-        top="-8px"
-        left="20px"
-        width="16px"
-        height="16px"
-        bg={{ base: bubbleColor.bg, _dark: bubbleColor._darkBg }}
-        borderRadius={3}
-        transform="rotate(45deg)"
-        zIndex={1}
-      />
-    </Box>
+        {/* シンプルな丸みを帯びた三角形 - CSSのみ */}
+        <Box
+          position="absolute"
+          top="-8px"
+          left="20px"
+          width="16px"
+          height="16px"
+          bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
+          borderRadius={3}
+          transform="rotate(45deg)"
+          zIndex={1}
+        />
+      </Box>
+    </Link>
   );
 }

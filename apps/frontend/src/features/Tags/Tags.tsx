@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { Box, Flex, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
-import { CharacterTag, CuteTag, PopularWords } from '@repo/ui/components';
+import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { useNavigationStore } from '@/stores/navigationStore';
@@ -18,24 +18,11 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
-
   return (
-    <Layout title="キャラ・タグ一覧">
+    <Layout title="タグ一覧">
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
-        <Box
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            キャラクター
-          </Text>
-        </Box>
+        <SectionText title="キャラ" />
 
         {/* キャラタグ一覧 */}
         <SimpleGrid columns={{ base: 3, sm: 4, md: 6 }} mb={8}>
@@ -47,41 +34,19 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </SimpleGrid>
 
         {/* タグセクション */}
-        <Box
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            タグ
-          </Text>
-        </Box>
+        <SectionText title="タグ" />
 
         {/* タグ一覧 - Wrapを使って自動的に折り返す */}
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag tag={tag} to={`/tags/tag/${tag.id}/page/1`} />
+              <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/${tag.id}/page/1`} />
             </WrapItem>
           ))}
         </Wrap>
 
         {/* 語録セクション */}
-        <Box
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            語録
-          </Text>
-        </Box>
+        <SectionText title="語録" />
 
         {/* 語録一覧 */}
         <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/${id}/page/1`} />

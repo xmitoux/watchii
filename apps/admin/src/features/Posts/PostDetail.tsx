@@ -1,10 +1,7 @@
-import Link from 'next/link';
 import { useState } from 'react';
-import { MdAdd } from 'react-icons/md';
 
-import { Box, Button, Flex, Icon, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
-import { Tag } from '@repo/ui/chakra-ui/tag';
-import { CharacterIcon, NextImage } from '@repo/ui/components';
+import { Button, Flex, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { CharacterIcon, CuteFormTag, NextImage, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
@@ -150,7 +147,14 @@ export function PostDetail({
           selectedIds={selectedCharacters}
           toggleItem={toggleCharacter}
           renderItem={(character, isSelected) => (
-            <CharacterTag character={character} isSelected={isSelected} />
+            <CuteFormTag
+              id={character.id}
+              name={character.name}
+              isSelected={isSelected}
+              startElement={
+                <CharacterIcon character={character} iconSize="40px" borderSize={0} />
+              }
+            />
           )}
         />
         <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateCharacterLoading} onClick={updateCharacters}>
@@ -166,7 +170,7 @@ export function PostDetail({
           selectedIds={selectedTags}
           toggleItem={toggleTag}
           renderItem={(tag, isSelected) => (
-            <PostTag item={tag} isSelected={isSelected} />
+            <CuteFormTag id={tag.id} name={tag.name} isSelected={isSelected} />
           )}
         />
         <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updateTagLoading} onClick={updateTags}>
@@ -182,7 +186,7 @@ export function PostDetail({
           selectedIds={selectedPopularWords}
           toggleItem={togglePopularWord}
           renderItem={(word, isSelected) => (
-            <PostTag item={word} isSelected={isSelected} />
+            <CuteFormTag id={word.id} name={word.word} isSelected={isSelected} />
           )}
         />
         <Button bg="hachiBlueSwitch" color="blackSwitch" mb={8} loading={updatePopularWordLoading} onClick={updatePopularWords}>
@@ -190,44 +194,6 @@ export function PostDetail({
         </Button>
       </Flex>
     </Layout>
-  );
-}
-
-type SectionTextProps = {
-  title: string;
-  to: string;
-};
-
-function SectionText({ title, to }: SectionTextProps) {
-  return (
-    <Box
-      position="relative"
-      w="full"
-      bg="hachiBlueSwitch"
-      borderRadius="lg"
-      py={2}
-      mb={4}
-      textAlign="center"
-    >
-      <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-        {title}
-      </Text>
-
-      <Link href={to}>
-        <Icon
-          position="absolute"
-          right={4}
-          top="11px"
-          color="blackSwitch"
-          size="lg"
-          cursor="pointer"
-          _hover={{ color: 'whiteSwitch' }}
-          transition="all 0.2s"
-        >
-          <MdAdd />
-        </Icon>
-      </Link>
-    </Box>
   );
 }
 
@@ -249,114 +215,5 @@ function TagList<T extends TagListItem>({ items, selectedIds, toggleItem, render
         </WrapItem>
       ))}
     </Wrap>
-  );
-}
-
-type CharacterTagProps = {
-  character: PostDetailCharacterEntity;
-  isSelected: boolean;
-};
-
-function CharacterTag({ character, isSelected }: CharacterTagProps) {
-  // カラーパレット - パステルカラーをランダムに選択
-  const tagColors = [
-    { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
-    { bg: 'purple.100', hover: 'purple.200', border: 'purple.300', text: 'purple.800' },
-    { bg: 'blue.100', hover: 'blue.200', border: 'blue.300', text: 'blue.800' },
-    { bg: 'teal.100', hover: 'teal.200', border: 'teal.300', text: 'teal.800' },
-    { bg: 'green.100', hover: 'green.200', border: 'green.300', text: 'green.800' },
-    { bg: 'yellow.100', hover: 'yellow.200', border: 'yellow.300', text: 'yellow.800' },
-    { bg: 'orange.100', hover: 'orange.200', border: 'orange.300', text: 'orange.800' },
-  ];
-
-  // タグごとに固定のカラーを選ぶ（タグのIDに基づく）
-  const colorIndex = character.id % tagColors.length;
-  const tagColor = tagColors[colorIndex]!;
-
-  // 選択されているかどうかでスタイルを変更
-  const bgColor = isSelected ? tagColor.bg : 'gray.100';
-  const borderColor = isSelected ? tagColor.border : 'gray.300';
-  const textColor = isSelected ? tagColor.text : 'gray.500';
-  const hoverBg = isSelected ? tagColor.hover : 'gray.200';
-
-  return (
-    <Tag
-      size="xl"
-      variant="solid"
-      bg={bgColor}
-      borderWidth="1px"
-      borderColor={borderColor}
-      borderRadius="full"
-      boxShadow="sm"
-      py={2}
-      px={4}
-      cursor="pointer"
-      startElement={
-        <CharacterIcon character={character} iconSize="40px" borderSize={0} />
-      }
-      transition="all 0.2s"
-      _hover={{
-        bg: hoverBg,
-        transform: 'translateY(-2px)',
-        boxShadow: 'md',
-      }}
-    >
-      <Text color={textColor} fontSize="md">
-        {character.name}
-      </Text>
-    </Tag>
-  );
-}
-
-type PostTagProps = {
-  item: PostDetailTagEntity | PostDetailPopularWordEntity;
-  isSelected: boolean;
-};
-
-function PostTag({ item, isSelected }: PostTagProps) {
-  // カラーパレット - パステルカラーをランダムに選択
-  const tagColors = [
-    { bg: 'pink.100', hover: 'pink.200', border: 'pink.300', text: 'pink.800' },
-    { bg: 'purple.100', hover: 'purple.200', border: 'purple.300', text: 'purple.800' },
-    { bg: 'blue.100', hover: 'blue.200', border: 'blue.300', text: 'blue.800' },
-    { bg: 'teal.100', hover: 'teal.200', border: 'teal.300', text: 'teal.800' },
-    { bg: 'green.100', hover: 'green.200', border: 'green.300', text: 'green.800' },
-    { bg: 'yellow.100', hover: 'yellow.200', border: 'yellow.300', text: 'yellow.800' },
-    { bg: 'orange.100', hover: 'orange.200', border: 'orange.300', text: 'orange.800' },
-  ];
-
-  // タグごとに固定のカラーを選ぶ（タグのIDに基づく）
-  const colorIndex = item.id % tagColors.length;
-  const tagColor = tagColors[colorIndex]!;
-
-  // 選択されているかどうかでスタイルを変更
-  const bgColor = isSelected ? tagColor.bg : 'gray.100';
-  const borderColor = isSelected ? tagColor.border : 'gray.300';
-  const textColor = isSelected ? tagColor.text : 'gray.500';
-  const hoverBg = isSelected ? tagColor.hover : 'gray.200';
-
-  return (
-    <Tag
-      size="lg"
-      variant="solid"
-      bg={bgColor}
-      borderWidth="1px"
-      borderColor={borderColor}
-      borderRadius="full"
-      boxShadow="sm"
-      py={2}
-      px={4}
-      cursor="pointer"
-      transition="all 0.2s"
-      _hover={{
-        bg: hoverBg,
-        transform: 'translateY(-2px)',
-        boxShadow: 'md',
-      }}
-    >
-      <Text color={textColor} fontSize="md">
-        {'name' in item ? item.name : item.word}
-      </Text>
-    </Tag>
   );
 }

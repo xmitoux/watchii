@@ -18,9 +18,6 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['@repo/ui'],
-    // turbopack用
-    // https://github.com/vercel/next.js/discussions/72029
-    turbo: {},
   },
   transpilePackages: ['@repo/ui'],
   compiler: {

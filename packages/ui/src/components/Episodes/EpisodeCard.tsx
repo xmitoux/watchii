@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Box, Flex, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Flex, Text } from '@repo/ui/chakra-ui';
 import { NextImage } from '@repo/ui/components';
 
 import { EpisodeItem } from '../../types/episodes';
@@ -41,7 +41,7 @@ export function EpisodeCard({
           left={0}
           right={0}
           bottom={0}
-          bg="usaYellow/30"
+          bg="usagiYellow/10"
           borderRadius={10}
           transition="background-color 0.2s"
           _hover={{

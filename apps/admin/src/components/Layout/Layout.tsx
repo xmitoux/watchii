@@ -67,6 +67,7 @@ export default function Layout({
       canBack={canBack}
       footerNavigationItems={navigationItems}
       noFooter={noFooter}
+      color="chiikawaPink"
       scrollRef={scrollRef}
       onNavigationClick={handleNavigationClick}
     >

@@ -1,8 +1,5 @@
-import Link from 'next/link';
-import { MdAdd } from 'react-icons/md';
-
-import { Box, Flex, Icon, SimpleGrid, Text, Wrap, WrapItem } from '@repo/ui/chakra-ui';
-import { CharacterTag, CuteTag, PopularWords } from '@repo/ui/components';
+import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -10,28 +7,11 @@ import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
 export default function Tags({ characters, tags, popularWordSpeakers }: TagsProps) {
-  const bgColor = { base: 'hachiBlue.light', _dark: 'hachiBlue.dark' };
-
   return (
     <Layout title="タグ管理">
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
-        <Box
-          position="relative"
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            キャラクター
-          </Text>
-
-          {/* 登録ボタン */}
-          <AddButton to="/tags/character/create" />
-        </Box>
+        <SectionText title="キャラ" to="/tags/character/create" />
 
         {/* キャラタグ一覧 */}
         <SimpleGrid columns={{ base: 3, sm: 4, md: 6 }} mb={8}>
@@ -43,77 +23,23 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
         </SimpleGrid>
 
         {/* タグセクション */}
-        <Box
-          position="relative"
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            タグ
-          </Text>
-
-          {/* 登録ボタン */}
-          <AddButton to="/tags/tag/create" />
-        </Box>
+        <SectionText title="タグ" to="/tags/tag/create" />
 
         {/* タグ一覧 - Wrapを使って自動的に折り返す */}
         <Wrap justify="center" mb={8}>
           {tags?.map((tag) => (
             <WrapItem key={tag.id} m={1}>
-              <CuteTag tag={tag} to={`/tags/tag/edit/${tag.id}`} />
+              <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/edit/${tag.id}`} />
             </WrapItem>
           ))}
         </Wrap>
 
         {/* 語録セクション */}
-        <Box
-          position="relative"
-          w="full"
-          bg={bgColor}
-          borderRadius="lg"
-          py={2}
-          mb={4}
-          textAlign="center"
-        >
-          <Text color="blackSwitch" fontSize="xl" fontWeight="bold">
-            語録
-          </Text>
-
-          {/* 登録ボタン */}
-          <AddButton to="/tags/popular-word/create" />
-        </Box>
+        <SectionText title="語録" to="/tags/popular-word/create" />
 
         {/* 語録一覧 */}
         <PopularWords popularWordSpeakers={popularWordSpeakers} to={(id: number) => `/tags/popular-word/edit/${id}`} />
       </Flex>
     </Layout>
-  );
-}
-
-type AddButtonProps = {
-  to: string;
-};
-
-/** 登録ボタン */
-function AddButton({ to }: AddButtonProps) {
-  return (
-    <Link href={to}>
-      <Icon
-        position="absolute"
-        right={4}
-        top="11px"
-        color="blackSwitch"
-        size="lg"
-        cursor="pointer"
-        _hover={{ color: 'whiteSwitch' }}
-        transition="all 0.2s"
-      >
-        <MdAdd />
-      </Icon>
-    </Link>
   );
 }
