@@ -3,7 +3,7 @@ import { fetchData } from '@repo/ui/utils';
 import { FindPostResponse } from './posts-api-types';
 
 export class PostsApi {
-  private endpointPosts = '/posts'
+  private endpointPosts = '/posts';
 
   /** Post詳細を取得する */
   async findPost(id: number): Promise<FindPostResponse> {
