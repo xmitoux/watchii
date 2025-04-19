@@ -35,13 +35,13 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
               alt={post.filename}
               priority
             />
-
-            <Text fontSize="xs" color="gray">
-              投稿:
-              {' '}
-              {formatToJST(post.postedAt)}
-            </Text>
           </Link>
+
+          <Text fontSize="xs" color="gray">
+            投稿:
+            {' '}
+            {formatToJST(post.postedAt)}
+          </Text>
         </Flex>
       ))}
     </Flex>
