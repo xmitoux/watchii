@@ -176,107 +176,116 @@ export default function Home() {
   }
   return (
     <Layout title="Watchii Admin">
-      {/* ファイル入力エリア */}
-      <Box
-        bg={isDragging ? 'blue.400' : 'gray.500'}
-        border={isImageSelected ? 'solid' : 'dashed'}
-        borderWidth="2px"
-        borderColor={isDragging ? 'blue.300' : 'gray.200'}
-        borderRadius="md"
-        minH="30vh"
-        maxH="70vh"
-        overflow="auto"
-        p={3}
-        mb={5}
-        transition="all 0.2s"
-        cursor="pointer"
-        onDragEnter={handleDragIn}
-        onDragLeave={handleDragOut}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        {isImageSelected ? (
-          // プレビュー表示
-          <Flex
-            justify="center"
-            gap={4}
-            wrap="wrap"
-            // ドラッグ時の色変更が消えないよう子要素のイベントを無効化
-            pointerEvents="none"
+      {process.env.NODE_ENV === 'development'
+        ?
+        <Center>
+          <VStack>
+            <Text color="red" fontSize="2xl">⛔開発環境でのPost登録禁止⛔</Text>
+            <Text>※Supabase Storageを本番環境と共用しているため</Text>
+          </VStack>
+        </Center>
+        :
+        <>
+          {/* ファイル入力エリア */}
+          <Box
+            bg={isDragging ? 'blue.400' : 'gray.500'}
+            border={isImageSelected ? 'solid' : 'dashed'}
+            borderWidth="2px"
+            borderColor={isDragging ? 'blue.300' : 'gray.200'}
+            borderRadius="md"
+            minH="30vh"
+            maxH="70vh"
+            overflow="auto"
+            p={3}
+            mb={5}
+            transition="all 0.2s"
+            cursor="pointer"
+            onDragEnter={handleDragIn}
+            onDragLeave={handleDragOut}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
           >
-            {images.map((image, index) => (
-              <Box key={index} position="relative">
-                <Image
-                  src={image.preview}
-                  w={imageWidth}
-                  alt={`Preview ${index}`}
-                  borderRadius="sm"
-                />
+            {isImageSelected ? (
+              // プレビュー表示
+              <Flex
+                justify="center"
+                gap={4}
+                wrap="wrap"
+                // ドラッグ時の色変更が消えないよう子要素のイベントを無効化
+                pointerEvents="none"
+              >
+                {images.map((image, index) => (
+                  <Box key={index} position="relative">
+                    <Image
+                      src={image.preview}
+                      w={imageWidth}
+                      alt={`Preview ${index}`}
+                      borderRadius="sm"
+                    />
 
-                {/* 削除ボタン */}
-                <IconButton
-                  rounded="full"
-                  colorPalette="red"
-                  size="2xs"
-                  position="absolute"
-                  top={1}
-                  right={1}
-                  transition="transform 0.2s"
-                  _hover={{
-                    transform: 'scale(1.2)',
-                  }}
-                  // 削除ボタンだけイベント有効
-                  pointerEvents="auto"
-                  onClick={(e) => {
-                    e.stopPropagation(); // 親要素のクリックイベントを止める
-                    handleRemoveImage(index);
-                  }}
-                >
-                  <MdClose />
-                </IconButton>
-              </Box>
-            ))}
-          </Flex>
-        ) : (
-          // ファイル未選択時の表示
-          <Center h="30vh">
-            <VStack pointerEvents="none">
-              <HStack>
-                <Icon size="lg">
-                  <MdAddPhotoAlternate />
-                </Icon>
-                <Text fontSize="lg">ここに画像をドラッグ＆ドロップ</Text>
-              </HStack>
-              <Text fontSize="sm">または クリックしてファイルを選択</Text>
-            </VStack>
+                    {/* 削除ボタン */}
+                    <IconButton
+                      rounded="full"
+                      colorPalette="red"
+                      size="2xs"
+                      position="absolute"
+                      top={1}
+                      right={1}
+                      transition="transform 0.2s"
+                      _hover={{
+                        transform: 'scale(1.2)',
+                      }}
+                      // 削除ボタンだけイベント有効
+                      pointerEvents="auto"
+                      onClick={(e) => {
+                        e.stopPropagation(); // 親要素のクリックイベントを止める
+                        handleRemoveImage(index);
+                      }}
+                    >
+                      <MdClose />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Flex>
+            ) : (
+              // ファイル未選択時の表示
+              <Center h="30vh">
+                <VStack pointerEvents="none">
+                  <HStack>
+                    <Icon size="lg">
+                      <MdAddPhotoAlternate />
+                    </Icon>
+                    <Text fontSize="lg">ここに画像をドラッグ＆ドロップ</Text>
+                  </HStack>
+                  <Text fontSize="sm">または クリックしてファイルを選択</Text>
+                </VStack>
+              </Center>
+            )}
+
+            {/* ファイル入力用の隠し要素 */}
+            <Input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={handleFileChange}
+            />
+          </Box>
+
+          <Center>
+            <Button
+              disabled={!isImageSelected}
+              loading={isMutating}
+              w="sm"
+              onClick={handleSubmit}
+            >
+              登録する
+            </Button>
           </Center>
-        )}
-
-        {/* ファイル入力用の隠し要素 */}
-        <Input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          hidden
-          onChange={handleFileChange}
-        />
-      </Box>
-
-      <Center>
-        <Button
-          disabled={!isImageSelected}
-          loading={isMutating}
-          w="sm"
-          onClick={handleSubmit}
-        >
-          登録する
-        </Button>
-      </Center>
-
-      {/* トースト用 */}
-      <Toaster />
+        </>
+      }
     </Layout>
   );
 }
