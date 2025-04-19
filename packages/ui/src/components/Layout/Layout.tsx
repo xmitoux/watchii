@@ -13,6 +13,7 @@ type LayoutProps = {
   canBack?: boolean;
   footerNavigationItems: NavigationItem[];
   noFooter?: boolean;
+  color?: string;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
   onNavigationBack?: () => void;
@@ -25,6 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({
   actionButton,
   canBack,
   noFooter,
+  color = 'hachiBlue',
   scrollRef,
   onNavigationClick,
   onNavigationBack,
@@ -35,6 +37,7 @@ export const Layout: React.FC<LayoutProps> = ({
         title={title}
         actionButton={actionButton}
         canBack={canBack}
+        color={color}
         onNavigationBack={onNavigationBack}
       />
 
@@ -59,7 +62,7 @@ export const Layout: React.FC<LayoutProps> = ({
         </Box>
       </Box>
 
-      {!noFooter && <Footer navigationItems={footerNavigationItems} onNavigationClick={onNavigationClick} />}
+      {!noFooter && <Footer navigationItems={footerNavigationItems} color={color} onNavigationClick={onNavigationClick} />}
 
       {/* トースト用 */}
       <Toaster />

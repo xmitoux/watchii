@@ -8,10 +8,11 @@ type HeaderProps = {
   title: string;
   actionButton?: React.ReactNode;
   canBack?: boolean;
+  color: string;
   onNavigationBack?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigationBack }) => {
+const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, onNavigationBack }) => {
   const router = useRouter();
 
   function handleBack() {
@@ -29,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, onNavigat
   return (
     <Box
       className={hachi_maru_pop.className}
-      bg="hachiBlue"
+      bg={color}
       fontWeight={600}
       position="fixed"
       top="0"
