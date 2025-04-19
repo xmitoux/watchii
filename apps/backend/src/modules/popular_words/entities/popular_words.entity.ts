@@ -1,6 +1,6 @@
 import { Character, PopularWord, Post } from '@prisma/client';
 
-type PopularWordEntity = Pick<
+export type PopularWordEntity = Pick<
   PopularWord,
   'id' | 'word' | 'kana'
 >;
@@ -9,7 +9,7 @@ export class FindAllPopularWordsResponse {
   popularWords: PopularWordEntity[];
 }
 
-type SpeakerEntity = Pick<
+export type SpeakerEntity = Pick<
   Character,
   'id' | 'name' | 'iconFilename' | 'order'
 >;
@@ -23,14 +23,14 @@ export class FindAllPopularWordSpeakersResponse {
   popularWordSpeakers: FindAllPopularWordSpeakersEntity[];
 }
 
-type FindPopularWordEntity = Pick<
+export type FindPopularWordEntity = Pick<
   PopularWord,
   'id' |
   'word' |
   'kana'
 >;
 
-type FindPopularWordSpeakerEntity = Pick<
+export type FindPopularWordSpeakerEntity = Pick<
   Character,
   'id' |
   'name' |

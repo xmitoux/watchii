@@ -1,4 +1,6 @@
-import { Character, PopularWord, Post, Tag } from '@prisma/client';
+import { Character, Post, Tag } from '@prisma/client';
+
+import { PopularWordEntity, SpeakerEntity } from '@/modules/popular_words/entities/popular_words.entity';
 
 type PostEntity = Pick<
   Post,
@@ -18,6 +20,7 @@ type FindPostCharacterEntity = Pick<
   Character,
   'id' |
   'name' |
+  'nameKey' |
   'iconFilename'
 >;
 
@@ -27,11 +30,10 @@ type FindPostTagEntity = Pick<
   'name'
 >;
 
-type FindPostPopularWordEntity = Pick<
-  PopularWord,
-  'id' |
-  'word'
->;
+export type FindPostPopularWordEntity = {
+  speaker: SpeakerEntity;
+  words: PopularWordEntity[];
+};
 
 export type FindPostResponse = {
   post: (PostEntity & {
