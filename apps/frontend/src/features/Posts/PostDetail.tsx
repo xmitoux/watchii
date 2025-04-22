@@ -11,7 +11,7 @@ export function PostDetail({ post }: PostDetailProps) {
   const imageWidth = usePostImageWidth();
 
   return (
-    <Layout title="Post詳細" canBack>
+    <Layout title="漫画詳細" canBack noFooter>
       <Flex direction="column" align="center" gap={4}>
         {/* Post画像 */}
         <NextImage
