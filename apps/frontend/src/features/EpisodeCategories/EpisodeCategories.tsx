@@ -34,11 +34,13 @@ const categoryImages: Record<string, EpisodeCategoryCardImages> = {
 /** エピソードカテゴリ一覧 */
 export default function EpisodeCategories() {
   const resetEpisodeStore = useNavigationStore('episodes', (state) => state.reset);
+  const resetEpisodeDetailStore = useNavigationStore('episodeDetail', (state) => state.reset);
 
   useEffect(() => {
     // エピソード一覧ページのストアをリセット
     // (カテゴリページを開いた時点で一覧の復元状態は不要)
     resetEpisodeStore();
+    resetEpisodeDetailStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
