@@ -6,6 +6,7 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
+import { useTagsNavigationStore } from '@/stores/tagsNavigationStore';
 
 import { PopularWordPostsProps } from '../types/tags-types';
 
@@ -28,11 +29,17 @@ export default function PopularWordsPosts({
   });
 
   useNavigationRestore('tags', scrollRef);
+  const { shouldBackToTags } = useTagsNavigationStore();
 
   /** ヘッダーの戻るボタン処理 */
   function handleNavigationBack() {
     // エピソードカテゴリ一覧に戻る
-    router.push('/tags');
+    if (shouldBackToTags) {
+      router.push('/tags');
+    }
+    else {
+      router.back();
+    }
   }
 
   return (

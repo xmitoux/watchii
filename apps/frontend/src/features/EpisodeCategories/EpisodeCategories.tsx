@@ -4,6 +4,7 @@ import { Flex } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
 import { EPISODE_CONSTS } from '@/constants/episode-consts';
+import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodeCategoryCard, EpisodeCategoryCardImages } from './components/EpisodeCategoryCard';
@@ -43,6 +44,8 @@ export default function EpisodeCategories() {
     resetEpisodeDetailStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useTagsNavigationToggle(true);
 
   return (
     <Layout title="エピソードカテゴリ一覧">
