@@ -1,26 +1,33 @@
+import { Button, Center, Icon } from '@repo/ui/chakra-ui';
+import { MdKeyboardArrowLeft } from '@repo/ui/icons';
+
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
+import { useBackToTags } from '@/features/Tags/hooks/useBackToTags';
+import { TagDetailPostsProps } from '@/features/Tags/types/tags-types';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 
-import { useBackToTags } from '../hooks/useBackToTags';
-import { CharacterPostsProps } from '../types/tags-types';
+type TagDetailBaseProps = TagDetailPostsProps & {
+  pageTitle: string;
+  paginationPath: string;
+};
 
-export default function CharacterPosts({
+export default function TagDetailBase({
   posts,
   total,
-  characterNameKey,
-  characterName,
   currentPage,
   perPage,
-}: CharacterPostsProps) {
+  pageTitle,
+  paginationPath,
+}: TagDetailBaseProps) {
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
     currentPage,
-    destinationPage: `/tags/character/${characterNameKey}/page`,
+    destinationPage: `/tags/${paginationPath}/page`,
     scrollRef,
   });
 
@@ -30,13 +37,23 @@ export default function CharacterPosts({
 
   return (
     <Layout
-      title={`${characterName}の漫画一覧`}
+      title={pageTitle}
       scrollRef={scrollRef}
       onNavigationBack={backToTags}
       pagination={{ total, currentPage, perPage, pagination }}
     >
       {/* post一覧 */}
       <PostGallery posts={posts} />
+
+      {/* 一覧に戻るボタン */}
+      <Center mt={3}>
+        <Button variant="outline" onClick={backToTags}>
+          <Icon size="sm">
+            <MdKeyboardArrowLeft />
+          </Icon>
+          タグ一覧に戻る
+        </Button>
+      </Center>
 
       {/* Postページシャトル */}
       <PostPageShuttle

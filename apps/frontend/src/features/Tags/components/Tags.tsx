@@ -4,11 +4,10 @@ import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
+import { TagsProps } from '@/features/Tags/types/tags-types';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useNavigationStore } from '@/stores/navigationStore';
-
-import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
 export default function Tags({ characters, tags, popularWordSpeakers }: TagsProps) {

@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 
 import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
 import { tagsApi } from '@/features/Tags/api/tags-api';
-import CharacterPosts from '@/features/Tags/CharacterPosts/CharacterPosts';
+import CharacterPosts from '@/features/Tags/components/CharacterPosts';
 import { CharacterPostsProps } from '@/features/Tags/types/tags-types';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;
