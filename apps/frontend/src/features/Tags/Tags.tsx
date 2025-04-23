@@ -4,23 +4,28 @@ import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
+import { useLayoutScroll } from '@/hooks/useLayoutScroll';
+import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { TagsProps } from './types/tags-types';
 
 /** タグ一覧画面コンポーネント */
 export default function Tags({ characters, tags, popularWordSpeakers }: TagsProps) {
-  const resetNavigationStore = useNavigationStore('tags', (state) => state.reset);
+  const { scrollRef } = useLayoutScroll();
+  useNavigationRestore('tags', scrollRef);
+
+  const resetTagDetailStore = useNavigationStore('tagDetail', (state) => state.reset);
 
   useEffect(() => {
-    // タグ画面のナビゲーションストアをリセット
+    // タグ詳細画面のナビゲーションストアをリセット
     // (一覧ページを開いた時点で復元は不要)
-    resetNavigationStore();
+    resetTagDetailStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Layout title="タグ一覧">
+    <Layout title="タグ一覧" scrollRef={scrollRef}>
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <SectionText title="キャラ" />

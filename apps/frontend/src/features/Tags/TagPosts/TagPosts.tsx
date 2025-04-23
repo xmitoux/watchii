@@ -24,7 +24,7 @@ export default function TagPosts({
     scrollRef,
   });
 
-  useNavigationRestore('tags', scrollRef);
+  useNavigationRestore('tagDetail', scrollRef);
 
   const { backToTags } = useBackToTags();
 

@@ -86,6 +86,9 @@ export default function Layout({
   const {
     currentPagePath: tagsCurrentPagePath,
   } = useNavigationStore<StateSelector>('tags', stateSelector);
+  const {
+    currentPagePath: tagDetailCurrentPagePath,
+  } = useNavigationStore<StateSelector>('tagDetail', stateSelector);
 
   // ナビゲーションアイテムのプリフェッチ
   useEffect(() => {
@@ -136,7 +139,13 @@ export default function Layout({
       }
     }
     else if (item.name === 'タグ') {
-      router.push(tagsCurrentPagePath ?? '/tags');
+      if (tagDetailCurrentPagePath) {
+        // タグ詳細ページがストアされているならそちらを復元
+        router.push(tagDetailCurrentPagePath);
+      }
+      else {
+        router.push('/tags');
+      }
     }
     else {
       router.push(item.path);
