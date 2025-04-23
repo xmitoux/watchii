@@ -1,5 +1,7 @@
 // post一覧コンポーネント
 
+import Link from 'next/link';
+
 import { Flex, Text } from '@repo/ui/chakra-ui';
 import { NextImage } from '@repo/ui/components';
 import { formatToJST } from '@repo/ui/utils';
@@ -25,13 +27,15 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
           // ページシャトルによるスクロール操作用の属性
           data-image-index={index}
         >
-          <NextImage
-            src={post.filename}
-            width={700}
-            styleWidth={imageWidth}
-            alt={post.filename}
-            priority
-          />
+          <Link href={`/posts/${post.id}`}>
+            <NextImage
+              src={post.filename}
+              width={700}
+              styleWidth={imageWidth}
+              alt={post.filename}
+              priority
+            />
+          </Link>
 
           <Text fontSize="xs" color="gray">
             投稿:

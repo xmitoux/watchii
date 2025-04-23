@@ -4,6 +4,8 @@ import { Flex } from '@repo/ui/chakra-ui';
 
 import Layout from '@/components/Layout/Layout';
 import { EPISODE_CONSTS } from '@/constants/episode-consts';
+import { useLayoutScroll } from '@/hooks/useLayoutScroll';
+import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodeCategoryCard, EpisodeCategoryCardImages } from './components/EpisodeCategoryCard';
@@ -33,17 +35,22 @@ const categoryImages: Record<string, EpisodeCategoryCardImages> = {
 
 /** エピソードカテゴリ一覧 */
 export default function EpisodeCategories() {
+  const { scrollRef } = useLayoutScroll();
+  useNavigationRestore('episodeCategories', scrollRef);
+
   const resetEpisodeStore = useNavigationStore('episodes', (state) => state.reset);
+  const resetEpisodeDetailStore = useNavigationStore('episodeDetail', (state) => state.reset);
 
   useEffect(() => {
     // エピソード一覧ページのストアをリセット
     // (カテゴリページを開いた時点で一覧の復元状態は不要)
     resetEpisodeStore();
+    resetEpisodeDetailStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Layout title="エピソードカテゴリ一覧">
+    <Layout title="エピソードカテゴリ一覧" scrollRef={scrollRef}>
       <Flex direction="column" align="center" gap={4}>
         <EpisodeCategoryCard
           title={EPISODE_CONSTS.CATEGORY.LONG.name}

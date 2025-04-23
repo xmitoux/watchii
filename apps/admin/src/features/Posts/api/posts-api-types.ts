@@ -1,12 +1,12 @@
-import { PostEntity } from '@repo/ui/types';
+import { PopularWordSpeakerEntity, PostEntity } from '@repo/ui/types';
 
-import { PostDetailCharacterEntity, PostDetailPopularWordEntity, PostDetailTagEntity } from '../types/posts-types';
+import { PostDetailCharacterEntity, PostDetailTagEntity } from '../types/posts-types';
 
 export type FindPostResponse = {
   post: (PostEntity & {
     tags: PostDetailTagEntity[];
     characters: PostDetailCharacterEntity[];
-    popularWords: PostDetailPopularWordEntity[];
+    popularWords: PopularWordSpeakerEntity[];
   }) | null;
 };
 

@@ -33,7 +33,7 @@ export function PostDetail({
     post.tags.map((tag) => tag.id),
   );
   const [selectedPopularWords, setSelectedPopularWords] = useState<number[]>(
-    post.popularWords.map((word) => word.id),
+    post.popularWords.flatMap((word) => word.words.map((w) => w.id)),
   );
 
   // キャラクターのトグル処理

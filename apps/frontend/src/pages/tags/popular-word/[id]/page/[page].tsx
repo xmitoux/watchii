@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 
 import { PAGENATION_CONSTS } from '@/constants/pagenation-consts';
 import { tagsApi } from '@/features/Tags/api/tags-api';
-import PopularWordsPosts from '@/features/Tags/PopularWordsPosts/PopularWordsPosts';
+import PopularWordsPosts from '@/features/Tags/components/PopularWordsPosts';
 import { PopularWordPostsProps } from '@/features/Tags/types/tags-types';
 
 const PER_PAGE = PAGENATION_CONSTS.PER_PAGE;

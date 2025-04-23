@@ -7,7 +7,7 @@ import { PostsFindAllRequestDto, PostsFindEpisodeTargetsRequestDto } from './dto
 import { UpdatePostCharactersRequest } from './dto/UpdatePostCharactersRequest.dto';
 import { UpdatePostPopularWordsRequest } from './dto/UpdatePostPopularWordsRequest.dto';
 import { UpdatePostTagsRequest } from './dto/UpdatePostTagsRequest.dto';
-import { PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
+import { FindPostPopularWordEntity, FindPostResponse, PostFindAllResponseEntity, PostsFindEpisodeTargetsResponseEntity } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -165,8 +165,8 @@ export class PostsService {
     };
   }
 
-  async findPost(id: number) {
-    const post = await this.prisma.post.findUnique({
+  async findPost(id: number): Promise<FindPostResponse> {
+    const post = await this.prisma.post.findUniqueOrThrow({
       where: { id },
       select: {
         id: true,
@@ -185,6 +185,7 @@ export class PostsService {
           select: {
             id: true,
             name: true,
+            nameKey: true,
             iconFilename: true,
           },
           orderBy: {
@@ -195,15 +196,67 @@ export class PostsService {
           select: {
             id: true,
             word: true,
+            kana: true,
+            speaker: {
+              select: {
+                id: true,
+                name: true,
+                iconFilename: true,
+                order: true, // キャラクターのソート用
+              },
+            },
           },
-          orderBy: {
-            kana: 'asc',
-          },
+          orderBy: [
+            {
+              speaker: {
+                order: 'asc', // 発言者の順番でまずソート
+              },
+            },
+            {
+              kana: 'asc', // 次に語録のかな順でソート
+            },
+          ],
         },
       },
     });
 
-    return { post };
+    // 発言者ごとにグループ化
+    const speakerMap = new Map<number, FindPostPopularWordEntity>();
+
+    post.popularWords.forEach((word) => {
+      const speakerId = word.speaker.id;
+
+      if (!speakerMap.has(speakerId)) {
+        // 新しい発言者のグループを作成
+        speakerMap.set(speakerId, {
+          speaker: {
+            id: word.speaker.id,
+            name: word.speaker.name,
+            iconFilename: word.speaker.iconFilename,
+            order: word.speaker.order,
+          },
+          words: [],
+        });
+      }
+
+      // グループに語録を追加
+      speakerMap.get(speakerId)!.words.push({
+        id: word.id,
+        word: word.word,
+        kana: word.kana,
+      });
+    });
+
+    // Map から配列に変換してキャラクターの順番でソート
+    const groupedPopularWords = Array.from(speakerMap.values())
+      .sort((a, b) => a.speaker.order - b.speaker.order);
+
+    return {
+      post: {
+        ...post,
+        popularWords: groupedPopularWords,
+      },
+    };
   }
 
   async updatePostCharacters(dto: UpdatePostCharactersRequest) {

@@ -9,6 +9,13 @@ export type TagsProps = {
   popularWordSpeakers: PopularWordSpeakerEntity[];
 };
 
+export type TagDetailPostsProps = {
+  posts: PostEntity[];
+  total: number;
+  currentPage: number;
+  perPage: number;
+};
+
 /** キャラごとのPost数取得エンティティ */
 export type GetCharactersPostCountEntity = {
   nameKey: string;
@@ -16,13 +23,9 @@ export type GetCharactersPostCountEntity = {
 };
 
 /** キャラPost一覧ページコンポーネントのProps */
-export type CharacterPostsProps = {
-  posts: PostEntity[];
+export type CharacterPostsProps = TagDetailPostsProps & {
   characterNameKey: string;
   characterName: string;
-  total: number;
-  currentPage: number;
-  perPage: number;
 };
 
 /** タグごとのPost数取得エンティティ */
@@ -32,13 +35,9 @@ export type GetTagsPostCountEntity = {
 };
 
 /** タグPost一覧ページコンポーネントのProps */
-export type TagPostsProps = {
-  posts: PostEntity[];
+export type TagPostsProps = TagDetailPostsProps & {
   id: number;
   tagName: string;
-  total: number;
-  currentPage: number;
-  perPage: number;
 };
 
 /** 語録ごとのPost数取得エンティティ */
@@ -48,11 +47,7 @@ export type GetPopularWordsPostCountEntity = {
 };
 
 /** 語録Post一覧ページコンポーネントのProps */
-export type PopularWordPostsProps = {
-  posts: PostEntity[];
+export type PopularWordPostsProps = TagDetailPostsProps & {
   id: number;
   word: string;
-  total: number;
-  currentPage: number;
-  perPage: number;
 };

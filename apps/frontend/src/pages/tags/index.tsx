@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 
 import { tagsApi } from '@/features/Tags/api/tags-api';
-import Tags from '@/features/Tags/Tags';
+import Tags from '@/features/Tags/components/Tags';
 import { TagsProps } from '@/features/Tags/types/tags-types';
 
 export const getStaticProps: GetStaticProps<TagsProps> = async () => {

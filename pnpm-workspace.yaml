@@ -4,4 +4,9 @@ packages:
 
 onlyBuiltDependencies:
   - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@swc/core'
   - nestjs-pino
+  - prisma
+  - sharp

@@ -18,15 +18,13 @@ export type PostDetailEntity = {
     characters: PostDetailCharacterEntity[];
     popularWords: PopularWordSpeakerEntity[];
   };
-  tagsMaster: PostDetailTagEntity[];
-  charactersMaster: PostDetailCharacterEntity[];
-  popularWordsMaster: PostDetailPopularWordEntity[];
 };
 
 /** Post詳細に紐づくキャラ */
 export type PostDetailCharacterEntity = {
   id: number;
   name: string;
+  nameKey: string;
   iconFilename: string;
 };
 
@@ -34,10 +32,4 @@ export type PostDetailCharacterEntity = {
 export type PostDetailTagEntity = {
   id: number;
   name: string;
-};
-
-/** Post詳細に紐づく語録 */
-export type PostDetailPopularWordEntity = {
-  id: number;
-  word: string;
 };
