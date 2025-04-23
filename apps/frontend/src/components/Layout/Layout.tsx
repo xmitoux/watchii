@@ -84,9 +84,6 @@ export default function Layout({
     currentPagePath: episodeDetailCurrentPagePath,
   } = useNavigationStore<StateSelector>('episodeDetail', stateSelector);
   const {
-    currentPagePath: tagsCurrentPagePath,
-  } = useNavigationStore<StateSelector>('tags', stateSelector);
-  const {
     currentPagePath: tagDetailCurrentPagePath,
   } = useNavigationStore<StateSelector>('tagDetail', stateSelector);
 
@@ -104,15 +101,23 @@ export default function Layout({
         if (episodeDetailCurrentPagePath) {
           router.prefetch(episodeDetailCurrentPagePath);
         }
-        if (episodesCurrentPagePath) {
+        else if (episodesCurrentPagePath) {
           router.prefetch(episodesCurrentPagePath);
         }
+        else {
+          router.prefetch('/episodes/categories');
+        }
       }
-      else if (item.name === 'タグ' && tagsCurrentPagePath) {
-        router.prefetch(tagsCurrentPagePath);
+      else if (item.name === 'タグ') {
+        if (tagDetailCurrentPagePath) {
+          router.prefetch(tagDetailCurrentPagePath);
+        }
+        else {
+          router.prefetch('/tags');
+        }
       }
     });
-  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath, tagsCurrentPagePath]);
+  }, [router, homeCurrentPagePath, episodesCurrentPagePath, episodeDetailCurrentPagePath, tagDetailCurrentPagePath]);
 
   function handleNavigationClick(item: NavigationItem, isRecursive: boolean) {
     if (isRecursive) {
