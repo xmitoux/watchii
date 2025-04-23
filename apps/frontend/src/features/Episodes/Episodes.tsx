@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { Button, Center, Flex, Icon } from '@repo/ui/chakra-ui';
 import { EpisodeCard } from '@repo/ui/components';
-import { MdArrowBackIos } from '@repo/ui/icons';
+import { MdKeyboardArrowLeft } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
@@ -70,10 +70,10 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
       </Flex>
 
       {/* 一覧に戻るボタン */}
-      <Center mt={3} mb="60px">
+      <Center mt={3}>
         <Button variant="outline" onClick={handleNavigationBack}>
           <Icon size="sm">
-            <MdArrowBackIos />
+            <MdKeyboardArrowLeft />
           </Icon>
           エピソードカテゴリ一覧に戻る
         </Button>
