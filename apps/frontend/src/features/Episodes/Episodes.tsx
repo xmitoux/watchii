@@ -11,7 +11,6 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
-import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodesProps } from './types/episodes-types';
@@ -28,7 +27,6 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
   });
 
   useNavigationRestore('episodes', scrollRef);
-  useTagsNavigationToggle(true);
 
   const imageWidth = usePostImageWidth();
 

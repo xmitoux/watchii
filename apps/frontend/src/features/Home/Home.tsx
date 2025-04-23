@@ -4,7 +4,6 @@ import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
-import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 
 import { HomeProps } from './types/home-types';
 
@@ -18,7 +17,6 @@ export default function Home({ posts, total, currentPage, perPage }: HomeProps) 
   });
 
   useNavigationRestore('home', scrollRef);
-  useTagsNavigationToggle(true);
 
   return (
     <Layout title="Watchii" scrollRef={scrollRef} pagination={{ total, currentPage, perPage, pagination }}>

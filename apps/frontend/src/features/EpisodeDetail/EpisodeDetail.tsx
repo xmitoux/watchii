@@ -8,7 +8,6 @@ import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
-import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { EpisodeDetailProps } from './types/episode-detail-types';
@@ -20,8 +19,6 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
 
   useNavigationRestore('episodeDetail', scrollRef);
   const parentPagePath = useNavigationStore('episodes', (state) => state.currentPagePath);
-
-  useTagsNavigationToggle(true);
 
   /** エピソード一覧に戻る */
   function goToEpisodes() {

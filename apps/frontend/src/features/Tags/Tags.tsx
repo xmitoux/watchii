@@ -4,7 +4,6 @@ import { Box, Flex, SimpleGrid, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { CharacterTag, CuteLinkTag, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
-import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 import { useNavigationStore } from '@/stores/navigationStore';
 
 import { TagsProps } from './types/tags-types';
@@ -19,8 +18,6 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
     resetNavigationStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useTagsNavigationToggle(true);
 
   return (
     <Layout title="タグ一覧">

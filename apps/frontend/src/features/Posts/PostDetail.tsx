@@ -3,15 +3,12 @@ import { CharacterTag, CuteLinkTag, NextImage, PopularWords, SectionText } from 
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
-import { useTagsNavigationToggle } from '@/hooks/useTagsNavigationToggle';
 
 import { PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
 export function PostDetail({ post }: PostDetailProps) {
   const imageWidth = usePostImageWidth();
-
-  useTagsNavigationToggle(false);
 
   return (
     <Layout title="漫画詳細" canBack noFooter>

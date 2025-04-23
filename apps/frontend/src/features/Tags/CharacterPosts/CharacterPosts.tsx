@@ -1,13 +1,11 @@
-import { useRouter } from 'next/router';
-
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
-import { useTagsNavigationStore } from '@/stores/tagsNavigationStore';
 
+import { useBackToTags } from '../hooks/useBackToTags';
 import { CharacterPostsProps } from '../types/tags-types';
 
 export default function CharacterPosts({
@@ -18,8 +16,6 @@ export default function CharacterPosts({
   currentPage,
   perPage,
 }: CharacterPostsProps) {
-  const router = useRouter();
-
   const { scrollRef } = useLayoutScroll();
 
   const { pagination } = usePagination({
@@ -29,24 +25,14 @@ export default function CharacterPosts({
   });
 
   useNavigationRestore('tags', scrollRef);
-  const { shouldBackToTags } = useTagsNavigationStore();
 
-  /** ヘッダーの戻るボタン処理 */
-  function handleNavigationBack() {
-    // エピソードカテゴリ一覧に戻る
-    if (shouldBackToTags) {
-      router.push('/tags');
-    }
-    else {
-      router.back();
-    }
-  }
+  const { backToTags } = useBackToTags();
 
   return (
     <Layout
       title={`${characterName}の漫画一覧`}
       scrollRef={scrollRef}
-      onNavigationBack={handleNavigationBack}
+      onNavigationBack={backToTags}
       pagination={{ total, currentPage, perPage, pagination }}
     >
       {/* post一覧 */}
