@@ -11,7 +11,6 @@ import {
   Text,
   VStack,
 } from '@repo/ui/chakra-ui';
-import { CloseButton } from '@repo/ui/chakra-ui/close-button';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -91,11 +90,6 @@ export default function PWAInstallGuide() {
 
   return (
     <Layout title="インストールガイド" canBack noFooter>
-      {/* 閉じるボタン */}
-      <Flex justify="end" pt={2}>
-        <CloseButton onClick={handleClose} />
-      </Flex>
-
       <Flex direction="column" align="center" gap={4}>
         <VStack>
           <Heading size="xl">
@@ -109,7 +103,7 @@ export default function PWAInstallGuide() {
           </Text>
         </VStack>
 
-        <Flex h="75vh" align="center" justify="center" width="100%">
+        <Flex align="center" justify="center" width="100%">
           <motion.div style={{ width: '100%' }}>
             <Box px={6} py={4} rounded="lg" bg="gray.900" shadow="md" width="100%">
               <Steps.Root count={steps.length} size="sm" onStepChange={handleStepChange}>
