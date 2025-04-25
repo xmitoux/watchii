@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import {
@@ -104,7 +105,9 @@ const slideVariants = {
 };
 
 /** PWAインストールガイド */
-export default function PWAInstallGuide({ onClose }: { onClose: () => void }) {
+export default function PWAInstallGuide() {
+  const router = useRouter();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [direction, setDirection] = useState(0); // スライド方向 (1: 次へ, -1: 前へ)
 
@@ -116,6 +119,10 @@ export default function PWAInstallGuide({ onClose }: { onClose: () => void }) {
   }
 
   const isStepCompleted = currentStep === steps.length;
+
+  function handleClose() {
+    router.back();
+  }
 
   return (
     <motion.div
@@ -137,7 +144,7 @@ export default function PWAInstallGuide({ onClose }: { onClose: () => void }) {
         {/* 閉じるボタン */}
         <Flex justify="end" pt={2}>
           <motion.div variants={itemVariants}>
-            <CloseButton onClick={onClose} />
+            <CloseButton onClick={handleClose} />
           </motion.div>
         </Flex>
 
@@ -249,7 +256,7 @@ export default function PWAInstallGuide({ onClose }: { onClose: () => void }) {
                     </Steps.PrevTrigger>
 
                     {isStepCompleted
-                      ? <Button color="white" bg="blue.500" onClick={onClose}>完了</Button>
+                      ? <Button color="white" bg="blue.500" onClick={handleClose}>完了</Button>
                       : (
                         <Steps.NextTrigger asChild>
                           <Button onClick={() => setDirection(1)}>次へ</Button>

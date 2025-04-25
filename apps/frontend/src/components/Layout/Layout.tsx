@@ -2,16 +2,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { ReactNode, RefObject, useEffect } from 'react';
 
-import { Box, Center } from '@repo/ui/chakra-ui';
+import { Center } from '@repo/ui/chakra-ui';
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
 import { MenuDrawer } from '@/components/Menu/MenuDrawer';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
-import PWAInstallGuide from '@/features/PWAInstallGuide/PWAInstallGuide';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
-import { useSettingStore } from '@/stores/settingStore';
 
 import { usePageTransition } from './hooks/usePageTransition';
 
@@ -157,65 +155,48 @@ export default function Layout({
     }
   }
 
-  // PWAインストールガイド用のストア
-  const showPWAGuide = useSettingStore((state) => state.showPWAGuide);
-  const setShowPWAInstallGuide = useSettingStore((state) => state.setShowPWAInstallGuide);
-
   return (
     <DeviceTypeInitializer>
-      {/* PWAインストールガイド(ストアのガイド表示を監視して表示) */}
-      <AnimatePresence mode="wait">
-        {showPWAGuide && (<PWAInstallGuide onClose={() => setShowPWAInstallGuide(false)} />)}
-      </AnimatePresence>
-
-      {/* ガイドが表示されていてもレイアウトは常に存在 (ただしz-indexで下に) */}
-      <Box
-        style={{
-          filter: showPWAGuide ? 'blur(3px)' : 'none',
-          transition: 'filter 0.3s ease-in-out',
-        }}
+      <UiLayout
+        title={title}
+        actionButton={!noMenu && <MenuDrawer />}
+        canBack={canBack}
+        footerNavigationItems={navigationItems}
+        noFooter={noFooter}
+        scrollRef={scrollRef}
+        onNavigationClick={handleNavigationClick}
+        onNavigationBack={onNavigationBack}
       >
-        <UiLayout
-          title={title}
-          actionButton={!noMenu && <MenuDrawer />}
-          canBack={canBack}
-          footerNavigationItems={navigationItems}
-          noFooter={noFooter}
-          scrollRef={scrollRef}
-          onNavigationClick={handleNavigationClick}
-          onNavigationBack={onNavigationBack}
-        >
-          <AnimatePresence mode="wait" custom={transitionProps.custom}>
-            <motion.div key={router.asPath} {...transitionProps}>
-              {/* ページネーション */}
-              {pagination && (
-                <Center mb={3}>
-                  <Pagination
-                    totalPageCount={pagination.total}
-                    perPage={pagination.perPage}
-                    currentPage={pagination.currentPage}
-                    onPageChange={pagination.pagination}
-                  />
-                </Center>
-              )}
+        <AnimatePresence mode="wait" custom={transitionProps.custom}>
+          <motion.div key={router.asPath} {...transitionProps}>
+            {/* ページネーション */}
+            {pagination && (
+              <Center mb={3}>
+                <Pagination
+                  totalPageCount={pagination.total}
+                  perPage={pagination.perPage}
+                  currentPage={pagination.currentPage}
+                  onPageChange={pagination.pagination}
+                />
+              </Center>
+            )}
 
-              {children}
+            {children}
 
-              {/* ページネーション(シャトルに隠れないよう余白) */}
-              {pagination && (
-                <Center mt={3} mb="60px">
-                  <Pagination
-                    totalPageCount={pagination.total}
-                    perPage={pagination.perPage}
-                    currentPage={pagination.currentPage}
-                    onPageChange={pagination.pagination}
-                  />
-                </Center>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </UiLayout>
-      </Box>
+            {/* ページネーション(シャトルに隠れないよう余白) */}
+            {pagination && (
+              <Center mt={3} mb="60px">
+                <Pagination
+                  totalPageCount={pagination.total}
+                  perPage={pagination.perPage}
+                  currentPage={pagination.currentPage}
+                  onPageChange={pagination.pagination}
+                />
+              </Center>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </UiLayout>
     </DeviceTypeInitializer>
   );
 }
