@@ -1,14 +1,16 @@
-import { Flex, Wrap, WrapItem } from '@repo/ui/chakra-ui';
+import { Box, Flex, Wrap, WrapItem } from '@repo/ui/chakra-ui';
 import { CharacterTag, CuteLinkTag, NextImage, PopularWords, SectionText } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
+import { useNavigationStore } from '@/stores/navigationStore';
 
 import { PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
 export function PostDetail({ post }: PostDetailProps) {
   const imageWidth = usePostImageWidth();
+  const resetTagDetailStore = useNavigationStore('tagDetail', (state) => state.reset);
 
   return (
     <Layout title="漫画詳細" canBack noFooter>
@@ -29,7 +31,10 @@ export function PostDetail({ post }: PostDetailProps) {
         <TagList
           items={post.characters}
           renderItem={(character) => (
-            <CharacterTag character={character} to={`/tags/character/${character.nameKey}/page/1`} />
+            // 遷移時にタグ詳細のスクロール位置が復元されないようにする
+            <Box onClick={() => resetTagDetailStore()}>
+              <CharacterTag character={character} to={`/tags/character/${character.nameKey}/page/1`} />
+            </Box>
           )}
         />
 
@@ -40,7 +45,10 @@ export function PostDetail({ post }: PostDetailProps) {
         <TagList
           items={post.tags}
           renderItem={(tag) => (
-            <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/${tag.id}/page/1`} />
+            // 遷移時にタグ詳細のスクロール位置が復元されないようにする
+            <Box onClick={() => resetTagDetailStore()}>
+              <CuteLinkTag id={tag.id} name={tag.name} to={`/tags/tag/${tag.id}/page/1`} />
+            </Box>
           )}
         />
 
@@ -48,7 +56,11 @@ export function PostDetail({ post }: PostDetailProps) {
         <SectionText title="語録" />
 
         {/* 語録一覧 */}
-        <PopularWords popularWordSpeakers={post.popularWords} to={(id: number) => `/tags/popular-word/${id}/page/1`} />
+        <PopularWords
+          popularWordSpeakers={post.popularWords}
+          to={(id: number) => `/tags/popular-word/${id}/page/1`}
+          onClick={() => resetTagDetailStore()} // 遷移時にタグ詳細のスクロール位置が復元されないようにする
+        />
       </Flex>
     </Layout>
   );
