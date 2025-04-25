@@ -19,10 +19,11 @@ type PopularWordProps = {
     }>;
   }>;
   to: (id: number) => string;
+  onClick?: () => void;
 };
 
 /** 語録コンポーネント */
-export function PopularWords({ popularWordSpeakers, to }: PopularWordProps) {
+export function PopularWords({ popularWordSpeakers, to, onClick }: PopularWordProps) {
   return (
     <Box w="full">
       {popularWordSpeakers?.map((speakerData) => (
@@ -51,7 +52,9 @@ export function PopularWords({ popularWordSpeakers, to }: PopularWordProps) {
           {/* 語録一覧 */}
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} pt={4}>
             {speakerData.words.map((word) => (
-              <WordBubble key={word.id} word={word} speakerId={speakerData.speaker.id} to={to(word.id)} />
+              <Box key={word.id} onClick={onClick}>
+                <WordBubble word={word} speakerId={speakerData.speaker.id} to={to(word.id)} />
+              </Box>
             ))}
           </SimpleGrid>
         </Card.Root>
