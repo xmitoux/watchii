@@ -20,7 +20,7 @@ export default function AboutThisApp() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Layout title="このアプリについて" canBack noFooter>
+    <Layout title="このアプリについて" canBack noFooter noMenu>
       <Container maxW="md">
         <VStack align="start" gap={8}>
           <AbourSection title="アプリの目的">
