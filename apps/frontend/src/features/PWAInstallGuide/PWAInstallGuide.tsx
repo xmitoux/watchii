@@ -89,7 +89,7 @@ export default function PWAInstallGuide() {
   }
 
   return (
-    <Layout title="インストールガイド" canBack noFooter>
+    <Layout title="インストールガイド" canBack noFooter noMenu>
       <Flex direction="column" align="center" gap={4}>
         <VStack>
           <Heading size="xl">

@@ -5,7 +5,7 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { MdDarkMode, MdExitToApp, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
+import { MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
@@ -18,11 +18,6 @@ export function MenuDrawer() {
   const [showMenu, setShowMenu] = useState(false);
 
   const { isPWA } = usePWAInstallGuide();
-
-  function handlePWAInstallGuide() {
-    // PWAインストールガイドを表示
-    router.push('/pwa-install-guide');
-  }
 
   const { toggleColorMode, colorMode } = useColorMode();
 
@@ -76,26 +71,35 @@ export function MenuDrawer() {
 
               <Drawer.Body>
                 <Flex direction="column">
-                  <Button variant="ghost" width="full" onClick={handleToggleDarkMode}>
-                    {colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
-                    ダークモード切り替え
-                  </Button>
+                  <MenuButton
+                    icon={colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
+                    label="ダークモード切り替え"
+                    onClick={handleToggleDarkMode}
+                  />
 
                   {!isPWA() && (
-                    <Button variant="ghost" width="full" onClick={handlePWAInstallGuide}>
-                      <MdSmartphone />
-                      インストールガイド
-                    </Button>
+                    <MenuButton
+                      icon={<MdSmartphone />}
+                      label="インストールガイド"
+                      onClick={() => router.push('/pwa-install-guide')}
+                    />
                   )}
                 </Flex>
               </Drawer.Body>
 
-              <Drawer.Footer justifyContent="center">
+              <Drawer.Footer flexDirection="column" justifyContent="center" gap={0}>
+                <MenuButton
+                  icon={<MdInfoOutline />}
+                  label="このアプリについて"
+                  onClick={() => router.push('/about')}
+                />
 
-                <Button variant="ghost" color="red.400" width="full" onClick={handleLogout}>
-                  <Icon><MdExitToApp /></Icon>
-                  ログアウト
-                </Button>
+                <MenuButton
+                  icon={<MdExitToApp />}
+                  label="ログアウト"
+                  labelColor="red.400"
+                  onClick={handleLogout}
+                />
               </Drawer.Footer>
 
               <Drawer.CloseTrigger asChild>
@@ -108,5 +112,23 @@ export function MenuDrawer() {
 
       <Toaster />
     </>
+  );
+}
+
+type MenuButtonProps = {
+  icon: React.ReactNode;
+  label: string;
+  labelColor?: string;
+  onClick: () => void;
+};
+
+function MenuButton({ icon, label, labelColor, onClick }: MenuButtonProps) {
+  return (
+    <Button variant="ghost" width="full" color={labelColor} onClick={onClick}>
+      <Icon>
+        {icon}
+      </Icon>
+      {label}
+    </Button>
   );
 }
