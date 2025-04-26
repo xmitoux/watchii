@@ -9,7 +9,6 @@ import { MdDarkMode, MdExitToApp, MdMenu, MdOutlineLightMode, MdSmartphone } fro
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
-import { useSettingStore } from '@/stores/settingStore';
 
 /** メニュードロワー */
 export function MenuDrawer() {
@@ -19,12 +18,10 @@ export function MenuDrawer() {
   const [showMenu, setShowMenu] = useState(false);
 
   const { isPWA } = usePWAInstallGuide();
-  const setShowPWAInstallGuide = useSettingStore((state) => state.setShowPWAInstallGuide);
 
   function handlePWAInstallGuide() {
     // PWAインストールガイドを表示
-    setShowPWAInstallGuide(true);
-    setShowMenu(false);
+    router.push('/pwa-install-guide');
   }
 
   const { toggleColorMode, colorMode } = useColorMode();
