@@ -105,18 +105,23 @@ export default function PWAInstallGuide() {
 
         <Flex align="center" justify="center" width="100%">
           <motion.div style={{ width: '100%' }}>
-            <Box px={6} py={4} rounded="lg" bg="gray.900" shadow="md" width="100%">
+            <Box px={6} py={4} rounded="lg" shadow="md" width="100%">
               <Steps.Root count={steps.length} size="sm" onStepChange={handleStepChange}>
                 {/* step数 */}
                 <Steps.List mb={1}>
-                  {steps.map((step, index) => (
-                    <Steps.Item key={index} index={index}>
-                      <Steps.Trigger>
-                        <Steps.Indicator />
-                      </Steps.Trigger>
-                      <Steps.Separator />
-                    </Steps.Item>
-                  ))}
+                  {steps.map((_, index) => {
+                    // ステップの色(完了状態で変える)
+                    const stepColor = index < currentStep ? 'hachiwareBlue' : 'hachiBlueSwitch';
+
+                    return (
+                      <Steps.Item key={index} index={index}>
+                        <Steps.Trigger>
+                          <Steps.Indicator bg={stepColor} color="chiiWhite" borderColor="transparent" />
+                        </Steps.Trigger>
+                        <Steps.Separator bg={stepColor} />
+                      </Steps.Item>
+                    );
+                  })}
                 </Steps.List>
 
                 {/* ステップコンテンツをAnimatePresenceでラップ */}
@@ -192,14 +197,14 @@ export default function PWAInstallGuide() {
                 {/* step移動 */}
                 <Flex justify="center" gap={4} mt={2}>
                   <Steps.PrevTrigger asChild>
-                    <Button onClick={() => setDirection(-1)}>前へ</Button>
+                    <Button bg="hachiBlueSwitch" color="chiiWhite" onClick={() => setDirection(-1)}>前へ</Button>
                   </Steps.PrevTrigger>
 
                   {isStepCompleted
-                    ? <Button color="white" bg="blue.500" onClick={handleClose}>完了</Button>
+                    ? <Button color="white" bg="hachiwareBlue" onClick={handleClose}>完了</Button>
                     : (
                       <Steps.NextTrigger asChild>
-                        <Button onClick={() => setDirection(1)}>次へ</Button>
+                        <Button bg="hachiBlueSwitch" color="chiiWhite" onClick={() => setDirection(1)}>次へ</Button>
                       </Steps.NextTrigger>
                     )}
                 </Flex>
