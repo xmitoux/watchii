@@ -5,6 +5,8 @@ import { supabaseSessionMiddleware, type SupabaseSessionMiddlewareOptions } from
 const options: SupabaseSessionMiddlewareOptions = {
   publicPaths: [
     '/login',
+    '/signup',
+    '/api/users',
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/login',
