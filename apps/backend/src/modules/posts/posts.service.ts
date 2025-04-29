@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { FileUploadService } from '@/common/services/file-upload.service';
 import { PrismaService } from '@/common/services/prisma.service';
+import { SupabaseService } from '@/common/services/supabase.service';
 
 import { PostsFindAllRequestDto, PostsFindEpisodeTargetsRequestDto } from './dto/posts.dto';
 import { UpdatePostCharactersRequest } from './dto/UpdatePostCharactersRequest.dto';
@@ -13,7 +13,7 @@ import { FindPostPopularWordEntity, FindPostResponse, PostFindAllResponseEntity,
 export class PostsService {
   constructor(
     private prisma: PrismaService,
-    private fileUploadService: FileUploadService,
+    private fileUploadService: SupabaseService,
   ) {}
 
   private readonly logger = new Logger(PostsService.name);

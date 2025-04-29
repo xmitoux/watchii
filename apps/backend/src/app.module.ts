@@ -10,6 +10,7 @@ import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { PopularWordsModule } from './modules/popular_words/popular_words.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { UsersModule } from './modules/users/users.module';
 
 const pinoHttp = {
   level: process.env.PINO_LOG_LEVEL || 'trace',
@@ -32,6 +33,7 @@ const pinoHttp = {
     CharactersModule,
     TagsModule,
     PopularWordsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

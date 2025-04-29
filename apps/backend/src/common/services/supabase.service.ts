@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
-export class FileUploadService {
+export class SupabaseService {
   private supabase: SupabaseClient;
   private supabaseBucket: string;
 
@@ -56,6 +56,27 @@ export class FileUploadService {
     }
     catch (error) {
       throw new Error(`Files deletion failed: ${error.message}`);
+    }
+  }
+
+  /**
+   * ユーザ登録の検証
+   * @param token - 検証に使用するトークン(登録確認メールのトークン)
+   * @returns ユーザ登録の検証結果(ユーザデータ・セッション情報)
+   */
+
+  async verifyUserRegistration(token: string) {
+    try {
+      const { data, error } = await this.supabase.auth.verifyOtp({ token_hash: token, type: 'email' });
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    }
+    catch (error) {
+      throw new Error(`Token verification failed: ${error.message}`);
     }
   }
 }
