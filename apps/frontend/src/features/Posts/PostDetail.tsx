@@ -5,6 +5,7 @@ import Layout from '@/components/Layout/Layout';
 import { usePostImageWidth } from '@/hooks/usePostImageWidth';
 import { useNavigationStore } from '@/stores/navigationStore';
 
+import PostDetailFavButton from './components/PostDetailFavButton';
 import { PostDetailProps, PostDetailTagEntity } from './types/posts-types';
 
 /** Post詳細コンポーネント */
@@ -23,6 +24,9 @@ export function PostDetail({ post }: PostDetailProps) {
           alt={post.filename}
           priority
         />
+
+        {/* お気に入りボタン */}
+        <PostDetailFavButton postId={post.id} />
 
         {/* キャラセクション */}
         <SectionText title="キャラ" />
