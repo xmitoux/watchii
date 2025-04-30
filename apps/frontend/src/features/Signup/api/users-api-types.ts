@@ -8,3 +8,14 @@ export type RegisterUserResponse = {
     refresh_token: string;
   };
 };
+
+export type GetUserFavsResponse = GetUserFavsEntity[];
+
+export type GetUserFavsEntity = {
+  postId: number;
+  favedAt: Date;
+};
+
+export type ToggleUserFavsRequest = {
+  postId: number;
+};

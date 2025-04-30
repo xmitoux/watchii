@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api/api-client';
 
-import { RegisterUserRequest, RegisterUserResponse } from './users-api-types';
+import { GetUserFavsResponse, RegisterUserRequest, RegisterUserResponse, ToggleUserFavsRequest } from './users-api-types';
 
 export class UsersApi {
   private apiClient = apiClient;
@@ -8,7 +8,17 @@ export class UsersApi {
 
   /** ユーザ登録を行う */
   async registerUser(request: RegisterUserRequest): Promise<RegisterUserResponse> {
-    return this.apiClient.post<RegisterUserResponse>(this.endpoint, request);
+    return this.apiClient.post(this.endpoint, request);
+  }
+
+  /** ユーザのお気に入り一覧を取得する */
+  async getUserFavs(token: string): Promise<GetUserFavsResponse> {
+    return this.apiClient.get(`${this.endpoint}/get-user-favs`, token);
+  }
+
+  /** ユーザのお気に入りをトグルする */
+  async toggleUserFavs(request: ToggleUserFavsRequest, token: string): Promise<void> {
+    return this.apiClient.post(`${this.endpoint}/toggle-user-favs`, request, token);
   }
 }
 

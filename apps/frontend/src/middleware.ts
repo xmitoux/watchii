@@ -6,7 +6,7 @@ const options: SupabaseSessionMiddlewareOptions = {
   publicPaths: [
     '/login',
     '/signup',
-    '/api/users',
+    '/users',
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/login',
