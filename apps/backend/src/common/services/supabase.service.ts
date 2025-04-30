@@ -79,4 +79,19 @@ export class SupabaseService {
       throw new Error(`Token verification failed: ${error.message}`);
     }
   }
+
+  async getUser(bearerToken: string) {
+    try {
+      const { data, error } = await this.supabase.auth.getUser(bearerToken.replace('Bearer ', ''));
+
+      if (error) {
+        throw error;
+      }
+
+      return data.user;
+    }
+    catch (error) {
+      throw new Error(`Get user failed: ${error.message}`);
+    }
+  }
 }
