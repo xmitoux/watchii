@@ -6,7 +6,6 @@ const options: SupabaseSessionMiddlewareOptions = {
   publicPaths: [
     '/login',
     '/signup',
-    '/users',
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/login',
@@ -20,6 +19,6 @@ export async function middleware(request: NextRequest) {
 // このミドルウェアを適用するパス
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
