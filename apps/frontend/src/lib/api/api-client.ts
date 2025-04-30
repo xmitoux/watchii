@@ -31,10 +31,14 @@ export class ApiRoutesClient {
   }
 
   // GETリクエスト🔍
-  async get<T>(endpoint: string): Promise<T> {
+  async get<T>(endpoint: string, token?: string): Promise<T> {
     try {
       const apiUrl = this.getApiRoutesUrl(endpoint);
-      const response = await fetch(apiUrl);
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers,
+      });
 
       return this.handleResponse<T>(response);
     }
@@ -50,14 +54,21 @@ export class ApiRoutesClient {
   }
 
   // POSTリクエスト📝
-  async post<T>(endpoint: string, data: any): Promise<T> {
+  async post<T>(endpoint: string, data: any, token?: string): Promise<T> {
     try {
       const apiUrl = this.getApiRoutesUrl(endpoint);
+
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(data),
       });
 
