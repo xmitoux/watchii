@@ -8,6 +8,7 @@ import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useFavsStore } from '@/stores/favsStore';
 
+import NoFavs from './components/NoFavs';
 import { FavsProps } from './types/favs-types';
 
 export default function Favs({ posts, total, currentPage, perPage }: FavsProps) {
@@ -40,12 +41,8 @@ export default function Favs({ posts, total, currentPage, perPage }: FavsProps) 
       noMenu
       onNavigationBack={handleBack}
     >
-      {total === 0 ? (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <div className="text-2xl font-bold text-center">お気に入りはまだありません</div>
-          <div className="mt-4 text-lg text-gray-500">お気に入りを追加してみましょう！</div>
-        </div>
-      )
+      {total === 0
+        ? <NoFavs />
         : (
           <>
             {/* post一覧 */}
