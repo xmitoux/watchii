@@ -110,7 +110,7 @@ export function MenuDrawer() {
                 </Flex>
               </Drawer.Body>
 
-              <Drawer.Footer flexDirection="column" justifyContent="center" gap={0}>
+              <Drawer.Footer flexDirection="column" justifyContent="center" gap={0} mb="20px">
                 <MenuButton
                   icon={<MdInfoOutline />}
                   label="このアプリについて"
