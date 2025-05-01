@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
 import { SupabaseService } from '@/common/services/supabase.service';
 
 import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
-import { GetUserFavsResponseEntity, RegisterUserResponseEntity } from './entity/users.entity';
+import { GetUserFavsResponse, RegisterUserResponseEntity } from './entity/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -15,13 +16,22 @@ export class UsersService {
 
   private readonly logger = new Logger(UsersService.name);
 
-  async getUserFavs(token: string): Promise<GetUserFavsResponseEntity[]> {
+  async getUserFavs(token: string, query: PaginationParams): Promise<GetUserFavsResponse> {
     // トークン検証してユーザー取得
     const user = await this.supabase.getUser(token);
 
     if (!user) {
       throw new Error('ユーザ取得に失敗しました😨');
     }
+
+    const { limit = 12, offset = 0, sort = 'asc' } = query;
+
+    // 全体の件数を取得
+    const total = await this.prisma.userFav.count({
+      where: {
+        userId: user.id,
+      },
+    });
 
     // ユーザーのお気に入り一覧を取得
     const favorites = await this.prisma.userFav.findMany({
@@ -31,10 +41,27 @@ export class UsersService {
       select: {
         postId: true,
         favedAt: true,
+        post: {
+          select: {
+            id: true,
+            filename: true,
+            postedAt: true,
+          },
+        },
       },
+      orderBy: {
+        favedAt: sort,
+      },
+      take: limit,
+      skip: offset,
     });
 
-    return favorites;
+    const posts = favorites.map((fav) => fav.post);
+
+    return {
+      posts,
+      total,
+    };
   }
 
   async toggleUserFavs(token: string, { postId }: ToggleUserFavsRequestDto): Promise<void> {

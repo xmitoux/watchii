@@ -1,8 +1,16 @@
+import { Post } from '@prisma/client';
 import { AuthResponse, Session } from '@supabase/supabase-js';
 
 export type RegisterUserResponseEntity = { session: Session };
 
-export type GetUserFavsResponseEntity = {
-  postId: number;
-  favedAt: Date;
+type PostEntity = Pick<
+  Post,
+  'id'
+  | 'filename'
+  | 'postedAt'
+>;
+
+export type GetUserFavsResponse = {
+  posts: PostEntity[];
+  total: number;
 };

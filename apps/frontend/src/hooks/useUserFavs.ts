@@ -13,7 +13,7 @@ export function useUserFavs() {
     const token = await getSessionToken();
     if (!token) {
       // 未ログイン時は空配列を返す
-      return [];
+      return;
     }
 
     const response = await usersApi.getUserFavs(token);
@@ -28,11 +28,11 @@ export function useUserFavs() {
     if (!data) {
       return false;
     }
-    return data.some((fav) => fav.postId === postId);
+    return data.posts.some((post) => post.id === postId);
   };
 
   return {
-    favs: data || [],
+    favPosts: data?.posts || [],
     isFavLoading: !error && !data,
     isError: error,
     isFav,

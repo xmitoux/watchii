@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Logger, Post, Query } from '@nestjs/common';
 
 import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
 import { UsersService } from './users.service';
@@ -10,10 +10,19 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get('/get-user-favs')
-  async getUserFavs(@Headers('authorization') token: string) {
+  async getUserFavs(
+    @Headers('authorization') token: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+    @Query('sort') sort?: 'asc' | 'desc',
+  ) {
     this.logger.log('getUserFavs');
 
-    return this.usersService.getUserFavs(token);
+    return this.usersService.getUserFavs(token, {
+      limit: limit ? Number(limit) : undefined,
+      offset: offset ? Number(offset) : undefined,
+      sort,
+    });
   }
 
   @Post('/toggle-user-favs')

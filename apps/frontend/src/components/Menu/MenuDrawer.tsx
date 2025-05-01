@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -5,7 +6,7 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
+import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
@@ -72,6 +73,12 @@ export function MenuDrawer() {
               <Drawer.Body>
                 <Flex direction="column">
                   <MenuButton
+                    icon={colorMode === 'light' ? <IoHeartOutline /> : <IoHeart />}
+                    label="お気に入り一覧"
+                    to="/favs"
+                  />
+
+                  <MenuButton
                     icon={colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
                     label="ダークモード切り替え"
                     onClick={handleToggleDarkMode}
@@ -119,16 +126,23 @@ type MenuButtonProps = {
   icon: React.ReactNode;
   label: string;
   labelColor?: string;
-  onClick: () => void;
+  to?: string;
+  onClick?: () => void;
 };
 
-function MenuButton({ icon, label, labelColor, onClick }: MenuButtonProps) {
+function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
   return (
     <Button variant="ghost" width="full" color={labelColor} onClick={onClick}>
       <Icon>
         {icon}
       </Icon>
-      {label}
+      {to
+        ? (
+          <Link href={to} passHref>
+            {label}
+          </Link>
+        )
+        : label}
     </Button>
   );
 }

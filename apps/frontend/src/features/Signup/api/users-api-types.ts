@@ -1,3 +1,5 @@
+import { PostEntity } from '@/types/post-types';
+
 export type RegisterUserRequest = {
   token: string;
 };
@@ -9,11 +11,9 @@ export type RegisterUserResponse = {
   };
 };
 
-export type GetUserFavsResponse = GetUserFavsEntity[];
-
-export type GetUserFavsEntity = {
-  postId: number;
-  favedAt: Date;
+export type GetUserFavsResponse = {
+  posts: PostEntity[];
+  total: number;
 };
 
 export type ToggleUserFavsRequest = {

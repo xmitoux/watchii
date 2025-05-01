@@ -4,6 +4,7 @@ import { IoHeart, IoHeartOutline } from '@repo/ui/icons';
 import { usersApi } from '@/features/Signup/api/users-api';
 import { useSessionToken } from '@/hooks/useSessionToken';
 import { useUserFavs } from '@/hooks/useUserFavs';
+import { PostEntity } from '@/types/post-types';
 
 type PostDetailFavButtonProps = {
   postId: number;
@@ -12,7 +13,7 @@ type PostDetailFavButtonProps = {
 /** お気に入りボタン */
 export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps) {
   const { getSessionToken } = useSessionToken();
-  const { favs, isFav, isFavLoading, mutate } = useUserFavs();
+  const { favPosts, isFav, isFavLoading, mutate } = useUserFavs();
 
   // お気に入り状態
   const favorited = isFav(postId);
@@ -20,16 +21,18 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
   // トグル処理
   const toggleFavorite = async () => {
     // 現在の状態を取得
-    const currentFavorites = [...(favs || [])];
+    const currentFavorites = [...favPosts];
 
     // Optimistic UI更新！APIレスポンス待たずに先に画面更新
     if (isFav(postId)) {
       // 解除する場合：該当postIdを除外
-      mutate(currentFavorites.filter((fav) => fav.postId !== postId), false);
+      const posts = currentFavorites.filter((post) => post.id !== postId);
+      mutate({ posts, total: posts.length }, false);
     }
     else {
       // 追加する場合：新しいお気に入り追加
-      mutate([...currentFavorites, { postId, favedAt: new Date() }], false);
+      const newFavPost: PostEntity = { id: postId, filename: '', postedAt: '' };
+      mutate({ posts: [newFavPost, ...currentFavorites], total: currentFavorites.length + 1 }, false);
     }
 
     try {
