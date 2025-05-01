@@ -10,6 +10,10 @@ import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
+import { useFavsStore } from '@/stores/favsStore';
+import { useNavigationStore } from '@/stores/navigationStore';
+
+const favsPath = '/favs/page/1';
 
 /** メニュードロワー */
 export function MenuDrawer() {
@@ -17,6 +21,17 @@ export function MenuDrawer() {
   const supabase = createClient();
 
   const [showMenu, setShowMenu] = useState(false);
+
+  const store = useFavsStore();
+  const favsNavStoreReset = useNavigationStore('favs', (state) => state.reset);
+
+  function handleGotoFavs() {
+    // お気に入り一覧から戻るためのパスをストアに保存
+    store.setPrePagePath(router.asPath);
+    // お気に入り一覧のスクロール位置をリセット
+    favsNavStoreReset();
+    router.push(favsPath);
+  }
 
   const { isPWA } = usePWAInstallGuide();
 
@@ -75,7 +90,8 @@ export function MenuDrawer() {
                   <MenuButton
                     icon={colorMode === 'light' ? <IoHeartOutline /> : <IoHeart />}
                     label="お気に入り一覧"
-                    to="/favs"
+                    to={favsPath}
+                    onClick={handleGotoFavs}
                   />
 
                   <MenuButton
@@ -88,7 +104,7 @@ export function MenuDrawer() {
                     <MenuButton
                       icon={<MdSmartphone />}
                       label="インストールガイド"
-                      onClick={() => router.push('/pwa-install-guide')}
+                      to="/pwa-install-guide"
                     />
                   )}
                 </Flex>

@@ -14,7 +14,7 @@ export function PostDetail({ post }: PostDetailProps) {
   const resetTagDetailStore = useNavigationStore('tagDetail', (state) => state.reset);
 
   return (
-    <Layout title="漫画詳細" canBack noFooter>
+    <Layout title="漫画詳細" canBack noFooter noMenu>
       <Flex direction="column" align="center" gap={4}>
         {/* Post画像 */}
         <NextImage

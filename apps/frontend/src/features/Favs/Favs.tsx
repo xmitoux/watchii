@@ -1,8 +1,12 @@
+import { useRouter } from 'next/router';
+
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
+import { useNavigationRestore } from '@/hooks/useNavigationRestore';
+import { useFavsStore } from '@/stores/favsStore';
 
 import { FavsProps } from './types/favs-types';
 
@@ -15,11 +19,26 @@ export default function Favs({ posts, total, currentPage, perPage }: FavsProps) 
     scrollRef,
   });
 
+  useNavigationRestore('favs', scrollRef);
+
+  const router = useRouter();
+  const favsStore = useFavsStore();
+
+  function handleBack() {
+    // ストアに保存したパスに戻る
+    router.push(favsStore.prePagePath ?? '/home/page/1');
+    // 戻るパスをリセット
+    favsStore.reset();
+  }
+
   return (
     <Layout
       title="お気に入り一覧"
       scrollRef={scrollRef}
       pagination={total === 0 ? undefined : { total, currentPage, perPage, pagination }}
+      noFooter
+      noMenu
+      onNavigationBack={handleBack}
     >
       {total === 0 ? (
         <div className="flex flex-col items-center justify-center w-full h-full">
