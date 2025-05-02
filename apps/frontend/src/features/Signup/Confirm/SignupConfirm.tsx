@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Center, Text, VStack } from '@repo/ui/chakra-ui';
+import { Center, Flex, Text, VStack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 import { usersApi } from '@/features/Signup/api/users-api';
+
+import UserRegisterLoading from '../components/UserRegisterLoading';
 
 export default function SignupConfirm() {
   const router = useRouter();
@@ -83,7 +85,12 @@ export default function SignupConfirm() {
               </VStack>
             )
             : (
-              <Text>登録を確認しています...</Text>
+              <Flex direction="column" justify="center" align="center" minH="80vh">
+                <VStack maxW="600px" textAlign="center">
+                  <Text color="blackPrimary" fontSize={['2xl', '3xl']} fontWeight="bold">登録を確認しています...</Text>
+                  <UserRegisterLoading />
+                </VStack>
+              </Flex>
             )}
       </Center>
     </Layout>
