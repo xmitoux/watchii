@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Center } from '@repo/ui/chakra-ui';
+import { Center, Text, VStack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { createClient } from '@repo/ui/utils';
 
@@ -10,49 +10,81 @@ import { usersApi } from '@/features/Signup/api/users-api';
 
 export default function SignupConfirm() {
   const router = useRouter();
+  const token = useRef<string | null>(null);
+
+  // ページロード時に自動で登録処理を実行
+  useEffect(() => {
+    const tokenFromQuery = router.query.token_hash as string;
+    if (tokenFromQuery) {
+      // 再試行用にトークンを保存しておく
+      token.current = tokenFromQuery;
+      handleConfirm();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
   const supabase = createClient();
 
-  const [loading, setLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   /** 登録確認処理 */
   async function handleConfirm() {
-    const token_hash = router.query.token_hash as string;
+    setIsError(false);
 
-    if (token_hash) {
-      setLoading(true);
+    try {
+      // ユーザ登録API
+      const { session } = await usersApi.registerUser({ token: token.current! });
 
-      try {
-        // ユーザ登録API
-        const { session } = await usersApi.registerUser({ token: token_hash });
+      // 登録結果のセッションを保存してログイン
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      });
 
-        // 登録結果のセッションを保存してログイン
-        const { error } = await supabase.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        });
-
-        if (error) {
-          console.error('Error setting session:', error);
-          return;
-        }
-
-        router.push('/');
+      if (sessionError) {
+        console.error('Error setting session:', sessionError);
+        setIsError(true);
+        return;
       }
-      catch (error) {
-        console.error('Error confirming signup:', error);
-      }
-      finally {
-        setLoading(false);
-      }
+
+      // 登録完了フラグをセット
+      setIsCompleted(true);
+
+      // 自動でホームページへ遷移
+      setTimeout(() => {
+        router.push('/home/page/1');
+      }, 3000);
+    }
+    catch (error) {
+      console.error('Error confirming signup:', error);
+      setIsError(true);
     }
   }
 
   return (
     <Layout title="登録確認" noFooter noMenu>
       <Center>
-        <Button color="chiiWhite" bg="hachiBlue" loading={loading} onClick={handleConfirm}>
-          確認
-        </Button>
+        {isError
+          ? (
+            <VStack>
+              <Text color="red.500">登録確認に失敗しました。</Text>
+              <Text color="red.500">もう一度お試しください。</Text>
+              <Button color="chiiWhite" bg="hachiBlue" onClick={handleConfirm}>
+                再試行
+              </Button>
+            </VStack>
+          )
+          : isCompleted
+            ? (
+              <VStack textAlign="center" p={4}>
+                <Text>登録完了しました！ 🎉</Text>
+                <Text>自動でホームページに移動します。</Text>
+              </VStack>
+            )
+            : (
+              <Text>登録を確認しています...</Text>
+            )}
       </Center>
     </Layout>
   );
