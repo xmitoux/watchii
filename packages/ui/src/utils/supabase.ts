@@ -1,4 +1,4 @@
-import { createBrowserClient, createServerClient } from '@supabase/ssr';
+import { createBrowserClient, createServerClient, serializeCookieHeader } from '@supabase/ssr';
 
 export function createClient() {
   return createBrowserClient(
@@ -7,7 +7,7 @@ export function createClient() {
   );
 }
 
-export { createServerClient };
+export { createServerClient, serializeCookieHeader };
 
 import { type NextRequest, NextResponse } from 'next/server';
 

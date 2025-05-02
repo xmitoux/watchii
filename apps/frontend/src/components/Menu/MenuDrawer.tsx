@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -5,10 +6,14 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
+import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
+import { useFavsStore } from '@/stores/favsStore';
+import { useNavigationStore } from '@/stores/navigationStore';
+
+const favsPath = '/favs/page/1';
 
 /** メニュードロワー */
 export function MenuDrawer() {
@@ -16,6 +21,17 @@ export function MenuDrawer() {
   const supabase = createClient();
 
   const [showMenu, setShowMenu] = useState(false);
+
+  const store = useFavsStore();
+  const favsNavStoreReset = useNavigationStore('favs', (state) => state.reset);
+
+  function handleGotoFavs() {
+    // お気に入り一覧から戻るためのパスをストアに保存
+    store.setPrePagePath(router.asPath);
+    // お気に入り一覧のスクロール位置をリセット
+    favsNavStoreReset();
+    router.push(favsPath);
+  }
 
   const { isPWA } = usePWAInstallGuide();
 
@@ -72,6 +88,13 @@ export function MenuDrawer() {
               <Drawer.Body>
                 <Flex direction="column">
                   <MenuButton
+                    icon={colorMode === 'light' ? <IoHeartOutline /> : <IoHeart />}
+                    label="お気に入り一覧"
+                    to={favsPath}
+                    onClick={handleGotoFavs}
+                  />
+
+                  <MenuButton
                     icon={colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
                     label="ダークモード切り替え"
                     onClick={handleToggleDarkMode}
@@ -81,13 +104,13 @@ export function MenuDrawer() {
                     <MenuButton
                       icon={<MdSmartphone />}
                       label="インストールガイド"
-                      onClick={() => router.push('/pwa-install-guide')}
+                      to="/pwa-install-guide"
                     />
                   )}
                 </Flex>
               </Drawer.Body>
 
-              <Drawer.Footer flexDirection="column" justifyContent="center" gap={0}>
+              <Drawer.Footer flexDirection="column" justifyContent="center" gap={0} mb="20px">
                 <MenuButton
                   icon={<MdInfoOutline />}
                   label="このアプリについて"
@@ -119,16 +142,23 @@ type MenuButtonProps = {
   icon: React.ReactNode;
   label: string;
   labelColor?: string;
-  onClick: () => void;
+  to?: string;
+  onClick?: () => void;
 };
 
-function MenuButton({ icon, label, labelColor, onClick }: MenuButtonProps) {
+function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
   return (
     <Button variant="ghost" width="full" color={labelColor} onClick={onClick}>
       <Icon>
         {icon}
       </Icon>
-      {label}
+      {to
+        ? (
+          <Link href={to} passHref>
+            {label}
+          </Link>
+        )
+        : label}
     </Button>
   );
 }

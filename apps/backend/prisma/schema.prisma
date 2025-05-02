@@ -18,6 +18,7 @@ model Post {
   characters   Character[]   @relation("PostCharacters")
   tags         Tag[]         @relation("PostTags")
   popularWords PopularWord[] @relation("PostPopularWords")
+  userFavs     UserFav[]
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
 
@@ -74,4 +75,26 @@ model PopularWord {
 
   @@unique([word, speakerId])
   @@map("popular_words")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  userType  Int       @default(2) @map("user_type") // 1: 管理者, 2: 一般ユーザー
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  userFavs  UserFav[]
+
+  @@map("users")
+}
+
+model UserFav {
+  userId  String   @map("user_id")
+  postId  Int      @map("post_id")
+  favedAt DateTime @default(now()) @map("faved_at")
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId]) // 複合主キー
+  @@map("user_favs")
 }

@@ -8,7 +8,7 @@ import Layout from '@/components/Layout/Layout';
 
 export default function Custom404() {
   return (
-    <Layout title="404" canBack>
+    <Layout title="404" canBack noFooter noMenu>
       <Flex direction="column" justify="center" align="center" minH="80vh">
         <VStack maxW="600px" textAlign="center">
           <Text
