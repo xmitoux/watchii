@@ -51,8 +51,8 @@ export function MenuDrawer() {
         throw error;
       }
 
-      // ログイン画面にリダイレクト
-      router.push('/login');
+      // ランディングページにリダイレクト
+      router.push('/welcome');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
