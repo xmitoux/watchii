@@ -17,7 +17,8 @@
   "scripts": {
     "lint": "eslint --fix",
     "check-types": "tsc --noEmit",
-    "chakra": "pnpm dlx @chakra-ui/cli snippet add"
+    "chakra": "pnpm dlx @chakra-ui/cli snippet add",
+    "chakra-typegen": "pnpm dlx @chakra-ui/cli typegen ./src/components/ui/theme.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.15.0",
