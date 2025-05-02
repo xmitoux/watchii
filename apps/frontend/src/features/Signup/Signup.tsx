@@ -44,7 +44,7 @@ export default function Signup() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
       toaster.create({
-        title: 'サインアップに失敗しました😢',
+        title: '登録に失敗しました😢',
         description: error.message || 'もう一度試してみてね',
         type: 'error',
         duration: 3000,
@@ -56,7 +56,7 @@ export default function Signup() {
   }
 
   return (
-    <Layout title="サインアップ" noFooter noMenu>
+    <Layout title="新規登録" canBack noFooter noMenu>
       <Center>
         {signUpSuccess
           ? <p>登録確認用のメールを送信しました！</p>
