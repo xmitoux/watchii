@@ -2,7 +2,7 @@ import NextImage from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-import { Box, Button, ButtonProps, Flex, Icon, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Button, ButtonProps, Flex, Icon, Text } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { MdAccountCircle, MdLogin } from '@repo/ui/icons';
 import { cherry_bomb_one, hachi_maru_pop } from '@repo/ui/utils';
@@ -18,17 +18,17 @@ export default function Welcome() {
   }, []);
 
   return (
-    <Flex
-      direction="column"
-      align="center"
-      justify="space-between"
-      h="100vh"
-      bg="hachiBlue"
-      py={8}
-      position="relative"
-    >
+    <Flex direction="column" align="center" justify="center">
       {/* ロゴ */}
-      <Box pt={8} mb={-8} textAlign="center">
+      <Box
+        pt={12}
+        w="100%"
+        h="30vh"
+        textAlign="center"
+        bgGradient="to-b"
+        gradientFrom="hachiwareBlue"
+        gradientTo="#6BBBD4"
+      >
         <Text
           className={cherry_bomb_one.className}
           color="chiiWhite"
@@ -54,34 +54,49 @@ export default function Welcome() {
 
       {/* イラスト部分 */}
       <Box
-        flex="1"
         display="flex"
         alignItems="center"
         justifyContent="center"
         width="100%"
-        overflow="hidden"
+        h="40vh"
+        my="-2px" // 画像の上下端に謎の線が入るので隠す
+        bgGradient="to-b"
+        gradientFrom="#6BBBD4"
+        gradientTo="#ACE0EE"
       >
         <NextImage
           src="/images/lp.webp"
           width={1000}
           height={0}
-          style={{ width: '500px', height: 'auto' }}
+          style={{ width: '500px', height: 'auto', paddingBottom: '40px' }}
           priority
           alt="Watchii cute characters"
         />
       </Box>
 
       {/* ボタン部分 */}
-      <VStack gap={4} pb={8}>
-        <ButtonComponent to="/login">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        gap={4}
+        w="100%"
+        h="calc(30vh + 4px)"
+        pb={12}
+        bgGradient="to-b"
+        gradientFrom="#ACE0EE"
+        gradientTo="hachiBlue.light"
+      >
+        <ButtonComponent to="/login" color="chiiWhite" bgColor="hachiwareBlue.dark">
           <Icon><MdLogin /></Icon>
           ログイン
         </ButtonComponent>
-        <ButtonComponent to="/signup" variant="subtle" bgColor="white/80">
+        <ButtonComponent to="/signup" color="hachiwareBlue.dark" variant="subtle" bgColor="chiiWhite">
           <Icon><MdAccountCircle /></Icon>
           新規登録
         </ButtonComponent>
-      </VStack>
+      </Box>
     </Flex>
   );
 }
@@ -104,15 +119,15 @@ function LogoCaptionTilde({ mr, ml }: { mr?: boolean; ml?: boolean }) {
 
 type ButtonComponent = {
   variant?: ButtonProps['variant'];
+  color?: string;
   bgColor?: string;
   to: string;
   children: React.ReactNode;
 };
 
-function ButtonComponent({ variant, bgColor, to, children }: ButtonComponent) {
+function ButtonComponent({ variant, color, bgColor, to, children }: ButtonComponent) {
   return (
     <Button
-      colorPalette="cyan"
       variant={variant}
       w={['240px', '280px']}
       h="56px"
@@ -120,6 +135,7 @@ function ButtonComponent({ variant, bgColor, to, children }: ButtonComponent) {
       fontWeight="bold"
       borderRadius="full"
       boxShadow="0px 4px 10px rgba(0,0,0,0.15)"
+      color={color}
       bgColor={bgColor}
       _hover={{
         transform: 'translateY(-2px)',
