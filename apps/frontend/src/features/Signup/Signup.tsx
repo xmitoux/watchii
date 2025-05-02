@@ -21,6 +21,7 @@ import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
+import PrefetchImage from '@/components/PrefetchImage';
 
 export default function Signup() {
   const supabase = createClient();
@@ -154,6 +155,9 @@ export default function Signup() {
             </motion.div>
           )}
       </Center>
+
+      {/* 画像プリフェッチ用の隠し要素 */}
+      <PrefetchImage src="/images/signup-mail-sent.webp" width={1000} />
     </Layout>
   );
 }

@@ -7,6 +7,7 @@ import { Button } from '@repo/ui/chakra-ui/button';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
+import PrefetchImage from '@/components/PrefetchImage';
 import { usersApi } from '@/features/Signup/api/users-api';
 
 import SignupConfirmCompleted from './SignupConfirmCompleted';
@@ -64,6 +65,7 @@ export default function SignupConfirm() {
   return (
     <AnimatePresence mode="wait">
       {isCompleted ? (
+        // 登録完了表示
         <motion.div
           key="completed"
           initial={{ opacity: 0 }}
@@ -121,6 +123,9 @@ export default function SignupConfirm() {
           </Layout>
         </motion.div>
       )}
+
+      {/* 登録完了画像プリフェッチ用の隠し要素 */}
+      <PrefetchImage src="/images/user-registration-completed.webp" width={1000} />
     </AnimatePresence>
   );
 }
