@@ -1,8 +1,9 @@
+import { motion } from 'motion/react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-import { Box, Button, ButtonProps, Flex, Icon, Text } from '@repo/ui/chakra-ui';
+import { Box, Button, ButtonProps, Flex, Text } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { MdAccountCircle, MdLogin } from '@repo/ui/icons';
 import { cherry_bomb_one, hachi_maru_pop } from '@repo/ui/utils';
@@ -29,27 +30,38 @@ export default function Welcome() {
         gradientFrom="hachiwareBlue"
         gradientTo="#6BBBD4"
       >
-        <Text
-          className={cherry_bomb_one.className}
-          color="chiiWhite"
-          fontSize="7xl"
-          textShadow="0px 2px 3px rgba(0,0,0,0.1)"
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }}
         >
-          Watchii
-        </Text>
-        <Box
-          className={cherry_bomb_one.className}
-          color="chiiWhite"
-          fontSize="2xl"
-          textShadow="0px 2px 3px rgba(0,0,0,0.1)"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
+          <Text
+            className={cherry_bomb_one.className}
+            color="chiiWhite"
+            fontSize="7xl"
+            textShadow="0px 2px 3px rgba(0,0,0,0.1)"
+          >
+            Watchii
+          </Text>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.4, duration: 0.8 } }}
         >
-          <LogoCaptionTilde mr />
-          ちいかわがよめるアプリ
-          <LogoCaptionTilde ml />
-        </Box>
+          <Box
+            className={cherry_bomb_one.className}
+            color="chiiWhite"
+            fontSize="2xl"
+            textShadow="0px 2px 3px rgba(0,0,0,0.1)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <LogoCaptionTilde mr />
+            ちいかわがよめるアプリ
+            <LogoCaptionTilde ml />
+          </Box>
+        </motion.div>
       </Box>
 
       {/* イラスト部分 */}
@@ -63,15 +75,29 @@ export default function Welcome() {
         bgGradient="to-b"
         gradientFrom="#6BBBD4"
         gradientTo="#ACE0EE"
+        position="relative"
+        overflow="hidden"
       >
-        <NextImage
-          src="/images/lp.webp"
-          width={1000}
-          height={0}
-          style={{ width: '500px', height: 'auto', paddingBottom: '40px' }}
-          priority
-          alt="Watchii cute characters"
-        />
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1, transition: { delay: 0.8, duration: 0.7, type: 'spring', stiffness: 100 } }}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <NextImage
+            src="/images/lp.webp"
+            width={1000}
+            height={0}
+            style={{ width: '500px', height: 'auto', paddingBottom: '40px' }}
+            priority
+            alt="Watchii cute characters"
+          />
+        </motion.div>
       </Box>
 
       {/* ボタン部分 */}
@@ -88,19 +114,33 @@ export default function Welcome() {
         gradientFrom="#ACE0EE"
         gradientTo="hachiBlue.light"
       >
-        <ButtonComponent to="/login" color="chiiWhite" bgColor="hachiwareBlue.dark">
-          <Icon><MdLogin /></Icon>
-          ログイン
-        </ButtonComponent>
-        <ButtonComponent to="/signup" color="hachiwareBlue.dark" variant="subtle" bgColor="chiiWhite">
-          <Icon><MdAccountCircle /></Icon>
-          新規登録
-        </ButtonComponent>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1, transition: { delay: 1.2, duration: 0.6 } }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <ButtonComponent to="/login" color="chiiWhite" bgColor="hachiwareBlue.dark">
+            <MdLogin />
+            ログイン
+          </ButtonComponent>
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1, transition: { delay: 1.4, duration: 0.6 } }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <ButtonComponent to="/signup" color="hachiwareBlue.dark" variant="subtle" bgColor="chiiWhite">
+            <MdAccountCircle />
+            新規登録
+          </ButtonComponent>
+        </motion.div>
       </Box>
     </Flex>
   );
 }
 
+// チルダ（～）部分
 function LogoCaptionTilde({ mr, ml }: { mr?: boolean; ml?: boolean }) {
   return (
     <Text
@@ -138,7 +178,7 @@ function ButtonComponent({ variant, color, bgColor, to, children }: ButtonCompon
       color={color}
       bgColor={bgColor}
       _hover={{
-        transform: 'translateY(-2px)',
+        transform: 'translateY(-4px)',
         boxShadow: '0px 6px 12px rgba(0,0,0,0.2)',
       }}
       transition="all 0.2s"
