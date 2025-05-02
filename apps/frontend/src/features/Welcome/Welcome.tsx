@@ -1,12 +1,22 @@
 import NextImage from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 import { Box, Button, ButtonProps, Flex, Icon, Text, VStack } from '@repo/ui/chakra-ui';
+import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { MdAccountCircle, MdLogin } from '@repo/ui/icons';
-import { cherry_bomb_one } from '@repo/ui/utils';
+import { cherry_bomb_one, hachi_maru_pop } from '@repo/ui/utils';
 
 /** ランディングページ */
 export default function Welcome() {
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    // 強制的にライトモードに設定
+    setColorMode('light');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Flex
       direction="column"
@@ -36,9 +46,9 @@ export default function Welcome() {
           alignItems="center"
           justifyContent="center"
         >
-          <Text fontWeight="bold" mr={2}>～</Text>
+          <LogoCaptionTilde mr />
           ちいかわがよめるアプリ
-          <Text fontWeight="bold" ml={2}>～</Text>
+          <LogoCaptionTilde ml />
         </Box>
       </Box>
 
@@ -73,6 +83,22 @@ export default function Welcome() {
         </ButtonComponent>
       </VStack>
     </Flex>
+  );
+}
+
+function LogoCaptionTilde({ mr, ml }: { mr?: boolean; ml?: boolean }) {
+  return (
+    <Text
+      className={hachi_maru_pop.className}
+      fontWeight="bold"
+      color="chiiWhite"
+      fontSize="2xl"
+      textShadow="0px 1px 2px rgba(0,0,0,0.1)"
+      mr={mr ? 1 : 0}
+      ml={ml ? 1 : 0}
+    >
+      ～
+    </Text>
   );
 }
 
