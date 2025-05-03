@@ -20,6 +20,11 @@ export class UsersApi {
   async toggleUserFavs(request: ToggleUserFavsRequest, token: string): Promise<void> {
     return this.apiClient.post(`${this.endpoint}/toggle-user-favs`, request, token);
   }
+
+  /** ユーザを削除する */
+  async deleteUser(token: string): Promise<void> {
+    return this.apiClient.delete(`${this.endpoint}`, token);
+  }
 }
 
 export const usersApi = new UsersApi();

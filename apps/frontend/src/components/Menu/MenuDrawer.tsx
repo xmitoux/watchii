@@ -6,10 +6,12 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
-import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
+import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdNoAccounts, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
+import { usersApi } from '@/features/Signup/api/users-api';
+import { useSessionToken } from '@/hooks/useSessionToken';
 import { useFavsStore } from '@/stores/favsStore';
 import { useNavigationStore } from '@/stores/navigationStore';
 
@@ -51,13 +53,7 @@ export function MenuDrawer() {
         throw error;
       }
 
-      // ログアウト後にブラウザバックで画面操作ができてしまう問題の対応
-      window.history.replaceState(null, '', '/welcome');
-      for (let i = 0; i < 10; i++) {
-        // 履歴を追加して戻れないようにする
-        window.history.pushState(null, '', '/welcome');
-      }
-      window.location.reload();
+      gotoWelcomePage();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
@@ -68,7 +64,40 @@ export function MenuDrawer() {
         duration: 3000,
       });
     }
-    finally {
+  }
+
+  function gotoWelcomePage() {
+    // ログアウト後にブラウザバックで画面操作ができてしまう問題の対応
+    window.history.replaceState(null, '', '/welcome');
+    for (let i = 0; i < 10; i++) {
+      // 履歴を追加して戻れないようにする
+      window.history.pushState(null, '', '/welcome');
+    }
+    window.location.reload();
+  }
+
+  const { getSessionToken } = useSessionToken();
+
+  async function handleUserDelete() {
+    try {
+      const token = await getSessionToken();
+      if (!token) {
+        return;
+      }
+
+      // ユーザ削除API
+      await usersApi.deleteUser(token);
+
+      gotoWelcomePage();
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      toaster.create({
+        title: '退会に失敗しました😢',
+        description: error.message || 'もう一度試してみてね',
+        type: 'error',
+        duration: 3000,
+      });
     }
   }
 
@@ -127,6 +156,13 @@ export function MenuDrawer() {
                   label="ログアウト"
                   labelColor="red.400"
                   onClick={handleLogout}
+                />
+
+                <MenuButton
+                  icon={<MdNoAccounts />}
+                  label="退会する"
+                  labelColor="red.400"
+                  onClick={handleUserDelete}
                 />
               </Drawer.Footer>
 

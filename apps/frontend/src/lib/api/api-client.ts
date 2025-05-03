@@ -134,15 +134,23 @@ export class ApiRoutesClient {
   }
 
   // DELETEリクエスト🗑️
-  async delete<T>(endpoint: string): Promise<T> {
+  async delete<T>(endpoint: string, token?: string): Promise<T> {
     try {
       const apiUrl = this.getApiRoutesUrl(endpoint);
+
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const response = await fetch(apiUrl, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
       });
+
       return this.handleResponse<T>(response);
     }
     catch (error) {
