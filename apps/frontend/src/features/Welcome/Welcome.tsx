@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import NextImage from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Box, Button, ButtonProps, Flex, Text } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
@@ -16,6 +16,18 @@ export default function Welcome() {
     // 強制的にライトモードに設定
     setColorMode('light');
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // アニメーションの状態管理
+  const [animationState, setAnimationState] = useState('initial');
+
+  // 最初のアニメーション後にfloatアニメーションを開始
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimationState('float');
+    }, 2000); // 2秒後にfloatアニメーションを開始
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -80,7 +92,11 @@ export default function Welcome() {
       >
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1, transition: { delay: 0.8, duration: 0.7, type: 'spring', stiffness: 100 } }}
+          animate={
+            animationState === 'initial'
+              ? { scale: 1, opacity: 1, transition: { delay: 0.6, duration: 0.7, type: 'spring', stiffness: 100 } }
+              : { scale: [1, 1.05, 1], opacity: 1, transition: { duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } }
+          }
           style={{
             width: '100%',
             height: '100%',
