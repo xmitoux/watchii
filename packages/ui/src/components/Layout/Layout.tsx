@@ -26,7 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({
   actionButton,
   canBack,
   noFooter,
-  color = 'hachiBlue',
+  color = 'hachiwareBlue',
   scrollRef,
   onNavigationClick,
   onNavigationBack,

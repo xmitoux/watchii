@@ -95,7 +95,7 @@ export default function SignupConfirmCompleted() {
         h="calc(30vh + 4px)"
         bgGradient="to-b"
         gradientFrom="#ACE0EE"
-        gradientTo="hachiBlue.light"
+        gradientTo="hachiwareBlue.light"
       >
         <motion.div
           initial={{ y: 20, opacity: 0 }}

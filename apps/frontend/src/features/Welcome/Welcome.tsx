@@ -112,7 +112,7 @@ export default function Welcome() {
         pb={12}
         bgGradient="to-b"
         gradientFrom="#ACE0EE"
-        gradientTo="hachiBlue.light"
+        gradientTo="hachiwareBlue.light"
       >
         <motion.div
           initial={{ y: 20, opacity: 0 }}

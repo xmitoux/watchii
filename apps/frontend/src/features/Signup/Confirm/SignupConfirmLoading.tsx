@@ -52,7 +52,7 @@ export default function SignupConfirmLoading() {
                 w={`${dotSize}px`}
                 h={`${dotSize}px`}
                 borderRadius="full"
-                bg={i % 2 === 0 ? 'hachiBlue.light' : 'hachiwareBlue'}
+                bg={i % 2 === 0 ? 'hachiwareBlue.light' : 'hachiwareBlue'}
                 boxShadow="0px 2px 4px rgba(0,0,0,0.1)"
               />
             </motion.div>

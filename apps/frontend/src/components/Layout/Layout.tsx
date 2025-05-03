@@ -18,22 +18,22 @@ const navigationItems: NavigationItem[] = [
     path: '/home/page/1',
     rootPath: '/home',
     name: 'ホーム',
-    activeIcon: '/images/icons/home-active.png',
-    inactiveIcon: '/images/icons/home-inactive.png',
+    activeIcon: '/images/footer-icons/home-active.png',
+    inactiveIcon: '/images/footer-icons/home-inactive.png',
   },
   {
     path: '/episodes/categories',
     rootPath: '/episodes',
     name: 'エピソード',
-    activeIcon: '/images/icons/episodes-active.png',
-    inactiveIcon: '/images/icons/episodes-inactive.png',
+    activeIcon: '/images/footer-icons/episodes-active.png',
+    inactiveIcon: '/images/footer-icons/episodes-inactive.png',
   },
   {
     path: '/tags',
     rootPath: '/tags',
     name: 'タグ',
-    activeIcon: '/images/icons/tags-active.png',
-    inactiveIcon: '/images/icons/tags-inactive.png',
+    activeIcon: '/images/footer-icons/tags-active.png',
+    inactiveIcon: '/images/footer-icons/tags-inactive.png',
   },
 ];
 
