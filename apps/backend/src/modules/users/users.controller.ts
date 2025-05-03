@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Logger, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Logger, Post, Query } from '@nestjs/common';
 
 import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
 import { UsersService } from './users.service';
@@ -42,5 +42,12 @@ export class UsersController {
     this.logger.log('%o', dto);
 
     return this.usersService.registerUser(dto);
+  }
+
+  @Delete()
+  async deleteUser(@Headers('authorization') token: string) {
+    this.logger.log('deleteUser');
+
+    return this.usersService.deleteUser(token);
   }
 }

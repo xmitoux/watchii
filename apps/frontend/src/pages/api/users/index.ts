@@ -14,6 +14,12 @@ export default async function handler(
       const data = await callExternalApi(endpoint, 'POST', req.body);
       return res.status(201).json({ success: true, data });
     }
+    // DELETEリクエスト - ユーザ削除🗑  ️
+    else if (req.method === 'DELETE') {
+      const token = req.headers.authorization;
+      await callExternalApi(endpoint, 'DELETE', null, token);
+      return res.status(200).json({ success: true });
+    }
 
     // サポートしてないメソッド🚫
     else {

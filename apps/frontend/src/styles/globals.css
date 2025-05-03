@@ -9,3 +9,8 @@
 .no-scrollbar {
   scrollbar-width: none;
 }
+
+/* スマホでinput欄のズームが発生しないようにする */
+input {
+  font-size: 16px;
+}

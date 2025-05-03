@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PaginationParams } from '@/common/dto/PaginationParams';
 import { PrismaService } from '@/common/services/prisma.service';
+import { SupabaseAdminService } from '@/common/services/supabase-admin.service';
 import { SupabaseService } from '@/common/services/supabase.service';
 
 import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
@@ -12,6 +13,7 @@ export class UsersService {
   constructor(
     private prisma: PrismaService,
     private supabase: SupabaseService,
+    private supabaseAdmin: SupabaseAdminService,
   ) { }
 
   private readonly logger = new Logger(UsersService.name);
@@ -136,6 +138,33 @@ export class UsersService {
     }
     catch (error) {
       this.logger.error('ユーザー登録に失敗しました😣');
+      throw error;
+    }
+  }
+
+  async deleteUser(token: string): Promise<void> {
+    try {
+      // トークン検証してユーザー取得
+      const user = await this.supabase.getUser(token);
+
+      if (!user) {
+        throw new Error('ユーザー取得に失敗しました😨');
+      }
+
+      // usersテーブルからユーザーを削除（user_favsはcascadeで削除）
+      await this.prisma.user.delete({
+        where: {
+          id: user.id,
+        },
+      });
+
+      // Supabaseからユーザーを削除
+      await this.supabaseAdmin.deleteUser(user.id);
+
+      this.logger.log('ユーザーの退会処理が完了しました。');
+    }
+    catch (error) {
+      this.logger.error('ユーザーの退会処理に失敗しました😣');
       throw error;
     }
   }

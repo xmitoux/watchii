@@ -1,12 +1,25 @@
 import { motion } from 'motion/react';
 import NextImage from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { Box, Flex, Text } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 
 /** ユーザ登録確認完了コンポーネント */
 export default function SignupConfirmCompleted() {
+  // アニメーションの状態管理
+  const [animationState, setAnimationState] = useState('initial');
+
+  // 最初のアニメーション後にfloatアニメーションを開始
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimationState('float');
+    }, 2000); // 2秒後にfloatアニメーションを開始
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     // 登録完了表示
     <Flex direction="column" align="center" justify="center">
@@ -65,7 +78,11 @@ export default function SignupConfirmCompleted() {
       >
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1, transition: { delay: 0.6, duration: 0.7, type: 'spring', stiffness: 100 } }}
+          animate={
+            animationState === 'initial'
+              ? { scale: 1, opacity: 1, transition: { delay: 0.6, duration: 0.7, type: 'spring', stiffness: 100 } }
+              : { scale: [1, 1.05, 1], opacity: 1, transition: { duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } }
+          }
           style={{
             width: '100%',
             height: '100%',
@@ -95,7 +112,7 @@ export default function SignupConfirmCompleted() {
         h="calc(30vh + 4px)"
         bgGradient="to-b"
         gradientFrom="#ACE0EE"
-        gradientTo="hachiBlue.light"
+        gradientTo="hachiwareBlue.light"
       >
         <motion.div
           initial={{ y: 20, opacity: 0 }}

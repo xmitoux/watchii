@@ -1,1 +1,5 @@
-
+/* スマホでinput欄のズームが発生しないようにする */
+input,
+select {
+  font-size: 16px;
+}
