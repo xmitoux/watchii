@@ -2,13 +2,13 @@ import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
+import MessageWithImage from '@/components/MessageWithImage';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
 import { useLayoutScroll } from '@/hooks/useLayoutScroll';
 import { useNavigationRestore } from '@/hooks/useNavigationRestore';
 import { useFavsStore } from '@/stores/favsStore';
 
-import NoFavs from './components/NoFavs';
 import { FavsProps } from './types/favs-types';
 
 export default function Favs({ posts, total, currentPage, perPage }: FavsProps) {
@@ -42,7 +42,13 @@ export default function Favs({ posts, total, currentPage, perPage }: FavsProps) 
       onNavigationBack={handleBack}
     >
       {total === 0
-        ? <NoFavs />
+        ? (
+          <MessageWithImage
+            title="お気に入りがないよ！"
+            messages="漫画詳細から追加してみよう！"
+            imageSrc="/images/no-favs.webp"
+          />
+        )
         : (
           <>
             {/* post一覧 */}

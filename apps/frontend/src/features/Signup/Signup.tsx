@@ -1,19 +1,7 @@
 import { motion } from 'motion/react';
-import NextImage from 'next/image';
 import React, { useState } from 'react';
 
-import {
-  Center,
-  Field,
-  Fieldset,
-  Flex,
-  Icon,
-  Image,
-  Input,
-  Stack,
-  Text,
-  VStack,
-} from '@repo/ui/chakra-ui';
+import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
 import { toaster } from '@repo/ui/chakra-ui/toaster';
@@ -21,6 +9,7 @@ import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
+import MessageWithImage from '@/components/MessageWithImage';
 import PrefetchImage from '@/components/PrefetchImage';
 
 export default function Signup() {
@@ -73,29 +62,11 @@ export default function Signup() {
               animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } }}
               exit={{ opacity: 0, transition: { duration: 0.3 } }}
             >
-              <Flex direction="column" justify="center" align="center" minH="75vh">
-                <VStack maxW="600px" textAlign="center" color="blackPrimary" fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-                  <Text fontSize={{ base: 'xl', md: '2xl' }}>
-                    登録確認用のメールを送信しました！
-                  </Text>
-                  <Text>
-                    メール内のリンクをクリックして
-                    <br />
-                    登録を完了してください！
-                  </Text>
-
-                  <Image asChild alt="">
-                    <NextImage
-                      src="/images/signup-mail-sent.webp"
-                      width={1000}
-                      height={0}
-                      style={{ width: '500px', height: 'auto' }}
-                      priority
-                      alt="登録確認用のメールを送信しました！"
-                    />
-                  </Image>
-                </VStack>
-              </Flex>
+              <MessageWithImage
+                title="登録確認用のメールを送信しました！"
+                messages={['メール内のリンクをクリックして', '登録を完了してください！']}
+                imageSrc="/images/signup-mail-sent.webp"
+              />
             </motion.div>
           )
           : (
