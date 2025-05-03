@@ -51,8 +51,13 @@ export function MenuDrawer() {
         throw error;
       }
 
-      // ランディングページにリダイレクト
-      router.push('/welcome');
+      // ログアウト後にブラウザバックで画面操作ができてしまう問題の対応
+      window.history.replaceState(null, '', '/welcome');
+      for (let i = 0; i < 10; i++) {
+        // 履歴を追加して戻れないようにする
+        window.history.pushState(null, '', '/welcome');
+      }
+      window.location.reload();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
