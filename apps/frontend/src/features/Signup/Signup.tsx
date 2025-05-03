@@ -4,16 +4,17 @@ import React, { useState } from 'react';
 import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
-import { toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 import MessageWithImage from '@/components/MessageWithImage';
 import PrefetchImage from '@/components/PrefetchImage';
+import { useToast } from '@/hooks/useToast';
 
 export default function Signup() {
   const supabase = createClient();
+  const { showErrorToast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,11 +40,9 @@ export default function Signup() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
-      toaster.create({
-        title: '登録に失敗しました😢',
-        description: error.message || 'もう一度試してみてね',
-        type: 'error',
-        duration: 3000,
+      showErrorToast({
+        message: '登録に失敗しました😢',
+        errorMessage: error.message,
       });
     }
     finally {

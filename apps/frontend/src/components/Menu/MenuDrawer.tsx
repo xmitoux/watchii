@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { CloseButton, Dialog, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
-import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
 import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdNoAccounts, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
 import { usersApi } from '@/features/Signup/api/users-api';
 import { useSessionToken } from '@/hooks/useSessionToken';
+import { useToast } from '@/hooks/useToast';
 import { useFavsStore } from '@/stores/favsStore';
 import { useNavigationStore } from '@/stores/navigationStore';
 
@@ -21,6 +21,7 @@ const favsPath = '/favs/page/1';
 export function MenuDrawer() {
   const router = useRouter();
   const supabase = createClient();
+  const { showErrorToast } = useToast();
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -57,11 +58,9 @@ export function MenuDrawer() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
-      toaster.create({
-        title: 'ログアウトに失敗しました😢',
-        description: error.message || 'もう一度試してみてね',
-        type: 'error',
-        duration: 3000,
+      showErrorToast({
+        message: 'ログアウトに失敗しました😢',
+        errorMessage: error.message,
       });
     }
   }
@@ -98,11 +97,9 @@ export function MenuDrawer() {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
-      toaster.create({
-        title: '退会に失敗しました😢',
-        description: error.message || 'もう一度試してみてね',
-        type: 'error',
-        duration: 3000,
+      showErrorToast({
+        message: '退会に失敗しました😢',
+        errorMessage: error.message,
       });
     }
     finally {
@@ -182,8 +179,6 @@ export function MenuDrawer() {
           </Drawer.Positioner>
         </Portal>
       </Drawer.Root>
-
-      <Toaster />
 
       {/* 退会確認ダイアログ */}
       <UserDeleteConfirmDialog
