@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -63,7 +63,7 @@ export default function SignupConfirm() {
   }
 
   return (
-    <AnimatePresence mode="wait">
+    <>
       {isCompleted ? (
         // 登録完了表示
         <motion.div
@@ -126,6 +126,6 @@ export default function SignupConfirm() {
 
       {/* 登録完了画像プリフェッチ用の隠し要素 */}
       <PrefetchImage src="/images/user-registration-completed.webp" width={1000} />
-    </AnimatePresence>
+    </>
   );
 }
