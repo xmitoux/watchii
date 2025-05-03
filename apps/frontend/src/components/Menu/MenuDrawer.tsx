@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
+import { CloseButton, Dialog, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Toaster, toaster } from '@repo/ui/chakra-ui/toaster';
@@ -53,7 +53,7 @@ export function MenuDrawer() {
         throw error;
       }
 
-      gotoWelcomePage();
+      gotoLogoutedPage('/welcome');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
@@ -66,19 +66,25 @@ export function MenuDrawer() {
     }
   }
 
-  function gotoWelcomePage() {
+  /** ログアウト後に表示するページへの移動 */
+  function gotoLogoutedPage(destination: string) {
     // ログアウト後にブラウザバックで画面操作ができてしまう問題の対応
-    window.history.replaceState(null, '', '/welcome');
+    window.history.replaceState(null, '', destination);
     for (let i = 0; i < 10; i++) {
       // 履歴を追加して戻れないようにする
-      window.history.pushState(null, '', '/welcome');
+      window.history.pushState(null, '', destination);
     }
     window.location.reload();
   }
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const { getSessionToken } = useSessionToken();
+  const [loadingUserDelete, setLoadingUserDelete] = useState(false);
 
   async function handleUserDelete() {
+    setLoadingUserDelete(true);
+
     try {
       const token = await getSessionToken();
       if (!token) {
@@ -88,7 +94,7 @@ export function MenuDrawer() {
       // ユーザ削除API
       await usersApi.deleteUser(token);
 
-      gotoWelcomePage();
+      gotoLogoutedPage('/goodbye');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
@@ -98,6 +104,9 @@ export function MenuDrawer() {
         type: 'error',
         duration: 3000,
       });
+    }
+    finally {
+      setLoadingUserDelete(false);
     }
   }
 
@@ -162,12 +171,12 @@ export function MenuDrawer() {
                   icon={<MdNoAccounts />}
                   label="退会する"
                   labelColor="red.400"
-                  onClick={handleUserDelete}
+                  onClick={() => setShowDeleteDialog(true)}
                 />
               </Drawer.Footer>
 
               <Drawer.CloseTrigger asChild>
-                <CloseButton size="sm" />
+                <CloseButton size="md" />
               </Drawer.CloseTrigger>
             </Drawer.Content>
           </Drawer.Positioner>
@@ -175,6 +184,14 @@ export function MenuDrawer() {
       </Drawer.Root>
 
       <Toaster />
+
+      {/* 退会確認ダイアログ */}
+      <UserDeleteConfirmDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        loading={loadingUserDelete}
+        onDelete={handleUserDelete}
+      />
     </>
   );
 }
@@ -201,5 +218,53 @@ function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
         )
         : label}
     </Button>
+  );
+}
+
+/** 退会確認ダイアログのProps */
+type UserDeleteConfirmDialogProps = {
+  open: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  loading: boolean;
+  onDelete: () => void;
+};
+
+/** 退会確認ダイアログ */
+function UserDeleteConfirmDialog({ open, onOpenChange, loading, onDelete }: UserDeleteConfirmDialogProps) {
+  return (
+    <Dialog.Root
+      open={open}
+      size="xs"
+      placement="center"
+      closeOnEscape={false}
+      closeOnInteractOutside={false}
+      onOpenChange={(e) => onOpenChange(e.open)}
+    >
+      <Portal>
+        <Dialog.Backdrop />
+
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title fontSize="xl">退会確認</Dialog.Title>
+            </Dialog.Header>
+
+            <Dialog.Body fontSize="md">やめちゃう…ってコト！？</Dialog.Body>
+
+            <Dialog.Footer>
+              <Dialog.ActionTrigger asChild>
+                <Button variant="outline" width="100px" disabled={loading}>キャンセル</Button>
+              </Dialog.ActionTrigger>
+
+              <Button width="100px" colorPalette="red" loading={loading} onClick={onDelete}>退会する</Button>
+            </Dialog.Footer>
+
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="md" disabled={loading} />
+            </Dialog.CloseTrigger>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 }
