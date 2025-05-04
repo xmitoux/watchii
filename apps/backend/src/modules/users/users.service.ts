@@ -26,7 +26,7 @@ export class UsersService {
       throw new Error('ユーザ取得に失敗しました😨');
     }
 
-    const { limit = 12, offset = 0, sort = 'asc' } = query;
+    const { limit = 12, offset = 0, sort = 'desc' } = query;
 
     // 全体の件数を取得
     const total = await this.prisma.userFav.count({

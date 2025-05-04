@@ -1,15 +1,17 @@
+// pages/signup.tsx
 import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
 import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
-import { MdLock, MdMail } from '@repo/ui/icons';
+import { MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 import MessageWithImage from '@/components/MessageWithImage';
+import { PasswordFields } from '@/components/PasswordFields';
 import PrefetchImage from '@/components/PrefetchImage';
+import { usePasswordValidation } from '@/hooks/usePasswordValidation';
 import { useToast } from '@/hooks/useToast';
 
 export default function Signup() {
@@ -17,10 +19,27 @@ export default function Signup() {
   const { showErrorToast } = useToast();
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
+
+  // パスワードバリデーションフックを使用
+  const {
+    password,
+    confirmPassword,
+    passwordTouched,
+    confirmTouched,
+    isValidFormat,
+    isLongEnough,
+    passwordsMatch,
+    handlePasswordChange,
+    handleConfirmChange,
+    handlePasswordBlur,
+    handleConfirmBlur,
+    isFormValid: isPasswordValid,
+  } = usePasswordValidation();
+
+  // フォーム全体の有効性
+  const isFormValid = email !== '' && isPasswordValid;
 
   /** サインアップ処理 */
   async function handleSignup(e: React.FormEvent) {
@@ -28,6 +47,22 @@ export default function Signup() {
 
     try {
       setLoading(true);
+
+      if (email === '') {
+        throw new Error('メールアドレスを入力してください');
+      }
+
+      if (password.length < 8) {
+        throw new Error('パスワードは8文字以上で入力してください');
+      }
+
+      if (!isValidFormat) {
+        throw new Error('パスワードは半角英数字記号のみで入力してください');
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error('パスワードと確認用パスワードが一致しません');
+      }
 
       // Supabaseでサインアップ処理
       const { error } = await supabase.auth.signUp({ email, password });
@@ -97,25 +132,27 @@ export default function Signup() {
                       />
                     </Field.Root>
 
-                    <Field.Root required>
-                      <Field.Label>
-                        <Icon><MdLock /></Icon>
-                        パスワード
-                        <Field.RequiredIndicator />
-                      </Field.Label>
-
-                      <PasswordInput
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </Field.Root>
+                    {/* 共通パスワードフィールドコンポーネントを使用 */}
+                    <PasswordFields
+                      password={password}
+                      confirmPassword={confirmPassword}
+                      passwordTouched={passwordTouched}
+                      confirmTouched={confirmTouched}
+                      isValidFormat={isValidFormat}
+                      isLongEnough={isLongEnough}
+                      passwordsMatch={passwordsMatch}
+                      handlePasswordChange={handlePasswordChange}
+                      handleConfirmChange={handleConfirmChange}
+                      handlePasswordBlur={handlePasswordBlur}
+                      handleConfirmBlur={handleConfirmBlur}
+                    />
                   </Fieldset.Content>
 
                   <Button
                     color="chiiWhite"
                     bg="hachiBlue"
                     type="submit"
-                    disabled={email === '' || password === ''}
+                    disabled={!isFormValid}
                     loading={loading}
                   >
                     登録
