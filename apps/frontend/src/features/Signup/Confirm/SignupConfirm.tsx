@@ -2,16 +2,16 @@ import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Center, Flex, Text, VStack } from '@repo/ui/chakra-ui';
+import { Center, Text, VStack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
+import LoadingScreen from '@/components/LoadingScreen';
 import PrefetchImage from '@/components/PrefetchImage';
 import { usersApi } from '@/features/Signup/api/users-api';
 
 import SignupConfirmCompleted from './SignupConfirmCompleted';
-import SignupConfirmLoading from './SignupConfirmLoading';
 
 export default function SignupConfirm() {
   const router = useRouter();
@@ -101,23 +101,7 @@ export default function SignupConfirm() {
                 </motion.div>
               ) : (
                 // 登録中表示
-                <Flex direction="column" justify="center" align="center" minH="80vh">
-                  <VStack maxW="600px" textAlign="center">
-                    <motion.div
-                      animate={{
-                        opacity: [0.8, 1, 0.8],
-                        transition: { duration: 2, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' },
-                      }}
-                    >
-                      <Text color="blackPrimary" fontSize={['2xl', '3xl']} fontWeight="bold">
-                        登録を確認しています
-                      </Text>
-                    </motion.div>
-
-                    {/* 確認ローディングアニメーション */}
-                    <SignupConfirmLoading />
-                  </VStack>
-                </Flex>
+                <LoadingScreen message="登録を確認しています" />
               )}
             </Center>
           </Layout>

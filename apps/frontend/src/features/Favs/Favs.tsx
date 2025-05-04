@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout/Layout';
 import PostPageShuttle from '@/components/Layout/PostPageShuttle/PostPageShuttle';
+import LoadingScreen from '@/components/LoadingScreen';
 import MessageWithImage from '@/components/MessageWithImage';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { PostGallery } from '@/components/PostGallery/PostGallery';
@@ -52,15 +53,9 @@ export default function Favs({ currentPage, perPage }: FavsProps) {
       onNavigationBack={handleBack}
     >
       {isFavLoading
-        ? <div>Loading...</div>
+        ? <LoadingScreen />
         : total === 0
-          ? (
-            <MessageWithImage
-              title="お気に入りがないよ"
-              messages="漫画詳細から追加してみよう！"
-              imageSrc="/images/no-favs.webp"
-            />
-          )
+          ? <MessageWithImage title="お気に入りがないよ" messages="漫画詳細から追加してみよう！" imageSrc="/images/no-favs.webp" />
           : (
             <>
               {/* post一覧 */}
