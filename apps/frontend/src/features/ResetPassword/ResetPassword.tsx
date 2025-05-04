@@ -1,26 +1,44 @@
+// pages/password-reset.tsx
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Center, Field, Fieldset, Flex, Icon, Stack } from '@repo/ui/chakra-ui';
+import { Center, Fieldset, Flex, Stack } from '@repo/ui/chakra-ui';
 import { Button } from '@repo/ui/chakra-ui/button';
-import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
-import { MdLock } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 import MessageWithImage from '@/components/MessageWithImage';
+import { PasswordFields } from '@/components/PasswordFields';
 import PrefetchImage from '@/components/PrefetchImage';
+import { usePasswordValidation } from '@/hooks/usePasswordValidation';
 import { useToast } from '@/hooks/useToast';
 
 const supabase = createClient();
 
-export default function Login() {
+export default function PasswordReset() {
   const router = useRouter();
   const { showErrorToast } = useToast();
-
   const [canReset, setCanReset] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resetPasswordSuccess, setResetPasswordSuccess] = useState(false);
+
+  // パスワードバリデーションフックを使用
+  const {
+    password,
+    confirmPassword,
+    passwordTouched,
+    confirmTouched,
+    isValidFormat,
+    isLongEnough,
+    passwordsMatch,
+    handlePasswordChange,
+    handleConfirmChange,
+    handlePasswordBlur,
+    handleConfirmBlur,
+    isFormValid,
+  } = usePasswordValidation({ minLength: 8 });
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -47,16 +65,28 @@ export default function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [resetPasswordSuccess, setResetPasswordSuccess] = useState(false);
-
   /** パスワードリセット処理 */
   async function handleResetPassword(e: React.FormEvent) {
     e.preventDefault();
 
     try {
       setLoading(true);
+
+      if (!isFormValid) {
+        throw new Error('入力内容を確認してください');
+      }
+
+      if (password.length < 8) {
+        throw new Error('パスワードは8文字以上で入力してください');
+      }
+
+      if (!isValidFormat) {
+        throw new Error('パスワードは半角英数字記号のみで入力してください');
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error('パスワードと確認用パスワードが一致しません');
+      }
 
       const { error } = await supabase.auth.updateUser({ password });
       if (error) {
@@ -133,26 +163,31 @@ export default function Login() {
                     <Fieldset.Root size="lg">
                       <Stack>
                         <Fieldset.Legend>パスワードリセット</Fieldset.Legend>
-                        <Fieldset.HelperText>パスワードを入力してください</Fieldset.HelperText>
+                        <Fieldset.HelperText>新しいパスワードを入力してください</Fieldset.HelperText>
                       </Stack>
 
                       <Fieldset.Content>
-                        <Field.Root required>
-                          <Field.Label>
-                            <Icon><MdLock /></Icon>
-                            パスワード
-                            <Field.RequiredIndicator />
-                          </Field.Label>
-
-                          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
-                        </Field.Root>
+                        {/* 共通パスワードフィールドコンポーネントを使用 */}
+                        <PasswordFields
+                          password={password}
+                          confirmPassword={confirmPassword}
+                          passwordTouched={passwordTouched}
+                          confirmTouched={confirmTouched}
+                          isValidFormat={isValidFormat}
+                          isLongEnough={isLongEnough}
+                          passwordsMatch={passwordsMatch}
+                          handlePasswordChange={handlePasswordChange}
+                          handleConfirmChange={handleConfirmChange}
+                          handlePasswordBlur={handlePasswordBlur}
+                          handleConfirmBlur={handleConfirmBlur}
+                        />
                       </Fieldset.Content>
 
                       <Button
                         color="chiiWhite"
                         bg="hachiBlue"
                         type="submit"
-                        disabled={password === ''}
+                        disabled={!isFormValid}
                         loading={loading}
                       >
                         リセットする
@@ -160,7 +195,6 @@ export default function Login() {
                     </Fieldset.Root>
                   </form>
                 </motion.div>
-
               )}
           </Center>
 
