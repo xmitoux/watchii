@@ -8,6 +8,7 @@ const options: SupabaseSessionMiddlewareOptions = {
     '/signup',
     '/welcome',
     '/goodbye',
+    '/reset-password',
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/welcome',

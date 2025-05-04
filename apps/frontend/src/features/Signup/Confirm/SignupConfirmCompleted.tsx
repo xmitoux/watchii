@@ -136,7 +136,12 @@ export default function SignupConfirmCompleted() {
             transition="all 0.2s"
             asChild
           >
-            <Link href="/home/page/1">はじめる！</Link>
+            {/*
+              ホーム画面にリダイレクト
+              (/home/page/1 には行かないよう注意！)
+              (本番環境だとなぜか固まる)
+            */}
+            <Link href="/home">はじめる！</Link>
           </Button>
         </motion.div>
       </Box>
