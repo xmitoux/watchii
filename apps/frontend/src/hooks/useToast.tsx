@@ -20,7 +20,7 @@ export const useToast = () => {
 
   /** エラーメッセージトーストを表示する */
   const showErrorToast = useCallback(
-    ({ message, errorMessage }: { message: string; errorMessage: string }) => {
+    ({ message, errorMessage }: { message: string; errorMessage?: string }) => {
       setTimeout(() => {
         toaster.create({
           title: message,
