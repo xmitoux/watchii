@@ -14,3 +14,7 @@ export type GetUserFavsResponse = {
   posts: PostEntity[];
   total: number;
 };
+
+export type SignInWithOAuthResponseEntity = {
+  userExists: boolean;
+};

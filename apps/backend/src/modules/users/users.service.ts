@@ -5,8 +5,8 @@ import { PrismaService } from '@/common/services/prisma.service';
 import { SupabaseAdminService } from '@/common/services/supabase-admin.service';
 import { SupabaseService } from '@/common/services/supabase.service';
 
-import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
-import { GetUserFavsResponse, RegisterUserResponseEntity } from './entity/users.entity';
+import { RegisterUserRequestDto, SignInWithOAuthRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
+import { GetUserFavsResponse, RegisterUserResponseEntity, SignInWithOAuthResponseEntity } from './entity/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -138,6 +138,56 @@ export class UsersService {
     }
     catch (error) {
       this.logger.error('ユーザー登録に失敗しました😣');
+      throw error;
+    }
+  }
+
+  /**
+   * OAuthサインイン処理
+   * @param dto - OAuthサインインリクエストDTO
+   * @returns - userExists: boolean (サインイン結果) true:ユーザ登録済み, false:新規登録
+   */
+  async signInWithOAuth(dto: SignInWithOAuthRequestDto): Promise<SignInWithOAuthResponseEntity> {
+    try {
+      // トークン検証してユーザー取得
+      const user = await this.supabase.getUser(dto.token);
+
+      if (!user) {
+        throw new Error('ユーザ取得に失敗しました😱');
+      }
+
+      // usersテーブルに登録済みかチェック
+      const existingUser = await this.prisma.user.findUnique({
+        where: {
+          id: user.id,
+        },
+      });
+
+      if (existingUser) {
+        this.logger.log('既存のユーザのため登録をスキップします⏩️');
+        return {
+          userExists: true,
+        };
+      }
+      else {
+        // usersテーブルに登録
+        await this.prisma.user.create({
+          data: {
+            id: user.id,
+            email: user.email!,
+            userType: 2, // 一般ユーザー
+          },
+        });
+
+        this.logger.log('初回ログインユーザの登録(OAuth)が完了しました。');
+
+        return {
+          userExists: false,
+        };
+      }
+    }
+    catch (error) {
+      this.logger.error('OAuthサインインに失敗しました😣');
       throw error;
     }
   }

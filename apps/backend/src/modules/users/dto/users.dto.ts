@@ -6,3 +6,7 @@ export type RegisterUserRequestDto = {
 export type ToggleUserFavsRequestDto = {
   postId: number;
 };
+
+export type SignInWithOAuthRequestDto = {
+  token: string;
+};

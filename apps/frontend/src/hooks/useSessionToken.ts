@@ -9,7 +9,21 @@ export function useSessionToken() {
     return data.session?.access_token;
   };
 
+  // セッショントークンとリフレッシュトークンを取得
+  const getSessionTokenData = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      return null;
+    }
+
+    return {
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    };
+  };
+
   return {
     getSessionToken,
+    getSessionTokenData,
   };
 }

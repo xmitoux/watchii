@@ -9,6 +9,7 @@ const options: SupabaseSessionMiddlewareOptions = {
     '/welcome',
     '/goodbye',
     '/reset-password',
+    '/login-with-oauth',
     // 他にも認証不要のパスがあれば追加
   ],
   redirectUrl: '/welcome',
