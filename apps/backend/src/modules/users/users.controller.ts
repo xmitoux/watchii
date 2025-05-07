@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Headers, Logger, Post, Query } from '@nestjs/common';
 
-import { RegisterUserRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
+import { RegisterUserRequestDto, SignInWithOAuthRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
 @Controller('/api/users')
@@ -42,6 +42,14 @@ export class UsersController {
     this.logger.log('%o', dto);
 
     return this.usersService.registerUser(dto);
+  }
+
+  @Post('/sign-in-with-oauth')
+  async signInWithOAuth(@Body() dto: SignInWithOAuthRequestDto) {
+    this.logger.log('signInWithOAuth');
+    this.logger.log('%o', dto);
+
+    return this.usersService.signInWithOAuth(dto);
   }
 
   @Delete()

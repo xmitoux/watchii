@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { Button, Flex, Text } from '@repo/ui/chakra-ui';
+import { Box, Button, Flex, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
 import { Login as BaseLogin } from '@repo/ui/components';
-import { MdArrowBack, MdMail } from '@repo/ui/icons';
+import { IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
@@ -42,6 +42,37 @@ export default function Login() {
     }
     finally {
       setLoading(false);
+    }
+  }
+
+  const [isGitHubLoginLoading, setGitHubLoginLoading] = useState(false);
+
+  /** GitHubでログイン */
+  async function handleGitHubLogin() {
+    try {
+      // signin処理が終わってもリダイレクトに時間がかかるのでずっとtrueにしておく
+      // ただし、エラーが発生した場合はfalseにする
+      setGitHubLoginLoading(true);
+
+      // Supabaseでログイン処理
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/login-with-oauth`,
+        },
+      });
+      if (error) {
+        throw error;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: 'ログインに失敗しました😢',
+        errorMessage: error.message || 'もう一度試してみてね',
+      });
+
+      setGitHubLoginLoading(false);
     }
   }
 
@@ -102,6 +133,21 @@ export default function Login() {
               こちら
             </Text>
           </Center>
+
+          <Box mt={6} px="15vw">
+            <HStack>
+              <Separator flex="1" />
+              <Text fontSize="sm" color="blackPrimary">または</Text>
+              <Separator flex="1" />
+            </HStack>
+          </Box>
+
+          <VStack mt={6} gap={4}>
+            <Button bg="black" loading={isGitHubLoginLoading} onClick={handleGitHubLogin}>
+              <IoLogoGithub />
+              GitHubでログイン
+            </Button>
+          </VStack>
         </>
       )}
     </Layout>

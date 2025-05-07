@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api/api-client';
 
-import { GetUserFavsResponse, RegisterUserRequest, RegisterUserResponse, ToggleUserFavsRequest } from './users-api-types';
+import { GetUserFavsResponse, RegisterUserRequest, RegisterUserResponse, SignInWithOAuthRequest, SignInWithOAuthResponse, ToggleUserFavsRequest } from './users-api-types';
 
 export class UsersApi {
   private apiClient = apiClient;
@@ -9,6 +9,11 @@ export class UsersApi {
   /** ユーザ登録を行う */
   async registerUser(request: RegisterUserRequest): Promise<RegisterUserResponse> {
     return this.apiClient.post(this.endpoint, request);
+  }
+
+  /** OAuthログインを行う */
+  async signInWithOAuth(request: SignInWithOAuthRequest): Promise<SignInWithOAuthResponse> {
+    return this.apiClient.post(`${this.endpoint}/sign-in-with-oauth`, request);
   }
 
   /** ユーザのお気に入り一覧を取得する */
