@@ -1,10 +1,10 @@
 import { motion } from 'motion/react';
 import NextImage from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Box, Flex, Text } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+
+import RoundedButton from '@/components/Button/RoundedButton';
 
 /** ユーザ登録確認完了コンポーネント */
 export default function SignupConfirmCompleted() {
@@ -117,32 +117,15 @@ export default function SignupConfirmCompleted() {
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1, transition: { delay: 1, duration: 0.6 } }}
-          whileTap={{ scale: 0.97 }}
         >
-          <Button
-            variant="subtle"
-            w={['240px', '280px']}
-            h="56px"
-            fontSize="lg"
-            fontWeight="bold"
-            borderRadius="full"
-            boxShadow="0px 4px 10px rgba(0,0,0,0.15)"
-            color="chiiWhite"
-            bgColor="hachiwareBlue.dark"
-            _hover={{
-              transform: 'translateY(-4px)',
-              boxShadow: '0px 6px 12px rgba(0,0,0,0.2)',
-            }}
-            transition="all 0.2s"
-            asChild
-          >
-            {/*
-              ホーム画面にリダイレクト
-              (/home/page/1 には行かないよう注意！)
-              (本番環境だとなぜか固まる)
-            */}
-            <Link href="/home">はじめる！</Link>
-          </Button>
+          {/*
+            ホーム画面にリダイレクト
+            (/home/page/1 には行かないよう注意！)
+            (本番環境だとなぜか固まる)
+          */}
+          <RoundedButton to="/home" variant="subtle" color="chiiWhite" bg="hachiwareBlue.dark">
+            はじめる！
+          </RoundedButton>
         </motion.div>
       </Box>
     </Flex>
