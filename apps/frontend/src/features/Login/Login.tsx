@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import { Box, Button, Flex, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
@@ -10,8 +11,24 @@ import Layout from '@/components/Layout/Layout';
 import { useToast } from '@/hooks/useToast';
 
 export default function Login() {
+  const router = useRouter();
   const supabase = createClient();
   const { showCompleteToast, showErrorToast } = useToast();
+
+  useEffect(() => {
+    // PWAでのOAuthログイン用の処理
+    // (認証画面がアプリ内ブラウザで開いてしまい、元のこの画面のログイン処理が進まないため)
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN') {
+        if (!session) {
+          return;
+        }
+
+        router.push('/home');
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [isResetMode, setIsResetMode] = useState(false);
   const [email, setEmail] = useState('');
