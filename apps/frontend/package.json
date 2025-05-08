@@ -10,6 +10,7 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^15.3.2",
     "@repo/ui": "workspace:*",
     "axios": "^1.7.9",
     "motion": "^12.5.0",

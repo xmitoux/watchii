@@ -1,3 +1,4 @@
+// import withBundleAnalyzer from '@next/bundle-analyzer';
 import withPWA from 'next-pwa';
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -32,3 +33,9 @@ export default withPWA({
   skipWaiting: true, // skip waiting for service worker activation
   buildExcludes: [/dynamic-css-manifest\.json$/],
 })(nextConfig);
+
+// const bundleAnalyzer = withBundleAnalyzer({
+//   enabled: process.env.ANALYZE === 'true',
+// });
+
+// export default bundleAnalyzer(nextConfig);
