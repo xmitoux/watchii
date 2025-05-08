@@ -17,8 +17,9 @@ import { createClient } from '@repo/ui/utils';
 
 type LoginProps = {
   homeUrl?: string;
+  oAuthSigninProcessing?: boolean;
 };
-export function Login({ homeUrl = '/home' }: LoginProps) {
+export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -102,7 +103,7 @@ export function Login({ homeUrl = '/home' }: LoginProps) {
               color="chiiWhite"
               bg="hachiBlue"
               type="submit"
-              disabled={email === '' || password === ''}
+              disabled={email === '' || password === '' || oAuthSigninProcessing}
               loading={loading}
             >
               ログイン
