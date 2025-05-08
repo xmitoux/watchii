@@ -4,16 +4,24 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Flex, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
 import { Login as BaseLogin } from '@repo/ui/components';
-import { IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
+import { FcGoogle, IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
 import { useToast } from '@/hooks/useToast';
 
+// OAuthプロバイダーの型定義
+type OAuthProvider = 'github' | 'google';
+
 export default function Login() {
   const router = useRouter();
   const supabase = createClient();
   const { showCompleteToast, showErrorToast } = useToast();
+
+  const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null);
+
+  // いずれかのログイン処理が実行中かどうか
+  const isAnyLoginProcessing = oauthLoading !== null;
 
   useEffect(() => {
     // PWAでのOAuthログイン用の処理
@@ -32,13 +40,13 @@ export default function Login() {
 
   const [isResetMode, setIsResetMode] = useState(false);
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [emailSending, setEmailSending] = useState(false);
 
   async function handleResetPassword(e: React.FormEvent) {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      setEmailSending(true);
       const { error } = await supabase.auth.resetPasswordForEmail(email);
 
       if (error) {
@@ -58,22 +66,20 @@ export default function Login() {
       });
     }
     finally {
-      setLoading(false);
+      setEmailSending(false);
     }
   }
 
-  const [isGitHubLoginLoading, setGitHubLoginLoading] = useState(false);
-
-  /** GitHubでログイン */
-  async function handleGitHubLogin() {
+  /** OAuthプロバイダーでログイン */
+  async function handleOAuthLogin(provider: OAuthProvider) {
     try {
       // signin処理が終わってもリダイレクトに時間がかかるのでずっとtrueにしておく
       // ただし、エラーが発生した場合はfalseにする
-      setGitHubLoginLoading(true);
+      setOauthLoading(provider);
 
       // Supabaseでログイン処理
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
+        provider,
         options: {
           redirectTo: `${window.location.origin}/login-with-oauth`,
         },
@@ -89,7 +95,7 @@ export default function Login() {
         errorMessage: error.message || 'もう一度試してみてね',
       });
 
-      setGitHubLoginLoading(false);
+      setOauthLoading(null);
     }
   }
 
@@ -126,13 +132,20 @@ export default function Login() {
                 </Field.Root>
               </Fieldset.Content>
 
-              <Button type="submit" color="chiiWhite" bg="hachiBlue" width="100%" disabled={email === ''} loading={loading}>
+              <Button
+                type="submit"
+                color="chiiWhite"
+                bg="hachiBlue"
+                width="100%"
+                disabled={email === '' || isAnyLoginProcessing}
+                loading={emailSending}
+              >
                 メールを送信
               </Button>
             </Fieldset.Root>
           </form>
 
-          <Button variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode}>
+          <Button variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
             <MdArrowBack />
             ログイン画面に戻る
           </Button>
@@ -140,13 +153,20 @@ export default function Login() {
       ) : (
         // 通常のログインフォーム
         <>
-          <BaseLogin />
+          <BaseLogin oAuthSigninProcessing={isAnyLoginProcessing} />
 
           <Center mt={6}>
             <Text color="blackPrimary" fontSize="sm">
               パスワードを忘れた場合は
             </Text>
-            <Text color="hachiwareBlue.dark" fontSize="sm" cursor="pointer" _hover={{ textDecoration: 'underline' }} onClick={() => setIsResetMode(true)}>
+            <Text
+              color="hachiwareBlue.dark"
+              fontSize="sm"
+              cursor={isAnyLoginProcessing ? 'not-allowed' : 'pointer'}
+              opacity={isAnyLoginProcessing ? 0.5 : 1}
+              _hover={{ textDecoration: isAnyLoginProcessing ? 'none' : 'underline' }}
+              onClick={() => !isAnyLoginProcessing && setIsResetMode(true)}
+            >
               こちら
             </Text>
           </Center>
@@ -160,9 +180,27 @@ export default function Login() {
           </Box>
 
           <VStack mt={6} gap={4}>
-            <Button bg="black" loading={isGitHubLoginLoading} onClick={handleGitHubLogin}>
+            <Button
+              bg="black"
+              width="220px"
+              loading={oauthLoading === 'github'}
+              disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
+              onClick={() => handleOAuthLogin('github')}
+            >
               <IoLogoGithub />
               GitHubでログイン
+            </Button>
+
+            <Button
+              variant="surface"
+              bg="white"
+              width="220px"
+              loading={oauthLoading === 'google'}
+              onClick={() => handleOAuthLogin('google')}
+              disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
+            >
+              <FcGoogle />
+              <Text color="blackPrimary">Googleでログイン</Text>
             </Button>
           </VStack>
         </>
