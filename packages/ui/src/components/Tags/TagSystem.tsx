@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import Link from 'next/link';
 
 import { Text } from '@repo/ui/chakra-ui';
@@ -107,25 +108,27 @@ export function BaseTag({
     };
 
   return (
-    <Tag
-      size="lg"
-      variant="solid"
-      bg={tagColor.bg}
-      borderWidth="1px"
-      borderColor={tagColor.border}
-      borderRadius="full"
-      py={2}
-      px={4}
-      cursor="pointer"
-      transition="all 0.3s"
-      startElement={startElement}
-      {...darkModeStyles}
-      onClick={onClick}
-    >
-      <Text color={tagColor.text} fontSize="md">
-        {name}
-      </Text>
-    </Tag>
+    <motion.div whileTap={{ scale: 0.97 }}>
+      <Tag
+        size="lg"
+        variant="solid"
+        bg={tagColor.bg}
+        borderWidth="1px"
+        borderColor={tagColor.border}
+        borderRadius="full"
+        py={2}
+        px={4}
+        cursor="pointer"
+        transition="all 0.3s"
+        startElement={startElement}
+        {...darkModeStyles}
+        onClick={onClick}
+      >
+        <Text color={tagColor.text} fontSize="md">
+          {name}
+        </Text>
+      </Tag>
+    </motion.div>
   );
 }
 
