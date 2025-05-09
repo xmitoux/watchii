@@ -2,10 +2,14 @@ import { motion } from 'motion/react';
 
 import { Button, ButtonProps } from '@repo/ui/chakra-ui';
 
+type BasicButtonProps = {
+  tapScale?: number;
+} & ButtonProps;
+
 /** Chakra Buttonのラッパーコンポーネント */
-export function BasicButton({ children, ...props }: ButtonProps) {
+export function BasicButton({ children, tapScale = 0.97, ...props }: BasicButtonProps) {
   return (
-    <motion.div whileTap={{ scale: 0.97 }}>
+    <motion.div whileTap={{ scale: tapScale }}>
       <Button
         variant="solid"
         w="222px"

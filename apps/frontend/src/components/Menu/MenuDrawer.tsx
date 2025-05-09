@@ -111,7 +111,7 @@ export function MenuDrawer() {
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
-          <BasicButton variant="plain" color="chiiWhite" w="54px">
+          <BasicButton variant="plain" color="chiiWhite" w="54px" tapScale={0.95}>
             <MdMenu />
           </BasicButton>
         </Drawer.Trigger>
