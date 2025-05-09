@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { CloseButton, Dialog, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
+import { BasicButton } from '@repo/ui/components';
 import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdNoAccounts, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -111,9 +111,9 @@ export function MenuDrawer() {
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
-          <Button variant="plain" color="chiiWhite">
+          <BasicButton variant="plain" color="chiiWhite" w="54px">
             <MdMenu />
-          </Button>
+          </BasicButton>
         </Drawer.Trigger>
 
         <Portal>
@@ -201,7 +201,7 @@ type MenuButtonProps = {
 
 function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
   return (
-    <Button variant="ghost" width="full" color={labelColor} onClick={onClick}>
+    <BasicButton variant="ghost" width="full" color={labelColor} onClick={onClick}>
       <Icon>
         {icon}
       </Icon>
@@ -212,7 +212,7 @@ function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
           </Link>
         )
         : label}
-    </Button>
+    </BasicButton>
   );
 }
 
@@ -248,10 +248,14 @@ function UserDeleteConfirmDialog({ open, onOpenChange, loading, onDelete }: User
 
             <Dialog.Footer>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline" width="100px" disabled={loading}>キャンセル</Button>
+                <BasicButton variant="outline" width="100px" disabled={loading}>
+                  キャンセル
+                </BasicButton>
               </Dialog.ActionTrigger>
 
-              <Button width="100px" colorPalette="red" loading={loading} onClick={onDelete}>退会する</Button>
+              <BasicButton width="100px" colorPalette="red" loading={loading} onClick={onDelete}>
+                退会する
+              </BasicButton>
             </Dialog.Footer>
 
             <Dialog.CloseTrigger asChild>
