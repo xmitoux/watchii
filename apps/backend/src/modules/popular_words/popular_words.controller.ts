@@ -34,6 +34,13 @@ export class PopularWordsController {
     return this.popularWordsService.findAllPopularWordSpeakers();
   }
 
+  @Get('/find-all-popular-word-speakers-have-some-posts')
+  async findAllPopularWordSpeakersHaveSomePosts(): Promise<FindAllPopularWordSpeakersResponse> {
+    this.logger.log('findAllPopularWordSpeakersHaveSomePosts');
+
+    return this.popularWordsService.findAllPopularWordSpeakers(false);
+  }
+
   @Get('/get-popular-words-post-count')
   async getPopularWordsPostCount(): Promise<GetPopularWordsPostCountResponse> {
     this.logger.log('getPopularWordsPostCount');

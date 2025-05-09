@@ -25,9 +25,18 @@ export class TagsApi {
 
   private tagsApiBase = tagsApiBase;
 
-  /** キャラクター一覧を取得する */
-  async findAllCharacters(): Promise<FindAllCharactersResponse> {
-    return await this.tagsApiBase.findAllCharacters();
+  /** Postを持つキャラクター一覧を取得する */
+  async findAllCharactersHaveSomePosts(): Promise<FindAllCharactersResponse> {
+    const url = `${this.endpointCharacters}/find-all-characters-have-some-posts`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('キャラクター一覧取得処理に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
   }
 
   /** キャラクターごとのPost数を取得する */
@@ -60,9 +69,18 @@ export class TagsApi {
     return data;
   }
 
-  /** タグ一覧を取得する */
-  async findAllTags(): Promise<FindAllTagsResponse> {
-    return await this.tagsApiBase.findAllTags();
+  /** Postを持つタグ一覧を取得する */
+  async findAllTagsHaveSomePosts(): Promise<FindAllTagsResponse> {
+    const url = `${this.endpointTags}/find-all-tags-have-some-posts`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('タグ一覧取得処理に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
   }
 
   /** タグごとのPost数を取得する */
@@ -95,9 +113,18 @@ export class TagsApi {
     return data;
   }
 
-  /** 語録一覧を取得する */
-  async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
-    return await this.tagsApiBase.findAllPopularWordSpeakers();
+  /** Postを持つ語録一覧を取得する */
+  async findAllPopularWordSpeakersHaveSomePosts(): Promise<FindAllPopularWordSpeakersResponse> {
+    const url = `${this.endpointPopularWords}/find-all-popular-word-speakers-have-some-posts`;
+
+    const res = await fetchData(url);
+
+    if (!res.ok) {
+      throw new Error('語録一覧取得処理に失敗しました。');
+    }
+
+    const data = await res.json();
+    return data;
   }
 
   /** 語録ごとのPost数を取得する */

@@ -14,12 +14,20 @@ export class TagsService {
 
   private readonly logger = new Logger(TagsService.name);
 
-  async findAllTags(): Promise<FindAllTagsResponse> {
+  async findAllTags(all: boolean = true): Promise<FindAllTagsResponse> {
     const tags = await this.prisma.tag.findMany({
       select: {
         id: true,
         name: true,
       },
+      where: all
+        ? {}
+        : {
+          // Postがないタグを除外
+          posts: {
+            some: {},
+          },
+        },
       orderBy: {
         kana: 'asc',
       },

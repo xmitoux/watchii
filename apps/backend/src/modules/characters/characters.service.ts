@@ -32,7 +32,7 @@ export class CharactersService {
     });
   }
 
-  async findAllCharacters(): Promise<FindAllCharactersResponse> {
+  async findAllCharacters(all: boolean = true): Promise<FindAllCharactersResponse> {
     const characters = await this.prisma.character.findMany({
       select: {
         id: true,
@@ -40,6 +40,14 @@ export class CharactersService {
         nameKey: true,
         iconFilename: true,
       },
+      where: all
+        ? {}
+        : {
+          // Postがないキャラクターを除外
+          posts: {
+            some: {},
+          },
+        },
       orderBy: {
         order: 'asc',
       },
