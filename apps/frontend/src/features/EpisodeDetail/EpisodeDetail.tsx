@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 
-import { Button, Icon, VStack } from '@repo/ui/chakra-ui';
+import { Icon, VStack } from '@repo/ui/chakra-ui';
+import { BasicButton } from '@repo/ui/components';
 import { MdKeyboardArrowLeft, MdKeyboardDoubleArrowLeft } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
@@ -45,19 +46,19 @@ export default function EpisodeDetail({ episodeTitle, posts }: EpisodeDetailProp
 
       {/* 一覧に戻るボタン */}
       <VStack mt={3} mb="60px">
-        <Button variant="outline" onClick={goToEpisodes}>
+        <BasicButton variant="outline" w="210px" onClick={goToEpisodes}>
           <Icon size="sm">
             <MdKeyboardArrowLeft />
           </Icon>
           エピソード一覧に戻る
-        </Button>
+        </BasicButton>
 
-        <Button variant="outline" onClick={goToEpisodeCategories}>
+        <BasicButton variant="outline" w="260px" onClick={goToEpisodeCategories}>
           <Icon size="sm">
             <MdKeyboardDoubleArrowLeft />
           </Icon>
           エピソードカテゴリ一覧に戻る
-        </Button>
+        </BasicButton>
       </VStack>
 
       {/* Postページシャトル */}

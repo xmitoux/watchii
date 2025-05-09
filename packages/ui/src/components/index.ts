@@ -1,3 +1,4 @@
+export * from './Button/BasicButton';
 export * from './CharacterIcon';
 export * from './Episodes/EpisodeCard';
 export * from './Image/NextImage';

@@ -9,11 +9,12 @@ import {
   Input,
   Stack,
 } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
 import { PasswordInput } from '@repo/ui/chakra-ui/password-input';
 import { toaster } from '@repo/ui/chakra-ui/toaster';
 import { MdLock, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
+
+import { BasicButton } from './Button/BasicButton';
 
 type LoginProps = {
   homeUrl?: string;
@@ -78,11 +79,7 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
                   <Field.RequiredIndicator />
                 </Field.Label>
 
-                <Input
-                  value={email}
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <Input value={email} type="email" onChange={(e) => setEmail(e.target.value)} />
               </Field.Root>
 
               <Field.Root required>
@@ -92,14 +89,11 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
                   <Field.RequiredIndicator />
                 </Field.Label>
 
-                <PasswordInput
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
               </Field.Root>
             </Fieldset.Content>
 
-            <Button
+            <BasicButton
               color="chiiWhite"
               bg="hachiBlue"
               type="submit"
@@ -107,7 +101,7 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
               loading={loading}
             >
               ログイン
-            </Button>
+            </BasicButton>
           </Fieldset.Root>
         </form>
       </Center>

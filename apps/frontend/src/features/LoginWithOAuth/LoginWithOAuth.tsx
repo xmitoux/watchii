@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import { Center, Text, VStack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { BasicButton } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import LoadingScreen from '@/components/LoadingScreen';
@@ -91,9 +91,10 @@ export default function LoginWithOAuth() {
                   <VStack>
                     <Text color="red.500">登録確認に失敗しました。</Text>
                     <Text color="red.500">もう一度お試しください。</Text>
-                    <Button color="chiiWhite" bg="hachiBlue" onClick={handleLogin}>
+
+                    <BasicButton color="chiiWhite" bg="hachiBlue" onClick={handleLogin}>
                       再試行
-                    </Button>
+                    </BasicButton>
                   </VStack>
                 </motion.div>
               ) : (

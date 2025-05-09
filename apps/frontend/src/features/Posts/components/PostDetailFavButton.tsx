@@ -1,4 +1,5 @@
-import { Button, Icon } from '@repo/ui/chakra-ui';
+import { Icon } from '@repo/ui/chakra-ui';
+import { BasicButton } from '@repo/ui/components';
 import { IoHeart, IoHeartOutline } from '@repo/ui/icons';
 
 import { usersApi } from '@/features/Signup/api/users-api';
@@ -56,7 +57,7 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
   const colorNotFav = { base: 'chiiWhite', _dark: 'gray.900' };
 
   return (
-    <Button
+    <BasicButton
       variant={favorited ? 'solid' : 'outline'}
       color={favorited ? 'chiiWhite' : colorFav}
       bg={favorited ? colorFav : colorNotFav}
@@ -72,6 +73,6 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
         {favorited ? <IoHeart /> : <IoHeartOutline />}
       </Icon>
       {favorited ? 'お気に入りを解除' : 'お気に入りに追加'}
-    </Button>
+    </BasicButton>
   );
 }

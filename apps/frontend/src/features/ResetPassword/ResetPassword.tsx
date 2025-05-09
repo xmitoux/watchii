@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { Center, Fieldset, Flex, Stack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { BasicButton } from '@repo/ui/components';
 import { createClient } from '@repo/ui/utils';
 
 import RoundedButton from '@/components/Button/RoundedButton';
@@ -165,7 +165,7 @@ export default function PasswordReset() {
                         />
                       </Fieldset.Content>
 
-                      <Button
+                      <BasicButton
                         color="chiiWhite"
                         bg="hachiBlue"
                         type="submit"
@@ -173,7 +173,7 @@ export default function PasswordReset() {
                         loading={loading}
                       >
                         リセットする
-                      </Button>
+                      </BasicButton>
                     </Fieldset.Root>
                   </form>
                 </motion.div>
