@@ -27,6 +27,13 @@ export class TagsController {
     return this.tagsService.findAllTags();
   }
 
+  @Get('/find-all-tags-have-some-posts')
+  async findAllTagsHaveSomePosts(): Promise<FindAllTagsResponse> {
+    this.logger.log('findAllTagsHaveSomePosts started');
+
+    return this.tagsService.findAllTags(false);
+  }
+
   @Get('/get-tags-post-count')
   async getTagsPostCount(): Promise<GetTagsPostCountResponse> {
     this.logger.log('getTagsPostCount');

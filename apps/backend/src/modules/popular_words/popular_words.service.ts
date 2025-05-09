@@ -41,7 +41,7 @@ export class PopularWordsService {
     };
   }
 
-  async findAllPopularWordSpeakers(): Promise<FindAllPopularWordSpeakersResponse> {
+  async findAllPopularWordSpeakers(all: boolean = true): Promise<FindAllPopularWordSpeakersResponse> {
     // まず発言者情報も含めて全ての語録を取得
     const allPopularWords = await this.prisma.popularWord.findMany({
       select: {
@@ -57,6 +57,14 @@ export class PopularWordsService {
           },
         },
       },
+      where: all
+        ? {}
+        : {
+          // Postがない語録を除外
+          posts: {
+            some: {},
+          },
+        },
       orderBy: [
         {
           speaker: {

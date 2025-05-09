@@ -24,6 +24,13 @@ export class CharactersController {
     return this.charactersService.findAllCharacters();
   }
 
+  @Get('/find-all-characters-have-some-posts')
+  async findAllCharactersHaveSomePosts(): Promise<FindAllCharactersResponse> {
+    this.logger.log('findAllCharactersHaveSomePosts');
+
+    return this.charactersService.findAllCharacters(false);
+  }
+
   @Get('/get-characters-post-count')
   async getCharactersPostCount(): Promise<GetCharactersPostCountResponse> {
     this.logger.log('getCharactersPostCount');

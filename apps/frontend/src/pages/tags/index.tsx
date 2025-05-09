@@ -7,11 +7,11 @@ import { TagsProps } from '@/features/Tags/types/tags-types';
 export const getStaticProps: GetStaticProps<TagsProps> = async () => {
   try {
     // キャラクター一覧をAPIから取得
-    const { characters } = await tagsApi.findAllCharacters();
+    const { characters } = await tagsApi.findAllCharactersHaveSomePosts();
     // タグ一覧をAPIから取得
-    const { tags } = await tagsApi.findAllTags();
+    const { tags } = await tagsApi.findAllTagsHaveSomePosts();
     // 語録一覧をAPIから取得
-    const { popularWordSpeakers } = await tagsApi.findAllPopularWordSpeakers();
+    const { popularWordSpeakers } = await tagsApi.findAllPopularWordSpeakersHaveSomePosts();
 
     // ページコンポーネントに渡すpropsを返す
     return {
