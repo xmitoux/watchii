@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, Button, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
 import { Login as BaseLogin, BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
@@ -144,10 +144,10 @@ export default function Login() {
                 </BasicButton>
               </Center>
 
-              <Button variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
+              <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
                 <MdArrowBack />
                 ログイン画面に戻る
-              </Button>
+              </BasicButton>
             </Fieldset.Root>
           </form>
         </Center>
