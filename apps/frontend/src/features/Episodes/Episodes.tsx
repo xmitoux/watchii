@@ -1,8 +1,9 @@
+import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import { Button, Center, Flex, Icon } from '@repo/ui/chakra-ui';
-import { EpisodeCard } from '@repo/ui/components';
+import { Center, Flex, Icon } from '@repo/ui/chakra-ui';
+import { BasicButton, EpisodeCard } from '@repo/ui/components';
 import { MdKeyboardArrowLeft } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
@@ -60,23 +61,25 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
             // ページシャトルによるスクロール操作用の属性
             data-image-index={index}
           >
-            <EpisodeCard
-              episode={episode}
-              imageWidth={imageWidth}
-              href={`/episodes/ep/${episode.id}`}
-            />
+            <motion.div whileTap={{ scale: 0.99 }}>
+              <EpisodeCard
+                episode={episode}
+                imageWidth={imageWidth}
+                href={`/episodes/ep/${episode.id}`}
+              />
+            </motion.div>
           </div>
         ))}
       </Flex>
 
       {/* 一覧に戻るボタン */}
       <Center mt={3}>
-        <Button variant="outline" onClick={handleNavigationBack}>
+        <BasicButton variant="outline" w="250px" onClick={handleNavigationBack}>
           <Icon size="sm">
             <MdKeyboardArrowLeft />
           </Icon>
           エピソードカテゴリ一覧に戻る
-        </Button>
+        </BasicButton>
       </Center>
 
       {/* Postページシャトル */}

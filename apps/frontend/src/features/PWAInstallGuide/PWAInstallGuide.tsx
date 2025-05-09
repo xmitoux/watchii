@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Steps,
   Text,
   VStack,
 } from '@repo/ui/chakra-ui';
+import { BasicButton } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 
@@ -197,14 +197,22 @@ export default function PWAInstallGuide() {
                 {/* step移動 */}
                 <Flex justify="center" gap={4} mt={2}>
                   <Steps.PrevTrigger asChild>
-                    <Button bg="hachiBlueSwitch" color="chiiWhite" onClick={() => setDirection(-1)}>前へ</Button>
+                    <BasicButton color="chiiWhite" bg="hachiBlueSwitch" w="80px" onClick={() => setDirection(-1)}>
+                      前へ
+                    </BasicButton>
                   </Steps.PrevTrigger>
 
                   {isStepCompleted
-                    ? <Button color="white" bg="hachiwareBlue" onClick={handleClose}>完了</Button>
+                    ? (
+                      <BasicButton color="chiiWhite" bg="hachiwareBlue" w="80px" onClick={handleClose}>
+                        完了
+                      </BasicButton>
+                    )
                     : (
                       <Steps.NextTrigger asChild>
-                        <Button bg="hachiBlueSwitch" color="chiiWhite" onClick={() => setDirection(1)}>次へ</Button>
+                        <BasicButton color="chiiWhite" bg="hachiBlueSwitch" w="80px" onClick={() => setDirection(1)}>
+                          次へ
+                        </BasicButton>
                       </Steps.NextTrigger>
                     )}
                 </Flex>

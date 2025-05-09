@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import { Center, Text, VStack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
-import { createClient } from '@repo/ui/utils';
+import { BasicButton } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
 import LoadingScreen from '@/components/LoadingScreen';
@@ -34,8 +33,6 @@ export default function LoginWithOAuth() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const supabase = createClient();
-
   const [isCompleted, setIsCompleted] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -46,18 +43,6 @@ export default function LoginWithOAuth() {
     try {
       // OAuthサインインAPI
       const { userExists } = await usersApi.signInWithOAuth({ token: token.current!.access_token });
-
-      // サインイン結果のセッションを保存してログイン
-      const { error: sessionError } = await supabase.auth.setSession({
-        access_token: token.current!.access_token,
-        refresh_token: token.current!.refresh_token,
-      });
-
-      if (sessionError) {
-        console.error('Error setting session:', sessionError);
-        setIsError(true);
-        return;
-      }
 
       if (!userExists) {
         // 新規登録ユーザの場合は登録画面を表示
@@ -106,9 +91,10 @@ export default function LoginWithOAuth() {
                   <VStack>
                     <Text color="red.500">登録確認に失敗しました。</Text>
                     <Text color="red.500">もう一度お試しください。</Text>
-                    <Button color="chiiWhite" bg="hachiBlue" onClick={handleLogin}>
+
+                    <BasicButton color="chiiWhite" bg="hachiBlue" onClick={handleLogin}>
                       再試行
-                    </Button>
+                    </BasicButton>
                   </VStack>
                 </motion.div>
               ) : (

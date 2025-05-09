@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Center, Text, VStack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { BasicButton } from '@repo/ui/components';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
@@ -94,9 +94,10 @@ export default function SignupConfirm() {
                   <VStack>
                     <Text color="red.500">登録確認に失敗しました。</Text>
                     <Text color="red.500">もう一度お試しください。</Text>
-                    <Button color="chiiWhite" bg="hachiBlue" onClick={handleConfirm}>
+
+                    <BasicButton color="chiiWhite" bg="hachiBlue" onClick={handleConfirm}>
                       再試行
-                    </Button>
+                    </BasicButton>
                   </VStack>
                 </motion.div>
               ) : (

@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import NextImage from 'next/image';
 
 import { Box, Image } from '@repo/ui/chakra-ui';
@@ -32,27 +33,30 @@ export function CharacterIcon({
   const borderColor = getCharacterColor(character.id);
 
   return (
-    <Box
-      bg={borderColor}
-      borderRadius="full"
-      p={borderSize}
-      transition="all 0.2s"
-      _hover={{
-        transform: 'scale(1.05)',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <Image asChild borderRadius="full" objectFit="cover" alt="">
-        <NextImage
-          src={imageSrc}
-          loader={imageLoader}
-          width={size}
-          height={0}
-          style={{ width: iconSize, height: 'auto' }}
-          priority={priority}
-          alt={character.name}
-        />
-      </Image>
-    </Box>
+    <motion.div whileTap={{ scale: 0.97 }}>
+      <Box
+        bg={borderColor}
+        borderRadius="full"
+        p={borderSize}
+        boxShadow="md"
+        transition="all 0.2s"
+        _hover={{
+          transform: 'scale(1.05)',
+          boxShadow: 'lg',
+        }}
+      >
+        <Image asChild borderRadius="full" objectFit="cover" alt="">
+          <NextImage
+            src={imageSrc}
+            loader={imageLoader}
+            width={size}
+            height={0}
+            style={{ width: iconSize, height: 'auto' }}
+            priority={priority}
+            alt={character.name}
+          />
+        </Image>
+      </Box>
+    </motion.div>
   );
 }

@@ -1,12 +1,13 @@
 import { motion } from 'motion/react';
 import NextImage from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { Box, Button, ButtonProps, Flex, Text } from '@repo/ui/chakra-ui';
+import { Box, Flex, Text } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { MdAccountCircle, MdLogin } from '@repo/ui/icons';
 import { cherry_bomb_one, hachi_maru_pop } from '@repo/ui/utils';
+
+import RoundedButton from '@/components/Button/RoundedButton';
 
 /** ランディングページ */
 export default function Welcome() {
@@ -135,10 +136,10 @@ export default function Welcome() {
           animate={{ y: 0, opacity: 1, transition: { delay: 1.2, duration: 0.6 } }}
           whileTap={{ scale: 0.97 }}
         >
-          <ButtonComponent to="/login" color="chiiWhite" bgColor="hachiwareBlue.dark">
+          <RoundedButton to="/login" color="chiiWhite" bg="hachiwareBlue.dark">
             <MdLogin />
             ログイン
-          </ButtonComponent>
+          </RoundedButton>
         </motion.div>
 
         <motion.div
@@ -146,10 +147,10 @@ export default function Welcome() {
           animate={{ y: 0, opacity: 1, transition: { delay: 1.4, duration: 0.6 } }}
           whileTap={{ scale: 0.97 }}
         >
-          <ButtonComponent to="/signup" color="hachiwareBlue.dark" variant="subtle" bgColor="chiiWhite">
+          <RoundedButton to="/signup" color="hachiwareBlue.dark" variant="subtle" bg="chiiWhite">
             <MdAccountCircle />
             新規登録
-          </ButtonComponent>
+          </RoundedButton>
         </motion.div>
       </Box>
     </Flex>
@@ -170,37 +171,5 @@ function LogoCaptionTilde({ mr, ml }: { mr?: boolean; ml?: boolean }) {
     >
       ～
     </Text>
-  );
-}
-
-type ButtonComponent = {
-  variant?: ButtonProps['variant'];
-  color?: string;
-  bgColor?: string;
-  to: string;
-  children: React.ReactNode;
-};
-
-function ButtonComponent({ variant, color, bgColor, to, children }: ButtonComponent) {
-  return (
-    <Button
-      variant={variant}
-      w={['240px', '280px']}
-      h="56px"
-      fontSize="lg"
-      fontWeight="bold"
-      borderRadius="full"
-      boxShadow="0px 4px 10px rgba(0,0,0,0.15)"
-      color={color}
-      bgColor={bgColor}
-      _hover={{
-        transform: 'translateY(-4px)',
-        boxShadow: '0px 6px 12px rgba(0,0,0,0.2)',
-      }}
-      transition="all 0.2s"
-      asChild
-    >
-      <Link href={to}>{children}</Link>
-    </Button>
   );
 }

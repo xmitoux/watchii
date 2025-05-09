@@ -2,7 +2,6 @@ import Link from 'next/link';
 
 import {
   Box,
-  Button,
   Center,
   Container,
   Heading,
@@ -11,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@repo/ui/chakra-ui';
+import { BasicButton } from '@repo/ui/components';
 import { IoLogoGithub } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
@@ -50,18 +50,19 @@ export default function AboutThisApp() {
             </Box>
           </AbourSection>
 
-          <AbourSection title="コンタクト">
+          <AbourSection title="お問い合わせ">
             <Text mb={4}>
               権利者からのお問い合わせや要請がある場合は、下記までご連絡ください。
             </Text>
-            <Link href="https://github.com/xmitoux/watchii" target="_blank">
-              <Center>
-                <Button bg="hachiBlue">
+
+            <Center>
+              <BasicButton color="white" bg="black" asChild>
+                <Link href="https://github.com/xmitoux/watchii" target="_blank">
                   <IoLogoGithub />
                   GitHub
-                </Button>
-              </Center>
-            </Link>
+                </Link>
+              </BasicButton>
+            </Center>
           </AbourSection>
         </VStack>
 

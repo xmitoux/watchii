@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, Button, Flex, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
-import { Login as BaseLogin } from '@repo/ui/components';
+import { Login as BaseLogin, BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -108,7 +108,7 @@ export default function Login() {
     <Layout title="ログイン" canBack noFooter noMenu>
       {isResetMode ? (
         // パスワードリセットフォーム
-        <Flex direction="column" alignItems="center" justifyContent="center" gap={4}>
+        <Center>
           <form onSubmit={handleResetPassword}>
             <Fieldset.Root size="lg">
               <Stack>
@@ -132,24 +132,25 @@ export default function Login() {
                 </Field.Root>
               </Fieldset.Content>
 
-              <Button
-                type="submit"
-                color="chiiWhite"
-                bg="hachiBlue"
-                width="100%"
-                disabled={email === '' || isAnyLoginProcessing}
-                loading={emailSending}
-              >
-                メールを送信
-              </Button>
+              <Center>
+                <BasicButton
+                  type="submit"
+                  color="chiiWhite"
+                  bg="hachiBlue"
+                  disabled={email === '' || isAnyLoginProcessing}
+                  loading={emailSending}
+                >
+                  メールを送信
+                </BasicButton>
+              </Center>
+
+              <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
+                <MdArrowBack />
+                ログイン画面に戻る
+              </BasicButton>
             </Fieldset.Root>
           </form>
-
-          <Button variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
-            <MdArrowBack />
-            ログイン画面に戻る
-          </Button>
-        </Flex>
+        </Center>
       ) : (
         // 通常のログインフォーム
         <>
@@ -180,28 +181,26 @@ export default function Login() {
           </Box>
 
           <VStack mt={6} gap={4}>
-            <Button
+            <BasicButton
               bg="black"
-              width="220px"
               loading={oauthLoading === 'github'}
               disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
               onClick={() => handleOAuthLogin('github')}
             >
               <IoLogoGithub />
               GitHubでログイン
-            </Button>
+            </BasicButton>
 
-            <Button
+            <BasicButton
               variant="surface"
               bg="white"
-              width="220px"
               loading={oauthLoading === 'google'}
               onClick={() => handleOAuthLogin('google')}
               disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
             >
               <FcGoogle />
               <Text color="blackPrimary">Googleでログイン</Text>
-            </Button>
+            </BasicButton>
           </VStack>
         </>
       )}

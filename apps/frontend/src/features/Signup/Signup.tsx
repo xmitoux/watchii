@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
 import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { BasicButton } from '@repo/ui/components';
 import { MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -148,7 +148,7 @@ export default function Signup() {
                     />
                   </Fieldset.Content>
 
-                  <Button
+                  <BasicButton
                     color="chiiWhite"
                     bg="hachiBlue"
                     type="submit"
@@ -156,7 +156,7 @@ export default function Signup() {
                     loading={loading}
                   >
                     登録
-                  </Button>
+                  </BasicButton>
                 </Fieldset.Root>
               </form>
             </motion.div>

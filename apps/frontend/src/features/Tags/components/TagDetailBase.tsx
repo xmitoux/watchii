@@ -1,4 +1,5 @@
-import { Button, Center, Icon } from '@repo/ui/chakra-ui';
+import { Center, Icon } from '@repo/ui/chakra-ui';
+import { BasicButton } from '@repo/ui/components';
 import { MdKeyboardArrowLeft } from '@repo/ui/icons';
 
 import Layout from '@/components/Layout/Layout';
@@ -47,12 +48,12 @@ export default function TagDetailBase({
 
       {/* 一覧に戻るボタン */}
       <Center mt={3}>
-        <Button variant="outline" onClick={backToTags}>
+        <BasicButton variant="outline" w="180px" onClick={backToTags}>
           <Icon size="sm">
             <MdKeyboardArrowLeft />
           </Icon>
           タグ一覧に戻る
-        </Button>
+        </BasicButton>
       </Center>
 
       {/* Postページシャトル */}

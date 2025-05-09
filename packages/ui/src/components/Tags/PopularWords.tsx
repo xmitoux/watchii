@@ -1,4 +1,6 @@
+import { motion } from 'motion/react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Box, Card, Flex, SimpleGrid, Text } from '@repo/ui/chakra-ui';
 import { CharacterIcon } from '@repo/ui/components';
@@ -82,38 +84,46 @@ function WordBubble({ word, speakerId, to }: WordBubbleProps) {
   // プリフェッチ用のリンク
   const prefetchLink = to;
 
-  return (
-    <Link href={prefetchLink}>
-      <Box position="relative" cursor="pointer">
-        {/* 吹き出しの本体 */}
-        <Box
-          bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
-          borderRadius="lg"
-          mb={1}
-          p={3}
-          transition="transform 0.15s, box-shadow 0.15s"
-          _hover={{
-            transform: 'translateY(-2px)',
-          }}
-        >
-          <Text fontWeight="medium" fontSize="md">
-            {word.word}
-          </Text>
-        </Box>
+  const [hovered, setHovered] = useState(false);
 
-        {/* シンプルな丸みを帯びた三角形 - CSSのみ */}
-        <Box
-          position="absolute"
-          top="-8px"
-          left="20px"
-          width="16px"
-          height="16px"
-          bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
-          borderRadius={3}
-          transform="rotate(45deg)"
-          zIndex={1}
-        />
-      </Box>
-    </Link>
+  return (
+    <motion.div whileTap={{ scale: 0.99 }}>
+      <Link href={prefetchLink}>
+        <Box position="relative" cursor="pointer">
+          {/* 吹き出しの本体 */}
+          <Box
+            bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
+            borderRadius="lg"
+            mb={1}
+            p={3}
+            boxShadow="0 2px 4px rgba(0, 0, 0, 0.15)"
+            transition="all 0.2s"
+            _hover={{
+              transform: 'translateY(-2px)',
+            }}
+            onMouseOver={() => setHovered(true)}
+            onMouseOut={() => setHovered(false)}
+          >
+            <Text fontWeight="medium" fontSize="md">
+              {word.word}
+            </Text>
+          </Box>
+
+          {/* シンプルな丸みを帯びた三角形 - CSSのみ */}
+          <Box
+            position="absolute"
+            top="-8px"
+            left="20px"
+            width="16px"
+            height="16px"
+            bg={{ base: bubbleColorBase, _dark: bubbleColorDark }}
+            borderRadius={3}
+            transform={`rotate(45deg) ${hovered ? 'translateX(-1px) translateY(-1px)' : ''}`}
+            transition="all 0.2s"
+            zIndex={1}
+          />
+        </Box>
+      </Link>
+    </motion.div>
   );
 }

@@ -1,13 +1,12 @@
-// pages/password-reset.tsx
 import { motion } from 'motion/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { Center, Fieldset, Flex, Stack } from '@repo/ui/chakra-ui';
-import { Button } from '@repo/ui/chakra-ui/button';
+import { BasicButton } from '@repo/ui/components';
 import { createClient } from '@repo/ui/utils';
 
+import RoundedButton from '@/components/Button/RoundedButton';
 import Layout from '@/components/Layout/Layout';
 import MessageWithImage from '@/components/MessageWithImage';
 import { PasswordFields } from '@/components/PasswordFields';
@@ -128,26 +127,9 @@ export default function PasswordReset() {
                       imageSrc="/images/reset-password-completed.webp"
                     />
 
-                    <motion.div whileTap={{ scale: 0.97 }}>
-                      <Button
-                        color="chiiWhite"
-                        bg="hachiwareBlue.dark"
-                        w={['240px', '280px']}
-                        h="56px"
-                        fontSize="lg"
-                        fontWeight="bold"
-                        borderRadius="full"
-                        boxShadow="0px 4px 10px rgba(0,0,0,0.15)"
-                        _hover={{
-                          transform: 'translateY(-4px)',
-                          boxShadow: '0px 6px 12px rgba(0,0,0,0.2)',
-                        }}
-                        transition="all 0.2s"
-                        asChild
-                      >
-                        <Link href="/login">ログイン画面へ</Link>
-                      </Button>
-                    </motion.div>
+                    <RoundedButton to="/login" color="chiiWhite" bg="hachiwareBlue.dark">
+                      ログイン画面へ
+                    </RoundedButton>
                   </Flex>
                 </motion.div>
               )
@@ -183,7 +165,7 @@ export default function PasswordReset() {
                         />
                       </Fieldset.Content>
 
-                      <Button
+                      <BasicButton
                         color="chiiWhite"
                         bg="hachiBlue"
                         type="submit"
@@ -191,7 +173,7 @@ export default function PasswordReset() {
                         loading={loading}
                       >
                         リセットする
-                      </Button>
+                      </BasicButton>
                     </Fieldset.Root>
                   </form>
                 </motion.div>

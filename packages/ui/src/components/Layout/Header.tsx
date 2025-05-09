@@ -1,8 +1,9 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdArrowBackIos } from 'react-icons/md';
 
 import { hachi_maru_pop } from '../../utils/fonts';
+import { BasicButton } from '../Button/BasicButton';
 
 type HeaderProps = {
   title: string;
@@ -48,9 +49,16 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
         {/* 戻るボタン */}
         <Box width="40px">
           {(onNavigationBack || canBack) && (
-            <Button variant="plain" color="chiiWhite" paddingLeft={0} onClick={handleBack}>
+            <BasicButton
+              variant="plain"
+              color="chiiWhite"
+              w="40px"
+              paddingLeft={0}
+              tapScale={0.95}
+              onClick={handleBack}
+            >
               <MdArrowBackIos />
-            </Button>
+            </BasicButton>
           )}
         </Box>
 

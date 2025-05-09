@@ -1,4 +1,4 @@
-// Postページシャトルボタン
+import { motion } from 'motion/react';
 import { JSX } from 'react';
 
 import { Icon, IconButton } from '@repo/ui/chakra-ui';
@@ -23,15 +23,17 @@ export function PostPageShuttleButton({ direction, onClick }: PostPageShuttleBut
   };
 
   return (
-    <IconButton
-      bg={{ base: 'hachiBlue.light', _dark: 'hachiBlue.dark' }}
-      size="xs"
-      rounded="full"
-      onClick={onClick}
-    >
-      <Icon color="chiiWhite" size="lg">
-        {icon[direction]}
-      </Icon>
-    </IconButton>
+    <motion.div whileTap={{ scale: 0.96 }}>
+      <IconButton
+        bg={{ base: 'hachiBlue.light', _dark: 'hachiBlue.dark' }}
+        size="xs"
+        rounded="full"
+        onClick={onClick}
+      >
+        <Icon color="chiiWhite" size="lg">
+          {icon[direction]}
+        </Icon>
+      </IconButton>
+    </motion.div>
   );
 }
