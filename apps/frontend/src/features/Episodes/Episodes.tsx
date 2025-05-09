@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -60,11 +61,13 @@ export default function Episodes({ episodes, total, currentPage, perPage, catego
             // ページシャトルによるスクロール操作用の属性
             data-image-index={index}
           >
-            <EpisodeCard
-              episode={episode}
-              imageWidth={imageWidth}
-              href={`/episodes/ep/${episode.id}`}
-            />
+            <motion.div whileTap={{ scale: 0.99 }}>
+              <EpisodeCard
+                episode={episode}
+                imageWidth={imageWidth}
+                href={`/episodes/ep/${episode.id}`}
+              />
+            </motion.div>
           </div>
         ))}
       </Flex>
