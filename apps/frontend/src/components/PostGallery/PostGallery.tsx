@@ -1,5 +1,4 @@
-// post一覧コンポーネント
-
+import { motion } from 'motion/react';
 import Link from 'next/link';
 
 import { Flex, Text } from '@repo/ui/chakra-ui';
@@ -13,6 +12,7 @@ type PostGalleryProps = {
   posts: PostEntity[];
 };
 
+/** Postギャラリーコンポーネント */
 export const PostGallery = ({ posts }: PostGalleryProps) => {
   const imageWidth = usePostImageWidth();
 
@@ -27,15 +27,18 @@ export const PostGallery = ({ posts }: PostGalleryProps) => {
           // ページシャトルによるスクロール操作用の属性
           data-image-index={index}
         >
-          <Link href={`/posts/${post.id}`}>
-            <NextImage
-              src={post.filename}
-              width={700}
-              styleWidth={imageWidth}
-              alt={post.filename}
-              priority
-            />
-          </Link>
+          <motion.div whileTap={{ scale: 0.99 }}>
+            <Link href={`/posts/${post.id}`}>
+              <NextImage
+                src={post.filename}
+                width={700}
+                styleWidth={imageWidth}
+                shadow
+                alt={post.filename}
+                priority
+              />
+            </Link>
+          </motion.div>
 
           <Text fontSize="xs" color="gray">
             投稿:

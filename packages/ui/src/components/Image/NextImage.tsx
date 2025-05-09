@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import Image from 'next/image';
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Skeleton } from '@repo/ui/chakra-ui/skeleton';
 
@@ -19,6 +19,7 @@ export type NextImageProps = {
   priority?: boolean;
   className?: string;
   rounded?: boolean;
+  shadow?: boolean;
   onClick?: (src: string) => void;
 };
 
@@ -32,6 +33,7 @@ export function NextImage({
   priority = false,
   className = '',
   rounded = true,
+  shadow = false,
   onClick,
 }: NextImageProps) {
   const { imageLoader, imageSrc } = useNextImage({ src, width });
@@ -84,6 +86,7 @@ export function NextImage({
           height: styleHeight,
           display: showSkeleton ? 'none' : 'block',
           borderRadius: rounded ? '10px' : undefined,
+          boxShadow: shadow ? '0 0 6px rgba(0, 0, 0, 0.15)' : undefined,
         }}
         className={className}
         src={imageSrc}
