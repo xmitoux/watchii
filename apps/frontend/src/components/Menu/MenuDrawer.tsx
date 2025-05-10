@@ -8,6 +8,7 @@ import { BasicButton } from '@repo/ui/components';
 import {
   IoHeart,
   IoHeartOutline,
+  IoReload,
   MdAccountCircle,
   MdDarkMode,
   MdInfo,
@@ -56,6 +57,11 @@ export function MenuDrawer() {
     // ダークモードのトグル
     toggleColorMode();
     setShowMenu(false);
+  }
+
+  // リロードボタンの処理
+  function handleReload() {
+    window.location.reload();
   }
 
   async function handleLogout() {
@@ -115,6 +121,8 @@ export function MenuDrawer() {
                     label="アカウント設定"
                     to="/account-settings"
                   />
+
+                  <MenuButton icon={<IoReload />} label="ページリロード" onClick={handleReload} />
                 </Flex>
               </Drawer.Body>
 
