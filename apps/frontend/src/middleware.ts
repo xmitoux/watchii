@@ -23,6 +23,6 @@ export async function middleware(request: NextRequest) {
 // このミドルウェアから除外するパスを指定
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|sw.js|workbox-*.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
