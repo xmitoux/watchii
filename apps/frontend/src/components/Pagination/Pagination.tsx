@@ -58,8 +58,8 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
                     <ChakraPagination.Item {...page} asChild>
                       <IconButton
                         variant={page.value === currentPageState ? 'solid' : 'outline'}
-                        color={page.value === currentPageState ? 'chiiWhite' : 'blackPrimary'}
-                        bg={page.value === currentPageState ? 'hachiBlueSwitch' : 'chiiWhite'}
+                        color={page.value === currentPageState ? 'chiiWhite' : 'blackSwitch'}
+                        bg={page.value === currentPageState ? 'hachiBlueSwitch' : 'whiteSwitch'}
                       >
                         {page.value}
                       </IconButton>
@@ -69,7 +69,7 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
                 : (
                   // ページ番号省略(...)のボタン
                   <ChakraPagination.Ellipsis key={index} index={index} asChild>
-                    <IconButton variant="outline" color="blackPrimary" bg="chiiWhite">
+                    <IconButton variant="outline" color="blackSwitch" bg="whiteSwitch">
                       <IoEllipsisHorizontal />
                     </IconButton>
                   </ChakraPagination.Ellipsis>
