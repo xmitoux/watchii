@@ -165,15 +165,17 @@ export default function PasswordReset() {
                         />
                       </Fieldset.Content>
 
-                      <BasicButton
-                        color="chiiWhite"
-                        bg="hachiBlue"
-                        type="submit"
-                        disabled={!isFormValid}
-                        loading={loading}
-                      >
-                        リセットする
-                      </BasicButton>
+                      <Center>
+                        <BasicButton
+                          color="chiiWhite"
+                          bg="hachiBlue"
+                          type="submit"
+                          disabled={!isFormValid}
+                          loading={loading}
+                        >
+                          リセットする
+                        </BasicButton>
+                      </Center>
                     </Fieldset.Root>
                   </form>
                 </motion.div>

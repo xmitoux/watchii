@@ -93,15 +93,17 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
               </Field.Root>
             </Fieldset.Content>
 
-            <BasicButton
-              color="chiiWhite"
-              bg="hachiBlue"
-              type="submit"
-              disabled={email === '' || password === '' || oAuthSigninProcessing}
-              loading={loading}
-            >
-              ログイン
-            </BasicButton>
+            <Center>
+              <BasicButton
+                color="chiiWhite"
+                bg="hachiBlue"
+                type="submit"
+                disabled={email === '' || password === '' || oAuthSigninProcessing}
+                loading={loading}
+              >
+                ログイン
+              </BasicButton>
+            </Center>
           </Fieldset.Root>
         </form>
       </Center>
