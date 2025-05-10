@@ -16,7 +16,12 @@ import { useToast } from '@/hooks/useToast';
 
 const supabase = createClient();
 
-export default function PasswordReset() {
+type PasswordResetProps = {
+  /** ログイン中のパスワード変更の場合はOTP検証不要 */
+  skipOtpVerify?: boolean;
+};
+
+export default function PasswordReset({ skipOtpVerify }: PasswordResetProps) {
   const router = useRouter();
   const { showErrorToast } = useToast();
   const [canReset, setCanReset] = useState(false);
@@ -60,9 +65,15 @@ export default function PasswordReset() {
       setCanReset(true);
     };
 
-    verifyToken();
+    if (skipOtpVerify) {
+      // ログイン中のパスワード変更の場合はOTP検証不要
+      setCanReset(true);
+    }
+    else {
+      verifyToken();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+  }, [router, skipOtpVerify]);
 
   /** パスワードリセット処理 */
   async function handleResetPassword(e: React.FormEvent) {
@@ -87,9 +98,16 @@ export default function PasswordReset() {
         throw new Error('パスワードと確認用パスワードが一致しません');
       }
 
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) {
-        throw error;
+      // パスワードリセット処理
+      const { error: resetPasswordError } = await supabase.auth.updateUser({ password });
+      if (resetPasswordError) {
+        throw resetPasswordError;
+      }
+
+      // ログアウト処理
+      const { error: signOutError } = await supabase.auth.signOut();
+      if (signOutError) {
+        throw signOutError;
       }
 
       setResetPasswordSuccess(true);
