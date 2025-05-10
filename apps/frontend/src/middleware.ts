@@ -20,9 +20,9 @@ export async function middleware(request: NextRequest) {
   return await supabaseSessionMiddleware(request, options);
 }
 
-// このミドルウェアを適用するパス
+// このミドルウェアから除外するパスを指定
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|sw.js|workbox-*.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
