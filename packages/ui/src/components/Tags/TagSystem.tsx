@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 
-import { Text } from '@repo/ui/chakra-ui';
+import { ClientOnly, Skeleton, Text } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { Tag } from '@repo/ui/chakra-ui/tag';
 
@@ -108,27 +108,31 @@ export function BaseTag({
     };
 
   return (
-    <motion.div whileTap={{ scale: 0.97 }}>
-      <Tag
-        size="lg"
-        variant="solid"
-        bg={tagColor.bg}
-        borderWidth="1px"
-        borderColor={tagColor.border}
-        borderRadius="full"
-        py={2}
-        px={4}
-        cursor="pointer"
-        transition="all 0.3s"
-        startElement={startElement}
-        {...darkModeStyles}
-        onClick={onClick}
-      >
-        <Text color={tagColor.text} fontSize="md">
-          {name}
-        </Text>
-      </Tag>
-    </motion.div>
+    // useColorModeでハイドレーションエラーになるのでClientOnly
+    // https://www.chakra-ui.com/docs/components/concepts/color-mode#hydration-mismatch
+    <ClientOnly fallback={<Skeleton boxSize="8" />}>
+      <motion.div whileTap={{ scale: 0.97 }}>
+        <Tag
+          size="lg"
+          variant="solid"
+          bg={tagColor.bg}
+          borderWidth="1px"
+          borderColor={tagColor.border}
+          borderRadius="full"
+          py={2}
+          px={4}
+          cursor="pointer"
+          transition="all 0.3s"
+          startElement={startElement}
+          {...darkModeStyles}
+          onClick={onClick}
+        >
+          <Text color={tagColor.text} fontSize="md">
+            {name}
+          </Text>
+        </Tag>
+      </motion.div>
+    </ClientOnly>
   );
 }
 

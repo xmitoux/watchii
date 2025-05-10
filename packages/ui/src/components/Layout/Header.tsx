@@ -2,7 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdArrowBackIos } from 'react-icons/md';
 
-import { hachi_maru_pop } from '../../utils/fonts';
+import { cherry_bomb_one, hachi_maru_pop } from '../../utils/fonts';
 import { BasicButton } from '../Button/BasicButton';
 
 type HeaderProps = {
@@ -27,6 +27,9 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
       router.back();
     }
   }
+
+  // ホームのタイトルだけは、Watchiiのロゴを表示
+  const isWatchiiLogo = title === 'Watchii';
 
   return (
     <Box
@@ -63,7 +66,13 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
         </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text pb={1} color="chiiWhite" fontSize="lg" textAlign="center">
+        <Text
+          pb={1}
+          color="chiiWhite"
+          fontSize={isWatchiiLogo ? '2xl' : 'lg'}
+          className={isWatchiiLogo ? cherry_bomb_one.className : undefined}
+          textAlign="center"
+        >
           {title}
         </Text>
 

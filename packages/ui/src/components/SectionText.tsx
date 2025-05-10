@@ -12,7 +12,7 @@ export function SectionText({ title, to }: SectionTextProps) {
     <Box
       position="relative"
       w="full"
-      bg="hachiBlueSwitch"
+      bg={{ base: 'hachiBlue.light', _dark: 'hachiBlue.dark' }}
       borderRadius="lg"
       py={2}
       mb={4}

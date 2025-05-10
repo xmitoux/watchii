@@ -8,16 +8,17 @@ import { BasicButton } from '@repo/ui/components';
 import {
   IoHeart,
   IoHeartOutline,
+  IoReload,
   MdAccountCircle,
-  MdDarkMode,
   MdInfo,
   MdInfoOutline,
   MdInstallMobile,
+  MdLightMode,
   MdLogout,
   MdMenu,
   MdOutlineAccountCircle,
+  MdOutlineDarkMode,
   MdOutlineInstallMobile,
-  MdOutlineLightMode,
 } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -56,6 +57,11 @@ export function MenuDrawer() {
     // ダークモードのトグル
     toggleColorMode();
     setShowMenu(false);
+  }
+
+  // リロードボタンの処理
+  function handleReload() {
+    window.location.reload();
   }
 
   async function handleLogout() {
@@ -105,8 +111,8 @@ export function MenuDrawer() {
                   />
 
                   <MenuButton
-                    icon={colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
-                    label="ダークモード切り替え"
+                    icon={colorMode === 'light' ? <MdOutlineDarkMode /> : <MdLightMode />}
+                    label={colorMode === 'light' ? 'ダークモード' : 'ライトモード'}
                     onClick={handleToggleDarkMode}
                   />
 
@@ -115,6 +121,8 @@ export function MenuDrawer() {
                     label="アカウント設定"
                     to="/account-settings"
                   />
+
+                  <MenuButton icon={<IoReload />} label="ページリロード" onClick={handleReload} />
                 </Flex>
               </Drawer.Body>
 
