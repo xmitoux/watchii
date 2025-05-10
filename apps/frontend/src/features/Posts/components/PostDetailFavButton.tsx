@@ -54,7 +54,7 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
         // 手動更新の結果で楽観的更新(お気に入り一覧画面でリモートデータの更新を待たない)
         // https://swr.vercel.app/ja/docs/mutation#optimistic-updates
         optimisticData: mutateData,
-        populateCache: true,
+        populateCache: () => mutateData,
         // 手動更新の結果を使うので再検証しない
         // https://swr.vercel.app/ja/docs/mutation#revalidation
         revalidate: false,
