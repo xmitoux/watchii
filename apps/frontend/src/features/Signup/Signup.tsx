@@ -148,15 +148,17 @@ export default function Signup() {
                     />
                   </Fieldset.Content>
 
-                  <BasicButton
-                    color="chiiWhite"
-                    bg="hachiBlue"
-                    type="submit"
-                    disabled={!isFormValid}
-                    loading={loading}
-                  >
-                    登録
-                  </BasicButton>
+                  <Center>
+                    <BasicButton
+                      color="chiiWhite"
+                      bg="hachiBlue"
+                      type="submit"
+                      disabled={!isFormValid}
+                      loading={loading}
+                    >
+                      登録
+                    </BasicButton>
+                  </Center>
                 </Fieldset.Root>
               </form>
             </motion.div>
