@@ -25,7 +25,7 @@ export function PostPageShuttleButton({ direction, onClick }: PostPageShuttleBut
   return (
     <motion.div whileTap={{ scale: 0.96 }}>
       <IconButton
-        bg={{ base: 'hachiBlue.light', _dark: 'hachiBlue.dark' }}
+        bg="hachiBlueSwitch"
         size="xs"
         rounded="full"
         onClick={onClick}

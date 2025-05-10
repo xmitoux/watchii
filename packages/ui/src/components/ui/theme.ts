@@ -68,7 +68,7 @@ export default createSystem(defaultConfig, {
           value: { base: '{colors.chiiWhite}', _dark: '{colors.gray.800}' },
         },
         hachiBlueSwitch: {
-          value: { base: '{colors.hachiBlue.light}', _dark: '{colors.hachiBlue.dark}' },
+          value: { base: '{colors.hachiBlue}', _dark: '{colors.hachiBlue.dark}' },
         },
         usaYellowSwitch: {
           value: { base: '{colors.usaYellow.light}', _dark: '{colors.usaYellow.dark}' },
