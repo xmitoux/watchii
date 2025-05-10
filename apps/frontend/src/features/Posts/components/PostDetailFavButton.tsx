@@ -1,3 +1,5 @@
+import { MutatorOptions } from 'swr';
+
 import { Icon } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
 import { IoHeart, IoHeartOutline } from '@repo/ui/icons';
@@ -48,10 +50,11 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
       }
 
       // mutateオプション
-      const mutateOptions = {
+      const mutateOptions: MutatorOptions = {
         // 手動更新の結果で楽観的更新(お気に入り一覧画面でリモートデータの更新を待たない)
         // https://swr.vercel.app/ja/docs/mutation#optimistic-updates
         optimisticData: mutateData,
+        populateCache: true,
         // 手動更新の結果を使うので再検証しない
         // https://swr.vercel.app/ja/docs/mutation#revalidation
         revalidate: false,
