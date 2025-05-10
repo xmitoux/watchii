@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useSWR from 'swr';
 
 import { usersApi } from '@/features/Signup/api/users-api';
@@ -8,7 +7,6 @@ import { useSessionToken } from './useSessionToken';
 /** お気に入り機能用のカスタムフック */
 export function useUserFavs() {
   const { getSessionToken } = useSessionToken();
-  const [favLoading, setFavLoading] = useState(false);
 
   // お気に入りデータ取得用のfetcher
   const fetcher = async () => {
@@ -18,9 +16,7 @@ export function useUserFavs() {
       return;
     }
 
-    setFavLoading(true);
     const response = await usersApi.getUserFavs(token);
-    setFavLoading(false);
     return response;
   };
 
@@ -37,7 +33,7 @@ export function useUserFavs() {
 
   return {
     favPosts: data?.posts || [],
-    isFavLoading: !error && !data || favLoading,
+    isFavLoading: !error && !data,
     isError: error,
     isFav,
     mutate, // 状態更新用

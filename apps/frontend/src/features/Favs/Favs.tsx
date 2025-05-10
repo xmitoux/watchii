@@ -47,11 +47,7 @@ export default function Favs({ currentPage, perPage }: FavsProps) {
     <Layout
       title="お気に入り一覧"
       scrollRef={scrollRef}
-      pagination={
-        total === 0 || isFavLoading
-          ? undefined
-          : { total, currentPage, perPage, pagination }
-      }
+      pagination={total === 0 ? undefined : { total, currentPage, perPage, pagination }}
       noFooter
       noMenu
       onNavigationBack={handleBack}
