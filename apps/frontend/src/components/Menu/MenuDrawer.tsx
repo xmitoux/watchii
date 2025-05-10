@@ -2,18 +2,30 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { CloseButton, Dialog, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
+import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { BasicButton } from '@repo/ui/components';
-import { IoHeart, IoHeartOutline, MdDarkMode, MdExitToApp, MdInfoOutline, MdMenu, MdNoAccounts, MdOutlineLightMode, MdSmartphone } from '@repo/ui/icons';
+import {
+  IoHeart,
+  IoHeartOutline,
+  MdAccountCircle,
+  MdDarkMode,
+  MdInfo,
+  MdInfoOutline,
+  MdInstallMobile,
+  MdLogout,
+  MdMenu,
+  MdOutlineAccountCircle,
+  MdOutlineInstallMobile,
+  MdOutlineLightMode,
+} from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
-import { usersApi } from '@/features/Signup/api/users-api';
-import { useSessionToken } from '@/hooks/useSessionToken';
 import { useToast } from '@/hooks/useToast';
 import { useFavsStore } from '@/stores/favsStore';
 import { useNavigationStore } from '@/stores/navigationStore';
+import { gotoLogoutedPageAndRestHistory } from '@/utils/gotoLogoutedPageAndRestHistory';
 
 const favsPath = '/favs/page/1';
 
@@ -54,7 +66,7 @@ export function MenuDrawer() {
         throw error;
       }
 
-      gotoLogoutedPage('/welcome');
+      gotoLogoutedPageAndRestHistory('/welcome');
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
@@ -62,48 +74,6 @@ export function MenuDrawer() {
         message: 'ログアウトに失敗しました😢',
         errorMessage: error.message,
       });
-    }
-  }
-
-  /** ログアウト後に表示するページへの移動 */
-  function gotoLogoutedPage(destination: string) {
-    // ログアウト後にブラウザバックで画面操作ができてしまう問題の対応
-    window.history.replaceState(null, '', destination);
-    for (let i = 0; i < 10; i++) {
-      // 履歴を追加して戻れないようにする
-      window.history.pushState(null, '', destination);
-    }
-    window.location.reload();
-  }
-
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  const { getSessionToken } = useSessionToken();
-  const [loadingUserDelete, setLoadingUserDelete] = useState(false);
-
-  async function handleUserDelete() {
-    setLoadingUserDelete(true);
-
-    try {
-      const token = await getSessionToken();
-      if (!token) {
-        return;
-      }
-
-      // ユーザ削除API
-      await usersApi.deleteUser(token);
-
-      gotoLogoutedPage('/goodbye');
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    catch (error: any) {
-      showErrorToast({
-        message: '退会に失敗しました😢',
-        errorMessage: error.message,
-      });
-    }
-    finally {
-      setLoadingUserDelete(false);
     }
   }
 
@@ -140,35 +110,34 @@ export function MenuDrawer() {
                     onClick={handleToggleDarkMode}
                   />
 
-                  {!isPWA() && (
-                    <MenuButton
-                      icon={<MdSmartphone />}
-                      label="インストールガイド"
-                      to="/pwa-install-guide"
-                    />
-                  )}
+                  <MenuButton
+                    icon={colorMode === 'light' ? <MdOutlineAccountCircle /> : <MdAccountCircle />}
+                    label="アカウント設定"
+                    to="/account-settings"
+                  />
                 </Flex>
               </Drawer.Body>
 
               <Drawer.Footer flexDirection="column" justifyContent="center" gap={0} mb="20px">
                 <MenuButton
-                  icon={<MdInfoOutline />}
+                  icon={colorMode === 'light' ? <MdInfoOutline /> : <MdInfo />}
                   label="このアプリについて"
                   onClick={() => router.push('/about')}
                 />
 
+                {!isPWA() && (
+                  <MenuButton
+                    icon={colorMode === 'light' ? <MdOutlineInstallMobile /> : <MdInstallMobile />}
+                    label="インストールガイド"
+                    to="/pwa-install-guide"
+                  />
+                )}
+
                 <MenuButton
-                  icon={<MdExitToApp />}
+                  icon={<MdLogout />}
                   label="ログアウト"
                   labelColor="red.400"
                   onClick={handleLogout}
-                />
-
-                <MenuButton
-                  icon={<MdNoAccounts />}
-                  label="退会する"
-                  labelColor="red.400"
-                  onClick={() => setShowDeleteDialog(true)}
                 />
               </Drawer.Footer>
 
@@ -179,14 +148,6 @@ export function MenuDrawer() {
           </Drawer.Positioner>
         </Portal>
       </Drawer.Root>
-
-      {/* 退会確認ダイアログ */}
-      <UserDeleteConfirmDialog
-        open={showDeleteDialog}
-        onOpenChange={setShowDeleteDialog}
-        loading={loadingUserDelete}
-        onDelete={handleUserDelete}
-      />
     </>
   );
 }
@@ -213,57 +174,5 @@ function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
         )
         : label}
     </BasicButton>
-  );
-}
-
-/** 退会確認ダイアログのProps */
-type UserDeleteConfirmDialogProps = {
-  open: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  loading: boolean;
-  onDelete: () => void;
-};
-
-/** 退会確認ダイアログ */
-function UserDeleteConfirmDialog({ open, onOpenChange, loading, onDelete }: UserDeleteConfirmDialogProps) {
-  return (
-    <Dialog.Root
-      open={open}
-      size="xs"
-      placement="center"
-      closeOnEscape={false}
-      closeOnInteractOutside={false}
-      onOpenChange={(e) => onOpenChange(e.open)}
-    >
-      <Portal>
-        <Dialog.Backdrop />
-
-        <Dialog.Positioner>
-          <Dialog.Content>
-            <Dialog.Header>
-              <Dialog.Title fontSize="xl">退会確認</Dialog.Title>
-            </Dialog.Header>
-
-            <Dialog.Body fontSize="md">やめちゃう…ってコト！？</Dialog.Body>
-
-            <Dialog.Footer>
-              <Dialog.ActionTrigger asChild>
-                <BasicButton variant="outline" width="100px" disabled={loading}>
-                  キャンセル
-                </BasicButton>
-              </Dialog.ActionTrigger>
-
-              <BasicButton width="100px" colorPalette="red" loading={loading} onClick={onDelete}>
-                退会する
-              </BasicButton>
-            </Dialog.Footer>
-
-            <Dialog.CloseTrigger asChild>
-              <CloseButton size="md" disabled={loading} />
-            </Dialog.CloseTrigger>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Portal>
-    </Dialog.Root>
   );
 }
