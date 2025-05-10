@@ -10,15 +10,15 @@ import {
   IoHeartOutline,
   IoReload,
   MdAccountCircle,
-  MdDarkMode,
   MdInfo,
   MdInfoOutline,
   MdInstallMobile,
+  MdLightMode,
   MdLogout,
   MdMenu,
   MdOutlineAccountCircle,
+  MdOutlineDarkMode,
   MdOutlineInstallMobile,
-  MdOutlineLightMode,
 } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -111,8 +111,8 @@ export function MenuDrawer() {
                   />
 
                   <MenuButton
-                    icon={colorMode === 'light' ? <MdOutlineLightMode /> : <MdDarkMode />}
-                    label="ダークモード切り替え"
+                    icon={colorMode === 'light' ? <MdOutlineDarkMode /> : <MdLightMode />}
+                    label={colorMode === 'light' ? 'ダークモード' : 'ライトモード'}
                     onClick={handleToggleDarkMode}
                   />
 
