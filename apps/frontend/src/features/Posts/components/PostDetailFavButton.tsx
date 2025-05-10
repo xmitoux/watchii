@@ -19,39 +19,51 @@ export default function PostDetailFavButton({ postId }: PostDetailFavButtonProps
   // お気に入り状態
   const favorited = isFav(postId);
 
-  // トグル処理
-  const toggleFavorite = async () => {
-    // 現在の状態を取得
-    const currentFavorites = [...favPosts];
-
-    // Optimistic UI更新！APIレスポンス待たずに先に画面更新
-    if (isFav(postId)) {
-      // 解除する場合：該当postIdを除外
-      const posts = currentFavorites.filter((post) => post.id !== postId);
-      mutate({ posts, total: posts.length }, false);
-    }
-    else {
-      // 追加する場合：新しいお気に入り追加
-      const newFavPost: PostEntity = { id: postId, filename: '', postedAt: '' };
-      mutate({ posts: [newFavPost, ...currentFavorites], total: currentFavorites.length + 1 }, false);
-    }
-
+  // お気に入りトグル処理
+  async function toggleFavorite() {
     try {
       const token = await getSessionToken();
       if (!token) {
         return;
       }
 
-      // お気に入りトグルAPI
-      await usersApi.toggleUserFavs({ postId }, token);
+      // お気に入りトグルAPI(結果を待つ必要がないのでawaitしない)
+      usersApi.toggleUserFavs({ postId }, token);
 
-      // キャッシュを更新して即時UI反映
-      mutate();
+      // 現在のお気に入り一覧を取得
+      const currentFavorites = [...favPosts];
+
+      // 一覧の手動更新
+      let mutateData: { posts: PostEntity[]; total: number };
+      if (isFav(postId)) {
+        // 解除する場合：該当postIdを除外
+        const posts = currentFavorites.filter((post) => post.id !== postId);
+        mutateData = { posts, total: posts.length };
+      }
+      else {
+        // 追加する場合：新しいお気に入り追加
+        const newFavPost: PostEntity = { id: postId, filename: '', postedAt: '' };
+        // mutate({ posts: [newFavPost, ...currentFavorites], total: currentFavorites.length + 1 }, false);
+        mutateData = { posts: [newFavPost, ...currentFavorites], total: currentFavorites.length + 1 };
+      }
+
+      // mutateオプション
+      const mutateOptions = {
+        // 手動更新の結果で楽観的更新(お気に入り一覧画面でリモートデータの更新を待たない)
+        // https://swr.vercel.app/ja/docs/mutation#optimistic-updates
+        optimisticData: mutateData,
+        // 手動更新の結果を使うので再検証しない
+        // https://swr.vercel.app/ja/docs/mutation#revalidation
+        revalidate: false,
+      };
+
+      // mutateを実行(お気に入り一覧は楽観的更新の結果を使える)
+      mutate(mutateData, mutateOptions);
     }
     catch (error) {
       console.error('Error:', error);
     }
-  };
+  }
 
   const colorFav = { base: 'chiikawaPink', _dark: 'chiikawaPink.dark' };
   const colorNotFav = { base: 'chiiWhite', _dark: 'gray.900' };
