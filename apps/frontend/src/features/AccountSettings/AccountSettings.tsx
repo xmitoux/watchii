@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { Card, Center, CloseButton, Container, Dialog, Flex, HStack, Icon, Portal, Stack, Text } from '@repo/ui/chakra-ui';
@@ -11,9 +12,14 @@ import { useToast } from '@/hooks/useToast';
 import { gotoLogoutedPageAndRestHistory } from '@/utils/gotoLogoutedPageAndRestHistory';
 
 export default function AccountSettings() {
+  const router = useRouter();
   const { showErrorToast } = useToast();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  function gotoResetPasswordPage() {
+    router.push('/update-password');
+  }
 
   const { getSessionToken } = useSessionToken();
   const [loadingUserDelete, setLoadingUserDelete] = useState(false);
@@ -68,7 +74,7 @@ export default function AccountSettings() {
                     </Stack>
 
                     <Center>
-                      <BasicButton color="chiiWhite" bg="hachiBlueSwitch" w="150px">
+                      <BasicButton color="chiiWhite" bg="hachiBlueSwitch" w="150px" onClick={gotoResetPasswordPage}>
                         変更する
                       </BasicButton>
                     </Center>
