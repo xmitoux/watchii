@@ -18,15 +18,13 @@ export class UsersService {
 
   private readonly logger = new Logger(UsersService.name);
 
-  async getUserFavs(token: string, query: PaginationParams): Promise<GetUserFavsResponse> {
+  async getUserFavs(token: string): Promise<GetUserFavsResponse> {
     // トークン検証してユーザー取得
     const user = await this.supabase.getUser(token);
 
     if (!user) {
       throw new Error('ユーザ取得に失敗しました😨');
     }
-
-    const { limit = 12, offset = 0, sort = 'desc' } = query;
 
     // 全体の件数を取得
     const total = await this.prisma.userFav.count({
@@ -52,10 +50,8 @@ export class UsersService {
         },
       },
       orderBy: {
-        favedAt: sort,
+        favedAt: 'desc',
       },
-      take: limit,
-      skip: offset,
     });
 
     const posts = favorites.map((fav) => fav.post);
