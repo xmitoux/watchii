@@ -46,7 +46,7 @@ export function EpisodeCategoryCard({
                     src={imageUrls[item as keyof EpisodeCategoryCardImages]}
                     width={200}
                     height={0}
-                    style={{ width: '106px', height: 'auto' }}
+                    style={{ width: '106px', height: '106px' }}
                     priority
                     alt="カテゴリサムネイル"
                   />
