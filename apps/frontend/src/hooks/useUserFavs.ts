@@ -12,7 +12,6 @@ export function useUserFavs() {
   const fetcher = async () => {
     const token = await getSessionToken();
     if (!token) {
-      // 未ログイン時は空配列を返す
       return;
     }
 
@@ -20,8 +19,7 @@ export function useUserFavs() {
     return response;
   };
 
-  // useSWRでデータ取得＆キャッシュ
-  const { data, error, mutate } = useSWR('favs', fetcher);
+  const { data, error, isLoading, isValidating, mutate } = useSWR('favs', fetcher);
 
   // お気に入りチェック
   const isFav = (postId: number) => {
@@ -33,7 +31,8 @@ export function useUserFavs() {
 
   return {
     favPosts: data?.posts || [],
-    isFavLoading: !error && !data,
+    isFavLoading: isLoading,
+    isFavValidating: isValidating,
     isError: error,
     isFav,
     mutate, // 状態更新用

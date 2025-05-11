@@ -26,7 +26,7 @@ export function PostDetail({ post }: PostDetailProps) {
         />
 
         {/* お気に入りボタン */}
-        <PostDetailFavButton postId={post.id} />
+        <PostDetailFavButton post={post} />
 
         {/* キャラセクション */}
         <SectionText title="キャラ" />
