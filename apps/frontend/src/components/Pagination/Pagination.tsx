@@ -14,12 +14,17 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-export function Pagination({ totalPageCount, perPage, currentPage, onPageChange }: PaginationProps) {
+export function Pagination({ totalPageCount: totalPostCount, perPage, currentPage, onPageChange }: PaginationProps) {
   const [currentPageState, setCurrentPageState] = useState(currentPage);
+  // 前後ページの状態変更用の総ページ数
+  const [totalPageCountState, setTotalPageCountState] = useState(totalPostCount);
 
   useEffect(() => {
     setCurrentPageState(currentPage);
-  }, [currentPage]);
+
+    const total = Math.ceil(totalPostCount / perPage) || 1;
+    setTotalPageCountState(total);
+  }, [currentPage, totalPostCount, perPage]);
 
   const { isMobile } = useDeviceTypeStore();
   /** ページネーションの現在ページ前後のページ番号数 */
@@ -32,7 +37,7 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
 
   return (
     <ChakraPagination.Root
-      count={totalPageCount}
+      count={totalPostCount}
       pageSize={perPage}
       page={currentPageState}
       siblingCount={paginationSiblingCount}
@@ -40,9 +45,9 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
     >
       <ButtonGroup variant="solid" size={isMobile ? 'xs' : 'sm'} gap={2}>
         {/* 前ページ(<)のボタン */}
-        <motion.div whileTap={{ scale: 0.95 }}>
+        <motion.div whileTap={{ scale: 0.9 }}>
           <ChakraPagination.PrevTrigger asChild>
-            <IconButton color="chiiWhite" bg="hachiBlueSwitch">
+            <IconButton variant={currentPage === 1 ? 'ghost' : 'outline'} color="blackSwitch">
               <MdKeyboardArrowLeft />
             </IconButton>
           </ChakraPagination.PrevTrigger>
@@ -54,12 +59,14 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
               page.type === 'page'
                 ? (
                   // ページ番号のボタン
-                  <motion.div key={index} whileTap={{ scale: 0.95 }}>
+                  <motion.div key={index} whileTap={{ scale: 0.9 }}>
                     <ChakraPagination.Item {...page} asChild>
                       <IconButton
                         variant={page.value === currentPageState ? 'solid' : 'outline'}
                         color={page.value === currentPageState ? 'chiiWhite' : 'blackSwitch'}
-                        bg={page.value === currentPageState ? 'hachiBlueSwitch' : 'whiteSwitch'}
+                        bg={page.value === currentPageState
+                          ? { base: 'hachiwareBlue', _dark: 'hachiwareBlue.dark' }
+                          : undefined}
                       >
                         {page.value}
                       </IconButton>
@@ -69,7 +76,7 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
                 : (
                   // ページ番号省略(...)のボタン
                   <ChakraPagination.Ellipsis key={index} index={index} asChild>
-                    <IconButton variant="outline" color="blackSwitch" bg="whiteSwitch">
+                    <IconButton variant="ghost" color="blackSwitch">
                       <IoEllipsisHorizontal />
                     </IconButton>
                   </ChakraPagination.Ellipsis>
@@ -77,9 +84,9 @@ export function Pagination({ totalPageCount, perPage, currentPage, onPageChange 
         </ChakraPagination.Context>
 
         {/* 次ページ(>)のボタン */}
-        <motion.div whileTap={{ scale: 0.95 }}>
+        <motion.div whileTap={{ scale: 0.9 }}>
           <ChakraPagination.NextTrigger asChild>
-            <IconButton color="chiiWhite" bg="hachiBlueSwitch">
+            <IconButton variant={currentPage === totalPageCountState ? 'ghost' : 'outline'} color="blackSwitch">
               <MdKeyboardArrowRight />
             </IconButton>
           </ChakraPagination.NextTrigger>
