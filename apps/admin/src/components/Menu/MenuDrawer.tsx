@@ -55,7 +55,11 @@ export function MenuDrawer() {
     <>
       <Drawer.Root open={showMenu} onOpenChange={(e) => setShowMenu(e.open)}>
         <Drawer.Trigger asChild>
-          <Button variant="plain" color="chiiWhite">
+          <Button
+            variant="plain"
+            color="chiiWhite"
+            onClick={(e) => e.stopPropagation()} // ヘッダータップスクロールが発火しないようにする
+          >
             <MdMenu />
           </Button>
         </Drawer.Trigger>

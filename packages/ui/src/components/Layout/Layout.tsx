@@ -1,5 +1,7 @@
-import { Box } from '@chakra-ui/react';
-import { ReactNode, RefObject } from 'react';
+import { Box, Icon, IconButton } from '@chakra-ui/react';
+import { motion } from 'motion/react';
+import { ReactNode, RefObject, useEffect, useState } from 'react';
+import { MdVerticalAlignTop } from 'react-icons/md';
 
 import { Toaster } from '@repo/ui/chakra-ui/toaster';
 
@@ -14,6 +16,7 @@ type LayoutProps = {
   footerNavigationItems: NavigationItem[];
   noFooter?: boolean;
   color?: string;
+  showScrollToTop?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
   onNavigationBack?: () => void;
@@ -27,19 +30,60 @@ export const Layout: React.FC<LayoutProps> = ({
   canBack,
   noFooter,
   color = 'hachiwareBlue',
+  showScrollToTop,
   scrollRef,
   onNavigationClick,
   onNavigationBack,
 }) => {
+  // 最上部にスクロール
+  function scrollToTop() {
+    const container = document.querySelector('.scroll-container');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // 最上部にスクロールボタン表示のための内部状態
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!showScrollToTop) {
+      return;
+    }
+
+    // スクロール検知
+    const handleScroll = () => {
+      const container = document.querySelector('.scroll-container');
+      if (container) {
+        // 200px以上スクロールしたらボタン表示
+        setIsScrolled((container as HTMLElement).scrollTop > 200);
+      }
+    };
+
+    const container = document.querySelector('.scroll-container');
+    container?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+    };
+  }, [showScrollToTop]); // showScrollToTopが変わったら再設定
+
+  // 実際にボタンを表示するかどうか = propsがtrueかつスクロール済み
+  const shouldShowButton = showScrollToTop && isScrolled;
+
   return (
     <Box bg={{ base: 'chiiWhite', _dark: 'gray.900' }} height="100vh" overflow="hidden" position="relative">
-      <Header
-        title={title}
-        actionButton={actionButton}
-        canBack={canBack}
-        color={color}
-        onNavigationBack={onNavigationBack}
-      />
+      {/* ヘッダークリックで最上部にスクロール */}
+      <Box onClick={scrollToTop}>
+        {/* ヘッダー */}
+        <Header
+          title={title}
+          actionButton={actionButton}
+          canBack={canBack}
+          color={color}
+          onNavigationBack={onNavigationBack}
+        />
+      </Box>
 
       <Box
         ref={scrollRef}
@@ -62,6 +106,33 @@ export const Layout: React.FC<LayoutProps> = ({
         </Box>
       </Box>
 
+      {/* 最上部にスクロールボタン */}
+      <Box position="fixed" bottom="85px" right="20px" zIndex={9999}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: shouldShowButton ? 1 : 0,
+            y: shouldShowButton ? 0 : 10,
+          }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <IconButton
+            color="chiiWhite"
+            bg="hachiBlueSwitch"
+            size="lg"
+            rounded="full"
+            boxShadow="md"
+            onClick={scrollToTop}
+          >
+            <Icon color="chiiWhite" size="xl">
+              <MdVerticalAlignTop />
+            </Icon>
+          </IconButton>
+        </motion.div>
+      </Box>
+
+      {/* フッター */}
       {!noFooter && <Footer navigationItems={footerNavigationItems} color={color} onNavigationClick={onNavigationClick} />}
 
       {/* トースト用 */}

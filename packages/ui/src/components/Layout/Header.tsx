@@ -16,7 +16,10 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, onNavigationBack }) => {
   const router = useRouter();
 
-  function handleBack() {
+  function handleBack(e: React.MouseEvent) {
+    // 最上部にスクロールが発火しないようにする
+    e.stopPropagation();
+
     // 戻るボタンが押されたときの処理
     if (onNavigationBack) {
       // カスタムの戻る処理があればそれを実行
