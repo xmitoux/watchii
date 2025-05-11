@@ -81,6 +81,9 @@ export class UsersService {
         },
       });
 
+      // TODO: テスト ちょっと遅延
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // お気に入り登録またはお気に入り解除
       if (existingFav) {
       // 既に存在する場合は削除
@@ -105,8 +108,8 @@ export class UsersService {
       }
     }
     catch (error) {
-      this.logger.error('お気に入りトグル処理に失敗しました😣');
-      throw error;
+      // 基本的にボタンの連続クリックによるエラーなのでログだけ吐いて握りつぶす
+      this.logger.error('お気に入りトグル処理に失敗しました😣 %s', error.message);
     }
   }
 

@@ -54,8 +54,17 @@ export default function PostDetailFavButton({ post }: PostDetailFavButtonProps) 
       // APIリクエスト実行 + 楽観的UI更新
       mutate(
         async () => {
-          // お気に入りトグルAPI
-          await usersApi.toggleUserFavs({ postId: post.id }, token);
+          try {
+            // お気に入りトグルAPI
+            await usersApi.toggleUserFavs({ postId: post.id }, token);
+          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          catch (error: any) {
+            showErrorToast({
+              message: 'お気に入りトグル処理に失敗しました😢',
+              errorMessage: error.message,
+            });
+          }
 
           // API呼び出しが成功したらoptimisticDataを返して確定させる
           // APIレスポンスがある場合はそちらを優先して返せる
