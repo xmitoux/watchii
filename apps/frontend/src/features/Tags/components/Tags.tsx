@@ -24,7 +24,7 @@ export default function Tags({ characters, tags, popularWordSpeakers }: TagsProp
   }, []);
 
   return (
-    <Layout title="タグ一覧" scrollRef={scrollRef}>
+    <Layout title="タグ一覧" showScrollToTop scrollRef={scrollRef}>
       <Flex direction="column" align="center">
         {/* キャラクターセクション */}
         <SectionText title="キャラ" />

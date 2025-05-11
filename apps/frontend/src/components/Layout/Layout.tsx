@@ -49,6 +49,7 @@ type LayoutProps = {
     currentPage: number;
     pagination: ReturnType<typeof usePagination>['pagination'];
   };
+  showScrollToTop?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
   onNavigationBack?: () => void;
 };
@@ -66,6 +67,7 @@ export default function Layout({
   noFooter,
   noMenu,
   pagination,
+  showScrollToTop,
   scrollRef,
   onNavigationBack,
 }: LayoutProps) {
@@ -163,6 +165,7 @@ export default function Layout({
         canBack={canBack}
         footerNavigationItems={navigationItems}
         noFooter={noFooter}
+        showScrollToTop={showScrollToTop}
         scrollRef={scrollRef}
         onNavigationClick={handleNavigationClick}
         onNavigationBack={onNavigationBack}
