@@ -12,17 +12,10 @@ export class UsersController {
   @Get('/get-user-favs')
   async getUserFavs(
     @Headers('authorization') token: string,
-    @Query('limit') limit?: number,
-    @Query('offset') offset?: number,
-    @Query('sort') sort?: 'asc' | 'desc',
   ) {
     this.logger.log('getUserFavs');
 
-    return this.usersService.getUserFavs(token, {
-      limit: limit ? Number(limit) : undefined,
-      offset: offset ? Number(offset) : undefined,
-      sort,
-    });
+    return this.usersService.getUserFavs(token);
   }
 
   @Post('/toggle-user-favs')
