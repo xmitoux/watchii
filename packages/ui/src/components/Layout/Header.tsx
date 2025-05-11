@@ -16,7 +16,9 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, onNavigationBack }) => {
   const router = useRouter();
 
-  function handleBack() {
+  function handleBack(e: React.MouseEvent) {
+    e.stopPropagation();
+
     // 戻るボタンが押されたときの処理
     if (onNavigationBack) {
       // カスタムの戻る処理があればそれを実行
@@ -31,6 +33,13 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
   // ホームのタイトルだけは、Watchiiのロゴを表示
   const isWatchiiLogo = title === 'Watchii';
 
+  function handleScrollToTop() {
+    const container = document.querySelector('.scroll-container');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   return (
     <Box
       className={hachi_maru_pop.className}
@@ -41,6 +50,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
       left="0"
       right="0"
       zIndex="sticky"
+      onClick={handleScrollToTop} // 擬似的なステータスバータップスクロール
     >
       {/* メインヘッダー部分 */}
       <Flex
