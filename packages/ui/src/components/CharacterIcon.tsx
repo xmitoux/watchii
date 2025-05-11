@@ -51,7 +51,7 @@ export function CharacterIcon({
             loader={imageLoader}
             width={size}
             height={0}
-            style={{ width: iconSize, height: 'auto' }}
+            style={{ width: iconSize, height: iconSize }}
             priority={priority}
             alt={character.name}
           />
