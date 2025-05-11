@@ -1,8 +1,9 @@
-// MessageImageComponent.tsx
 import NextImage from 'next/image';
 import { ReactNode } from 'react';
 
-import { Flex, FlexProps, Image, Text, VStack } from '@repo/ui/chakra-ui';
+import { Flex, FlexProps, Text, VStack } from '@repo/ui/chakra-ui';
+
+import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
 
 type MessageWithImageProps = {
   /** メインタイトルまたは主要メッセージ (省略可能) */
@@ -25,6 +26,8 @@ export default function MessageWithImage({
   imageSrc,
   flexProps,
 }: MessageWithImageProps) {
+  const { isMobile } = useDeviceTypeStore();
+
   // messagesが文字列の場合は配列に変換
   const messageArray = typeof messages === 'string' ? [messages] : messages;
 
@@ -53,16 +56,14 @@ export default function MessageWithImage({
         )}
 
         {/* 画像コンポーネント */}
-        <Image asChild alt="">
-          <NextImage
-            src={imageSrc}
-            width={1000}
-            height={0}
-            style={{ width: '500px', height: 'auto' }}
-            priority
-            alt={title || '画像'}
-          />
-        </Image>
+        <NextImage
+          src={imageSrc}
+          width={1000}
+          height={0}
+          style={{ width: '500px', height: isMobile ? '260px' : '350px' }}
+          priority
+          alt={title || '画像'}
+        />
       </VStack>
     </Flex>
   );
