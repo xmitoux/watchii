@@ -2,14 +2,14 @@ import { ApiResponse, callExternalApi } from '@/lib/api/helpers';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const endpoint = '/users/toggle-user-favs';
+const endpoint = '/users/add-user-fav';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>,
 ) {
   try {
-    // POSTリクエスト - お気に入りトグル🌟
+    // POSTリクエスト - お気に入り登録💖
     if (req.method === 'POST') {
       const token = req.headers.authorization;
       const data = await callExternalApi(endpoint, 'POST', req.body, token);

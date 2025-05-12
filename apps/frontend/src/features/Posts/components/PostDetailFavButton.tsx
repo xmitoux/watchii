@@ -26,95 +26,106 @@ export default function PostDetailFavButton({ post }: PostDetailFavButtonProps) 
   const [clickPosition, setClickPosition] = useState<ClickPosition>({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLDivElement>(null);
 
+  // お気に入りトグル処理中かどうか
+  const isToggleProcessingRef = useRef<boolean>(false);
+  // 保留中のトグル状態
+  const pendingToggleStateRef = useRef<boolean | null>(null);
+
   // お気に入り状態
   const favorited = isFav(post.id);
+
+  // エフェクトを実行する関数（視覚効果のみ）
+  function showSparkleEffect(e: React.MouseEvent) {
+    // クリック位置を取得
+    const buttonRect = buttonRef.current?.getBoundingClientRect();
+    if (buttonRect) {
+      // ボタン内のクリック位置を取得
+      const x = e.clientX - buttonRect.left;
+      const y = e.clientY - buttonRect.top;
+      setClickPosition({ x, y });
+    }
+
+    // エフェクトを表示
+    setShowEffect(true);
+    // エフェクトの表示時間後に非表示にする
+    setTimeout(() => {
+      setShowEffect(false);
+    }, 1200);
+  }
 
   // お気に入りボタンのクリックイベントハンドラ
   function handleFav(e: React.MouseEvent) {
     // パーティクル処理
     if (!favorited) {
       // 今がお気に入りでない(=今からお気に入りにする)場合のみパーティクルを表示
-
-      // クリック位置を取得
-      const buttonRect = buttonRef.current?.getBoundingClientRect();
-      if (buttonRect) {
-        // ボタン内のクリック位置を取得
-        const x = e.clientX - buttonRect.left;
-        const y = e.clientY - buttonRect.top;
-        setClickPosition({ x, y });
-      }
-
-      // お気に入りに追加されたらエフェクトを表示
-      setShowEffect(true);
-      // エフェクトの表示時間後に非表示にする
-      setTimeout(() => {
-        setShowEffect(false);
-      }, 1200); // 少し長めに設定
+      showSparkleEffect(e);
     }
 
-    // お気に入りトグル処理を実行
-    toggleFavorite();
+    // 今からトグルする状態
+    const newFavState = !favorited;
+
+    // 楽観的UI更新
+    updateFavOptimistically(newFavState);
+
+    if (isToggleProcessingRef.current) {
+      // すでに処理中ならキューイング
+      pendingToggleStateRef.current = newFavState;
+    }
+    else {
+      // 処理中じゃない場合はそのまま実行
+      executeToggleApi(newFavState);
+    }
+  }
+
+  // 楽観的UI更新（ボタンの表示状態をすぐに変更）
+  function updateFavOptimistically(newFavState: boolean) {
+    // 現在のお気に入り一覧を取得
+    const currentFavorites = [...favPosts];
+
+    // 新しいお気に入り状態を作成
+    let updatedFavorites: PostEntity[];
+    if (!newFavState) {
+      // 解除する場合：該当postIdを除外
+      updatedFavorites = currentFavorites.filter((favPost) => favPost.id !== post.id);
+    }
+    else {
+      // 追加する場合：新しいお気に入り追加
+      const newFavPost: PostEntity = { ...post };
+      updatedFavorites = [newFavPost, ...currentFavorites];
+    }
+
+    // 楽観的UI更新のデータ
+    const optimisticData: GetUserFavsResponse = {
+      posts: updatedFavorites,
+      total: updatedFavorites.length,
+    };
+
+    // 即時UI更新（APIは呼ばない）
+    mutate(optimisticData, false);
   }
 
   // お気に入りトグル処理
-  async function toggleFavorite() {
+  async function executeToggleApi(newFavState: boolean) {
     try {
+      isToggleProcessingRef.current = true;
+
       const token = await getSessionToken();
       if (!token) {
         return;
       }
 
-      // 現在のお気に入り一覧を取得
-      const currentFavorites = [...favPosts];
-
-      // 新しいお気に入り状態の作成
-      let updatedFavorites: PostEntity[];
-      if (favorited) {
-        // 解除する場合：該当postIdを除外
-        updatedFavorites = currentFavorites.filter((favPost) => favPost.id !== post.id);
+      // お気に入り状態に応じたAPI呼び出し
+      if (newFavState) {
+        // お気に入り追加API
+        await usersApi.addUserFav({ postId: post.id }, token);
       }
       else {
-        // 追加する場合：新しいお気に入り追加
-        const newFavPost: PostEntity = { ...post };
-        updatedFavorites = [newFavPost, ...currentFavorites];
+        // お気に入り解除API
+        await usersApi.removeUserFav({ postId: post.id }, token);
       }
 
-      // 楽観的UI更新の準備
-      const optimisticData: GetUserFavsResponse = {
-        posts: updatedFavorites,
-        total: updatedFavorites.length,
-      };
-
-      // APIリクエスト実行 + 楽観的UI更新
-      mutate(
-        async () => {
-          try {
-            // お気に入りトグルAPI
-            await usersApi.toggleUserFavs({ postId: post.id }, token);
-          }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          catch (error: any) {
-            showErrorToast({
-              message: 'お気に入りトグル処理に失敗しました😢',
-              errorMessage: error.message,
-            });
-          }
-
-          // API呼び出しが成功したらoptimisticDataを返して確定させる
-          // APIレスポンスがある場合はそちらを優先して返せる
-          return optimisticData;
-        },
-        {
-          // リクエスト前に即座に表示するデータ
-          optimisticData,
-          // APIレスポンスでキャッシュを更新
-          populateCache: true,
-          // その後の再検証は不要 (APIからのレスポンスで既に最新状態になっている)
-          revalidate: false,
-          // エラー時にロールバック
-          rollbackOnError: true,
-        },
-      );
+      // API成功後にキャッシュを再検証（オプション）
+      // mutate();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
@@ -122,6 +133,22 @@ export default function PostDetailFavButton({ post }: PostDetailFavButtonProps) 
         message: 'お気に入りトグル処理に失敗しました😢',
         errorMessage: error.message,
       });
+    }
+    finally {
+      // 保留中のトグルがあるか確認
+      const pendingState = pendingToggleStateRef.current;
+
+      // 状態をリセット
+      isToggleProcessingRef.current = false;
+      pendingToggleStateRef.current = null;
+
+      if (pendingState !== null) {
+        // 保留中のトグルがあれば実行
+        // 少し遅延させて次の処理を実行（UIの反応性を向上）
+        setTimeout(() => {
+          executeToggleApi(pendingState);
+        }, 50);
+      }
     }
   }
 
@@ -289,8 +316,8 @@ const HeartPulse = ({ x, y }: { x: number; y: number }) => {
           border: '2px solid',
           borderColor: '#FF6B8B',
           borderRadius: '50%',
-          top: y,
-          left: x,
+          top: y - 20,
+          left: x - 20,
           width: '40px',
           height: '40px',
           transform: 'translate(-50%, -50%)',
@@ -307,8 +334,8 @@ const HeartPulse = ({ x, y }: { x: number; y: number }) => {
           border: '2px solid',
           borderColor: '#FF96AB',
           borderRadius: '50%',
-          top: y,
-          left: x,
+          top: y - 20,
+          left: x - 20,
           width: '40px',
           height: '40px',
           transform: 'translate(-50%, -50%)',

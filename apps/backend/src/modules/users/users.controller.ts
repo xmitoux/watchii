@@ -18,15 +18,26 @@ export class UsersController {
     return this.usersService.getUserFavs(token);
   }
 
-  @Post('/toggle-user-favs')
-  async toggleUserFavs(
+  @Post('/add-user-fav')
+  async addUserFav(
     @Headers('authorization') token: string,
     @Body() dto: ToggleUserFavsRequestDto,
   ) {
-    this.logger.log('toggleUserFavs');
+    this.logger.log('addUserFav');
     this.logger.log('dto: %o', dto);
 
-    return this.usersService.toggleUserFavs(token, dto);
+    return this.usersService.addUserFav(token, dto);
+  }
+
+  @Post('/remove-user-fav')
+  async removeUserFav(
+    @Headers('authorization') token: string,
+    @Body() dto: ToggleUserFavsRequestDto,
+  ) {
+    this.logger.log('removeUserFav');
+    this.logger.log('dto: %o', dto);
+
+    return this.usersService.removeUserFav(token, dto);
   }
 
   @Post()
