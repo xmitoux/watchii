@@ -21,9 +21,14 @@ export class UsersApi {
     return this.apiClient.get(`${this.endpoint}/get-user-favs`, token);
   }
 
-  /** ユーザのお気に入りをトグルする */
-  async toggleUserFavs(request: ToggleUserFavsRequest, token: string): Promise<void> {
-    return this.apiClient.post(`${this.endpoint}/toggle-user-favs`, request, token);
+  /** ユーザのお気に入りを追加する */
+  async addUserFav(request: ToggleUserFavsRequest, token: string): Promise<void> {
+    return this.apiClient.post(`${this.endpoint}/add-user-fav`, request, token);
+  }
+
+  /** ユーザのお気に入りを削除する */
+  async removeUserFav(request: ToggleUserFavsRequest, token: string): Promise<void> {
+    return this.apiClient.post(`${this.endpoint}/remove-user-fav`, request, token);
   }
 
   /** ユーザを削除する */

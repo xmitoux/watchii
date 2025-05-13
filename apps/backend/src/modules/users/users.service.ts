@@ -62,7 +62,8 @@ export class UsersService {
     };
   }
 
-  async toggleUserFavs(token: string, { postId }: ToggleUserFavsRequestDto): Promise<void> {
+  // お気に入り追加
+  async addUserFav(token: string, { postId }: ToggleUserFavsRequestDto): Promise<void> {
     // トークン検証してユーザー取得
     const user = await this.supabase.getUser(token);
 
@@ -81,22 +82,7 @@ export class UsersService {
         },
       });
 
-      // TODO: テスト ちょっと遅延
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // お気に入り登録またはお気に入り解除
-      if (existingFav) {
-      // 既に存在する場合は削除
-        await this.prisma.userFav.delete({
-          where: {
-            userId_postId: {
-              userId: user.id,
-              postId,
-            },
-          },
-        });
-      }
-      else {
+      if (!existingFav) {
       // 存在しない場合は登録
         await this.prisma.userFav.create({
           data: {
@@ -109,7 +95,45 @@ export class UsersService {
     }
     catch (error) {
       // 基本的にボタンの連続クリックによるエラーなのでログだけ吐いて握りつぶす
-      this.logger.error('お気に入りトグル処理に失敗しました😣 %s', error.message);
+      this.logger.error('お気に入り追加処理に失敗しました %s', error.message);
+    }
+  }
+
+  // お気に入り削除
+  async removeUserFav(token: string, { postId }: ToggleUserFavsRequestDto): Promise<void> {
+    // トークン検証してユーザー取得
+    const user = await this.supabase.getUser(token);
+
+    if (!user) {
+      throw new Error('ユーザ取得に失敗しました😱');
+    }
+
+    try {
+    // 既存のお気に入りを確認
+      const existingFav = await this.prisma.userFav.findUnique({
+        where: {
+          userId_postId: {
+            userId: user.id,
+            postId,
+          },
+        },
+      });
+
+      if (existingFav) {
+      // 既に存在する場合は削除
+        await this.prisma.userFav.delete({
+          where: {
+            userId_postId: {
+              userId: user.id,
+              postId,
+            },
+          },
+        });
+      }
+    }
+    catch (error) {
+      // 基本的にボタンの連続クリックによるエラーなのでログだけ吐いて握りつぶす
+      this.logger.error('お気に入り削除処理に失敗しました %s', error.message);
     }
   }
 
