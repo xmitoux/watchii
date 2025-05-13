@@ -140,8 +140,8 @@ export default function PasswordReset({ skipOtpVerify }: PasswordResetProps) {
                 >
                   <Flex direction="column" justify="center" align="center" minH="75vh">
                     <MessageWithImage
-                      title="パスワードがリセットされました"
-                      messages={['新しいパスワードでログインしてください。']}
+                      title="パスワードがリセットされました！"
+                      messages="新しいパスワードでログインしてください"
                       imageSrc="/images/reset-password-completed.webp"
                     />
 

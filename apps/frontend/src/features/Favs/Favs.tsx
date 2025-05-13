@@ -55,7 +55,7 @@ export default function Favs({ currentPage, perPage }: FavsProps) {
       {isFavLoading
         ? <LoadingScreen />
         : total === 0
-          ? <MessageWithImage title="お気に入りがないよ" messages="漫画詳細から追加してみよう！" imageSrc="/images/no-favs.webp" />
+          ? <MessageWithImage title="お気に入りがないよ！" messages="漫画詳細から追加してみよう" imageSrc="/images/no-favs.webp" />
           : (
             <>
               {/* post一覧 */}
