@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Container, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
 import { Login as BaseLogin, BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
@@ -106,106 +106,108 @@ export default function Login() {
 
   return (
     <Layout title="ログイン" canBack noFooter noMenu>
-      {isResetMode ? (
-        // パスワードリセットフォーム
-        <Center>
-          <form onSubmit={handleResetPassword}>
-            <Fieldset.Root size="lg">
-              <Stack>
-                <Fieldset.Legend>パスワードリセット</Fieldset.Legend>
-                <Fieldset.HelperText>
-                  指定されたメールアドレス宛に、
-                  <br />
-                  パスワード再設定用のリンクを送信します
-                </Fieldset.HelperText>
-              </Stack>
+      <Container maxW="xl">
+        {isResetMode ? (
+          // パスワードリセットフォーム
+          <Center>
+            <form onSubmit={handleResetPassword}>
+              <Fieldset.Root size="lg">
+                <Stack>
+                  <Fieldset.Legend>パスワードリセット</Fieldset.Legend>
+                  <Fieldset.HelperText>
+                    指定されたメールアドレス宛に、
+                    <br />
+                    パスワード再設定用のリンクを送信します
+                  </Fieldset.HelperText>
+                </Stack>
 
-              <Fieldset.Content>
-                <Field.Root required>
-                  <Field.Label>
-                    <MdMail />
-                    メールアドレス
-                    <Field.RequiredIndicator />
-                  </Field.Label>
+                <Fieldset.Content>
+                  <Field.Root required>
+                    <Field.Label>
+                      <MdMail />
+                      メールアドレス
+                      <Field.RequiredIndicator />
+                    </Field.Label>
 
-                  <Input value={email} type="email" onChange={(e) => setEmail(e.target.value)} />
-                </Field.Root>
-              </Fieldset.Content>
+                    <Input value={email} type="email" onChange={(e) => setEmail(e.target.value)} />
+                  </Field.Root>
+                </Fieldset.Content>
 
-              <Center>
-                <BasicButton
-                  type="submit"
-                  color="chiiWhite"
-                  bg="hachiBlue"
-                  disabled={email === '' || isAnyLoginProcessing}
-                  loading={emailSending}
-                >
-                  メールを送信
-                </BasicButton>
-              </Center>
+                <Center>
+                  <BasicButton
+                    type="submit"
+                    color="chiiWhite"
+                    bg="hachiBlue"
+                    disabled={email === '' || isAnyLoginProcessing}
+                    loading={emailSending}
+                  >
+                    メールを送信
+                  </BasicButton>
+                </Center>
 
-              <Center>
-                <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
-                  <MdArrowBack />
-                  ログイン画面に戻る
-                </BasicButton>
-              </Center>
-            </Fieldset.Root>
-          </form>
-        </Center>
-      ) : (
-        // 通常のログインフォーム
-        <>
-          <BaseLogin oAuthSigninProcessing={isAnyLoginProcessing} />
-
-          <Center mt={6}>
-            <Text color="blackPrimary" fontSize="sm">
-              パスワードを忘れた場合は
-            </Text>
-            <Text
-              color="hachiwareBlue.dark"
-              fontSize="sm"
-              cursor={isAnyLoginProcessing ? 'not-allowed' : 'pointer'}
-              opacity={isAnyLoginProcessing ? 0.5 : 1}
-              _hover={{ textDecoration: isAnyLoginProcessing ? 'none' : 'underline' }}
-              onClick={() => !isAnyLoginProcessing && setIsResetMode(true)}
-            >
-              こちら
-            </Text>
+                <Center>
+                  <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
+                    <MdArrowBack />
+                    ログイン画面に戻る
+                  </BasicButton>
+                </Center>
+              </Fieldset.Root>
+            </form>
           </Center>
+        ) : (
+          // 通常のログインフォーム
+          <>
+            <BaseLogin oAuthSigninProcessing={isAnyLoginProcessing} />
 
-          <Box mt={6} px="15vw">
-            <HStack>
-              <Separator flex="1" />
-              <Text fontSize="sm" color="blackPrimary">または</Text>
-              <Separator flex="1" />
-            </HStack>
-          </Box>
+            <Center mt={6}>
+              <Text color="blackPrimary" fontSize="sm">
+                パスワードを忘れた場合は
+              </Text>
+              <Text
+                color="hachiwareBlue.dark"
+                fontSize="sm"
+                cursor={isAnyLoginProcessing ? 'not-allowed' : 'pointer'}
+                opacity={isAnyLoginProcessing ? 0.5 : 1}
+                _hover={{ textDecoration: isAnyLoginProcessing ? 'none' : 'underline' }}
+                onClick={() => !isAnyLoginProcessing && setIsResetMode(true)}
+              >
+                こちら
+              </Text>
+            </Center>
 
-          <VStack mt={6} gap={4}>
-            <BasicButton
-              bg="black"
-              loading={oauthLoading === 'github'}
-              disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
-              onClick={() => handleOAuthLogin('github')}
-            >
-              <IoLogoGithub />
-              GitHubでログイン
-            </BasicButton>
+            <Box mt={6} px="15vw">
+              <HStack>
+                <Separator flex="1" />
+                <Text fontSize="sm" color="blackPrimary">または</Text>
+                <Separator flex="1" />
+              </HStack>
+            </Box>
 
-            <BasicButton
-              variant="surface"
-              bg="white"
-              loading={oauthLoading === 'google'}
-              onClick={() => handleOAuthLogin('google')}
-              disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
-            >
-              <FcGoogle />
-              <Text color="blackPrimary">Googleでログイン</Text>
-            </BasicButton>
-          </VStack>
-        </>
-      )}
+            <VStack mt={6} gap={4}>
+              <BasicButton
+                bg="black"
+                loading={oauthLoading === 'github'}
+                disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
+                onClick={() => handleOAuthLogin('github')}
+              >
+                <IoLogoGithub />
+                GitHubでログイン
+              </BasicButton>
+
+              <BasicButton
+                variant="surface"
+                bg="white"
+                loading={oauthLoading === 'google'}
+                onClick={() => handleOAuthLogin('google')}
+                disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
+              >
+                <FcGoogle />
+                <Text color="blackPrimary">Googleでログイン</Text>
+              </BasicButton>
+            </VStack>
+          </>
+        )}
+      </Container>
     </Layout>
   );
 }

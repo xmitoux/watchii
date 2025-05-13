@@ -2,7 +2,7 @@
 import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
-import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
+import { Center, Container, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
 import { MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
@@ -87,83 +87,86 @@ export default function Signup() {
 
   return (
     <Layout title="新規登録" canBack noFooter noMenu>
-      <Center>
-        {signUpSuccess
-          ? (
-            <motion.div
-              key="completed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } }}
-              exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            >
-              <MessageWithImage
-                title="登録確認用のメールを送信しました！"
-                messages={['メール内のリンクをクリックして', '登録を完了してください！']}
-                imageSrc="/images/signup-mail-sent.webp"
-              />
-            </motion.div>
-          )
-          : (
-            <motion.div
-              key="form"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.3, ease: 'easeIn' } }}
-              exit={{ opacity: 0, transition: { duration: 0.5 } }}
-            >
-              <form onSubmit={handleSignup}>
-                <Fieldset.Root size="lg">
-                  <Stack>
-                    <Fieldset.Legend>登録</Fieldset.Legend>
-                    <Fieldset.HelperText>アカウント情報を入力してね！</Fieldset.HelperText>
-                  </Stack>
+      <Container maxW="xl">
 
-                  <Fieldset.Content>
-                    <Field.Root required>
-                      <Field.Label>
-                        <Icon><MdMail /></Icon>
-                        メールアドレス
-                        <Field.RequiredIndicator />
-                      </Field.Label>
+        <Center>
+          {signUpSuccess
+            ? (
+              <motion.div
+                key="completed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+              >
+                <MessageWithImage
+                  title="登録確認用のメールを送信しました！"
+                  messages={['メール内のリンクをクリックして', '登録を完了してください！']}
+                  imageSrc="/images/signup-mail-sent.webp"
+                />
+              </motion.div>
+            )
+            : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3, ease: 'easeIn' } }}
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+              >
+                <form onSubmit={handleSignup}>
+                  <Fieldset.Root size="lg">
+                    <Stack>
+                      <Fieldset.Legend>登録</Fieldset.Legend>
+                      <Fieldset.HelperText>アカウント情報を入力してね！</Fieldset.HelperText>
+                    </Stack>
 
-                      <Input
-                        value={email}
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
+                    <Fieldset.Content>
+                      <Field.Root required>
+                        <Field.Label>
+                          <Icon><MdMail /></Icon>
+                          メールアドレス
+                          <Field.RequiredIndicator />
+                        </Field.Label>
+
+                        <Input
+                          value={email}
+                          type="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </Field.Root>
+
+                      {/* 共通パスワードフィールドコンポーネントを使用 */}
+                      <PasswordFields
+                        password={password}
+                        confirmPassword={confirmPassword}
+                        passwordTouched={passwordTouched}
+                        confirmTouched={confirmTouched}
+                        isValidFormat={isValidFormat}
+                        isLongEnough={isLongEnough}
+                        passwordsMatch={passwordsMatch}
+                        handlePasswordChange={handlePasswordChange}
+                        handleConfirmChange={handleConfirmChange}
+                        handlePasswordBlur={handlePasswordBlur}
+                        handleConfirmBlur={handleConfirmBlur}
                       />
-                    </Field.Root>
+                    </Fieldset.Content>
 
-                    {/* 共通パスワードフィールドコンポーネントを使用 */}
-                    <PasswordFields
-                      password={password}
-                      confirmPassword={confirmPassword}
-                      passwordTouched={passwordTouched}
-                      confirmTouched={confirmTouched}
-                      isValidFormat={isValidFormat}
-                      isLongEnough={isLongEnough}
-                      passwordsMatch={passwordsMatch}
-                      handlePasswordChange={handlePasswordChange}
-                      handleConfirmChange={handleConfirmChange}
-                      handlePasswordBlur={handlePasswordBlur}
-                      handleConfirmBlur={handleConfirmBlur}
-                    />
-                  </Fieldset.Content>
-
-                  <Center>
-                    <BasicButton
-                      color="chiiWhite"
-                      bg="hachiBlue"
-                      type="submit"
-                      disabled={!isFormValid}
-                      loading={loading}
-                    >
-                      登録
-                    </BasicButton>
-                  </Center>
-                </Fieldset.Root>
-              </form>
-            </motion.div>
-          )}
-      </Center>
+                    <Center>
+                      <BasicButton
+                        color="chiiWhite"
+                        bg="hachiBlue"
+                        type="submit"
+                        disabled={!isFormValid}
+                        loading={loading}
+                      >
+                        登録
+                      </BasicButton>
+                    </Center>
+                  </Fieldset.Root>
+                </form>
+              </motion.div>
+            )}
+        </Center>
+      </Container>
 
       {/* 画像プリフェッチ用の隠し要素 */}
       <PrefetchImage src="/images/signup-mail-sent.webp" width={1000} />
