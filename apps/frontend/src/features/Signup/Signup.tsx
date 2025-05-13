@@ -2,9 +2,9 @@
 import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
-import { Center, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
+import { Box, Center, Container, Field, Fieldset, HStack, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
-import { MdMail } from '@repo/ui/icons';
+import { FcGoogle, IoLogoGithub, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
@@ -13,6 +13,9 @@ import { PasswordFields } from '@/components/PasswordFields';
 import PrefetchImage from '@/components/PrefetchImage';
 import { usePasswordValidation } from '@/hooks/usePasswordValidation';
 import { useToast } from '@/hooks/useToast';
+
+// OAuthプロバイダーの型定義
+type OAuthProvider = 'github' | 'google';
 
 export default function Signup() {
   const supabase = createClient();
@@ -85,85 +88,151 @@ export default function Signup() {
     }
   }
 
+  const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null);
+  // いずれかのログイン処理が実行中かどうか
+  const isAnyLoginProcessing = loading || oauthLoading !== null;
+
+  /** OAuthプロバイダーでログイン */
+  async function handleOAuthLogin(provider: OAuthProvider) {
+    try {
+      // signin処理が終わってもリダイレクトに時間がかかるのでずっとtrueにしておく
+      // ただし、エラーが発生した場合はfalseにする
+      setOauthLoading(provider);
+
+      // Supabaseでログイン処理
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/login-with-oauth`,
+        },
+      });
+      if (error) {
+        throw error;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: 'ログインに失敗しました😢',
+        errorMessage: error.message || 'もう一度試してみてね',
+      });
+
+      setOauthLoading(null);
+    }
+  }
+
   return (
     <Layout title="新規登録" canBack noFooter noMenu>
-      <Center>
-        {signUpSuccess
-          ? (
-            <motion.div
-              key="completed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } }}
-              exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            >
-              <MessageWithImage
-                title="登録確認用のメールを送信しました！"
-                messages={['メール内のリンクをクリックして', '登録を完了してください！']}
-                imageSrc="/images/signup-mail-sent.webp"
-              />
-            </motion.div>
-          )
-          : (
-            <motion.div
-              key="form"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.3, ease: 'easeIn' } }}
-              exit={{ opacity: 0, transition: { duration: 0.5 } }}
-            >
-              <form onSubmit={handleSignup}>
-                <Fieldset.Root size="lg">
-                  <Stack>
-                    <Fieldset.Legend>登録</Fieldset.Legend>
-                    <Fieldset.HelperText>アカウント情報を入力してね！</Fieldset.HelperText>
-                  </Stack>
+      <Container maxW="xl">
+        <Center>
+          {signUpSuccess
+            ? (
+              <motion.div
+                key="completed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+              >
+                <MessageWithImage
+                  title="登録確認用のメールを送信しました！"
+                  messages={['メール内のリンクをクリックして', '登録を完了してください']}
+                  imageSrc="/images/signup-mail-sent.webp"
+                />
+              </motion.div>
+            )
+            : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3, ease: 'easeIn' } }}
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+              >
+                <form onSubmit={handleSignup}>
+                  <Fieldset.Root size="lg">
+                    <Stack>
+                      <Fieldset.Legend>登録</Fieldset.Legend>
+                      <Fieldset.HelperText>アカウント情報を入力してね</Fieldset.HelperText>
+                    </Stack>
 
-                  <Fieldset.Content>
-                    <Field.Root required>
-                      <Field.Label>
-                        <Icon><MdMail /></Icon>
-                        メールアドレス
-                        <Field.RequiredIndicator />
-                      </Field.Label>
+                    <Fieldset.Content>
+                      <Field.Root required>
+                        <Field.Label>
+                          <Icon><MdMail /></Icon>
+                          メールアドレス
+                          <Field.RequiredIndicator />
+                        </Field.Label>
 
-                      <Input
-                        value={email}
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
+                        <Input
+                          value={email}
+                          type="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </Field.Root>
+
+                      {/* 共通パスワードフィールドコンポーネントを使用 */}
+                      <PasswordFields
+                        password={password}
+                        confirmPassword={confirmPassword}
+                        passwordTouched={passwordTouched}
+                        confirmTouched={confirmTouched}
+                        isValidFormat={isValidFormat}
+                        isLongEnough={isLongEnough}
+                        passwordsMatch={passwordsMatch}
+                        handlePasswordChange={handlePasswordChange}
+                        handleConfirmChange={handleConfirmChange}
+                        handlePasswordBlur={handlePasswordBlur}
+                        handleConfirmBlur={handleConfirmBlur}
                       />
-                    </Field.Root>
+                    </Fieldset.Content>
 
-                    {/* 共通パスワードフィールドコンポーネントを使用 */}
-                    <PasswordFields
-                      password={password}
-                      confirmPassword={confirmPassword}
-                      passwordTouched={passwordTouched}
-                      confirmTouched={confirmTouched}
-                      isValidFormat={isValidFormat}
-                      isLongEnough={isLongEnough}
-                      passwordsMatch={passwordsMatch}
-                      handlePasswordChange={handlePasswordChange}
-                      handleConfirmChange={handleConfirmChange}
-                      handlePasswordBlur={handlePasswordBlur}
-                      handleConfirmBlur={handleConfirmBlur}
-                    />
-                  </Fieldset.Content>
+                    <Center>
+                      <BasicButton
+                        color="chiiWhite"
+                        bg="hachiBlue"
+                        type="submit"
+                        disabled={!isFormValid || oauthLoading !== null}
+                        loading={loading}
+                      >
+                        登録
+                      </BasicButton>
+                    </Center>
+                  </Fieldset.Root>
+                </form>
 
-                  <Center>
-                    <BasicButton
-                      color="chiiWhite"
-                      bg="hachiBlue"
-                      type="submit"
-                      disabled={!isFormValid}
-                      loading={loading}
-                    >
-                      登録
-                    </BasicButton>
-                  </Center>
-                </Fieldset.Root>
-              </form>
-            </motion.div>
-          )}
-      </Center>
+                <Box mt={6}>
+                  <HStack>
+                    <Separator flex="1" />
+                    <Text fontSize="sm" color="blackPrimary">または</Text>
+                    <Separator flex="1" />
+                  </HStack>
+                </Box>
+
+                <VStack mt={6} gap={4}>
+                  <BasicButton
+                    bg="black"
+                    loading={oauthLoading === 'github'}
+                    disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
+                    onClick={() => handleOAuthLogin('github')}
+                  >
+                    <IoLogoGithub />
+                    GitHubでログイン
+                  </BasicButton>
+
+                  <BasicButton
+                    variant="surface"
+                    bg="white"
+                    loading={oauthLoading === 'google'}
+                    disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
+                    onClick={() => handleOAuthLogin('google')}
+                  >
+                    <FcGoogle />
+                    <Text color="blackPrimary">Googleでログイン</Text>
+                  </BasicButton>
+                </VStack>
+              </motion.div>
+            )}
+        </Center>
+      </Container>
 
       {/* 画像プリフェッチ用の隠し要素 */}
       <PrefetchImage src="/images/signup-mail-sent.webp" width={1000} />

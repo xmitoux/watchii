@@ -152,7 +152,7 @@ export function PostDetail({
               name={character.name}
               isSelected={isSelected}
               startElement={
-                <CharacterIcon character={character} iconSize="40px" borderSize={0} />
+                <CharacterIcon character={character} iconSize="16px" borderSize={0} />
               }
             />
           )}

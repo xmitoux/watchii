@@ -5,7 +5,6 @@ import {
   Center,
   Field,
   Fieldset,
-  Icon,
   Input,
   Stack,
 } from '@repo/ui/chakra-ui';
@@ -19,8 +18,9 @@ import { BasicButton } from './Button/BasicButton';
 type LoginProps = {
   homeUrl?: string;
   oAuthSigninProcessing?: boolean;
+  onLoadingChange?: (loading: boolean) => void;
 };
-export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) {
+export function Login({ homeUrl = '/home', oAuthSigninProcessing, onLoadingChange }: LoginProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -35,6 +35,7 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
 
     try {
       setLoading(true);
+      onLoadingChange?.(true);
 
       // Supabaseでログイン処理
       const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -58,6 +59,7 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
     }
     finally {
       setLoading(false);
+      onLoadingChange?.(false);
     }
   }
 
@@ -67,14 +69,14 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
         <form onSubmit={handleLogin}>
           <Fieldset.Root size="lg">
             <Stack>
-              <Fieldset.Legend>ログイン</Fieldset.Legend>
-              <Fieldset.HelperText>アカウント情報を入力してね！</Fieldset.HelperText>
+              <Fieldset.Legend>おかえりなさい！</Fieldset.Legend>
+              <Fieldset.HelperText>アカウント情報を入力してね</Fieldset.HelperText>
             </Stack>
 
             <Fieldset.Content>
               <Field.Root required>
                 <Field.Label>
-                  <Icon><MdMail /></Icon>
+                  <MdMail />
                   メールアドレス
                   <Field.RequiredIndicator />
                 </Field.Label>
@@ -84,7 +86,7 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing }: LoginProps) 
 
               <Field.Root required>
                 <Field.Label>
-                  <Icon><MdLock /></Icon>
+                  <MdLock />
                   パスワード
                   <Field.RequiredIndicator />
                 </Field.Label>
