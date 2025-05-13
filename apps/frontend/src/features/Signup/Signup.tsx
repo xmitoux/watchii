@@ -2,9 +2,9 @@
 import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
-import { Center, Container, Field, Fieldset, Icon, Input, Stack } from '@repo/ui/chakra-ui';
+import { Box, Center, Container, Field, Fieldset, HStack, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
-import { MdMail } from '@repo/ui/icons';
+import { FcGoogle, IoLogoGithub, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
 import Layout from '@/components/Layout/Layout';
@@ -13,6 +13,9 @@ import { PasswordFields } from '@/components/PasswordFields';
 import PrefetchImage from '@/components/PrefetchImage';
 import { usePasswordValidation } from '@/hooks/usePasswordValidation';
 import { useToast } from '@/hooks/useToast';
+
+// OAuthプロバイダーの型定義
+type OAuthProvider = 'github' | 'google';
 
 export default function Signup() {
   const supabase = createClient();
@@ -85,10 +88,42 @@ export default function Signup() {
     }
   }
 
+  const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null);
+  // いずれかのログイン処理が実行中かどうか
+  const isAnyLoginProcessing = loading || oauthLoading !== null;
+
+  /** OAuthプロバイダーでログイン */
+  async function handleOAuthLogin(provider: OAuthProvider) {
+    try {
+      // signin処理が終わってもリダイレクトに時間がかかるのでずっとtrueにしておく
+      // ただし、エラーが発生した場合はfalseにする
+      setOauthLoading(provider);
+
+      // Supabaseでログイン処理
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/login-with-oauth`,
+        },
+      });
+      if (error) {
+        throw error;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (error: any) {
+      showErrorToast({
+        message: 'ログインに失敗しました😢',
+        errorMessage: error.message || 'もう一度試してみてね',
+      });
+
+      setOauthLoading(null);
+    }
+  }
+
   return (
     <Layout title="新規登録" canBack noFooter noMenu>
       <Container maxW="xl">
-
         <Center>
           {signUpSuccess
             ? (
@@ -100,7 +135,7 @@ export default function Signup() {
               >
                 <MessageWithImage
                   title="登録確認用のメールを送信しました！"
-                  messages={['メール内のリンクをクリックして', '登録を完了してください！']}
+                  messages={['メール内のリンクをクリックして', '登録を完了してください']}
                   imageSrc="/images/signup-mail-sent.webp"
                 />
               </motion.div>
@@ -116,7 +151,7 @@ export default function Signup() {
                   <Fieldset.Root size="lg">
                     <Stack>
                       <Fieldset.Legend>登録</Fieldset.Legend>
-                      <Fieldset.HelperText>アカウント情報を入力してね！</Fieldset.HelperText>
+                      <Fieldset.HelperText>アカウント情報を入力してね</Fieldset.HelperText>
                     </Stack>
 
                     <Fieldset.Content>
@@ -155,7 +190,7 @@ export default function Signup() {
                         color="chiiWhite"
                         bg="hachiBlue"
                         type="submit"
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || oauthLoading !== null}
                         loading={loading}
                       >
                         登録
@@ -163,6 +198,37 @@ export default function Signup() {
                     </Center>
                   </Fieldset.Root>
                 </form>
+
+                <Box mt={6}>
+                  <HStack>
+                    <Separator flex="1" />
+                    <Text fontSize="sm" color="blackPrimary">または</Text>
+                    <Separator flex="1" />
+                  </HStack>
+                </Box>
+
+                <VStack mt={6} gap={4}>
+                  <BasicButton
+                    bg="black"
+                    loading={oauthLoading === 'github'}
+                    disabled={isAnyLoginProcessing && oauthLoading !== 'github'}
+                    onClick={() => handleOAuthLogin('github')}
+                  >
+                    <IoLogoGithub />
+                    GitHubでログイン
+                  </BasicButton>
+
+                  <BasicButton
+                    variant="surface"
+                    bg="white"
+                    loading={oauthLoading === 'google'}
+                    disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
+                    onClick={() => handleOAuthLogin('google')}
+                  >
+                    <FcGoogle />
+                    <Text color="blackPrimary">Googleでログイン</Text>
+                  </BasicButton>
+                </VStack>
               </motion.div>
             )}
         </Center>

@@ -18,10 +18,11 @@ export default function Login() {
   const supabase = createClient();
   const { showCompleteToast, showErrorToast } = useToast();
 
+  const [loginLoading, setLoginLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null);
 
   // いずれかのログイン処理が実行中かどうか
-  const isAnyLoginProcessing = oauthLoading !== null;
+  const isAnyLoginProcessing = loginLoading || oauthLoading !== null;
 
   useEffect(() => {
     // PWAでのOAuthログイン用の処理
@@ -155,24 +156,25 @@ export default function Login() {
             </form>
           </Center>
         ) : (
-          // 通常のログインフォーム
           <>
-            <BaseLogin oAuthSigninProcessing={isAnyLoginProcessing} />
+            {/* 通常のログインフォーム */}
+            <BaseLogin oAuthSigninProcessing={isAnyLoginProcessing} onLoadingChange={(loading) => setLoginLoading(loading)} />
 
             <Center mt={6}>
-              <Text color="blackPrimary" fontSize="sm">
-                パスワードを忘れた場合は
-              </Text>
-              <Text
-                color="hachiwareBlue.dark"
-                fontSize="sm"
-                cursor={isAnyLoginProcessing ? 'not-allowed' : 'pointer'}
-                opacity={isAnyLoginProcessing ? 0.5 : 1}
-                _hover={{ textDecoration: isAnyLoginProcessing ? 'none' : 'underline' }}
-                onClick={() => !isAnyLoginProcessing && setIsResetMode(true)}
-              >
-                こちら
-              </Text>
+              <VStack>
+                <TextWithLink
+                  text="初めてのご利用ですか？"
+                  linkText="新規登録"
+                  isLoginProcessing={isAnyLoginProcessing}
+                  onClick={() => router.push('/signup')}
+                />
+                <TextWithLink
+                  text="パスワードを忘れた場合は"
+                  linkText="こちら"
+                  isLoginProcessing={isAnyLoginProcessing}
+                  onClick={() => setIsResetMode(true)}
+                />
+              </VStack>
             </Center>
 
             <Box mt={6} px="15vw">
@@ -198,8 +200,8 @@ export default function Login() {
                 variant="surface"
                 bg="white"
                 loading={oauthLoading === 'google'}
-                onClick={() => handleOAuthLogin('google')}
                 disabled={isAnyLoginProcessing && oauthLoading !== 'google'}
+                onClick={() => handleOAuthLogin('google')}
               >
                 <FcGoogle />
                 <Text color="blackPrimary">Googleでログイン</Text>
@@ -209,5 +211,32 @@ export default function Login() {
         )}
       </Container>
     </Layout>
+  );
+}
+
+type TextWithLinkProps = {
+  text: string;
+  linkText: string;
+  isLoginProcessing: boolean;
+  onClick: () => void;
+};
+
+function TextWithLink({ text, linkText, isLoginProcessing, onClick }: TextWithLinkProps) {
+  return (
+    <HStack gap={1}>
+      <Text color="blackPrimary" fontSize="sm">
+        {text}
+      </Text>
+      <Text
+        color="hachiwareBlue.dark"
+        fontSize="sm"
+        cursor={isLoginProcessing ? 'not-allowed' : 'pointer'}
+        opacity={isLoginProcessing ? 0.5 : 1}
+        _hover={{ textDecoration: isLoginProcessing ? 'none' : 'underline' }}
+        onClick={() => !isLoginProcessing && onClick()}
+      >
+        {linkText}
+      </Text>
+    </HStack>
   );
 }
