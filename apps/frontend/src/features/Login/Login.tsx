@@ -144,10 +144,12 @@ export default function Login() {
                 </BasicButton>
               </Center>
 
-              <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
-                <MdArrowBack />
-                ログイン画面に戻る
-              </BasicButton>
+              <Center>
+                <BasicButton variant="ghost" color="blackPrimary" onClick={handleSwitchLoginMode} disabled={isAnyLoginProcessing}>
+                  <MdArrowBack />
+                  ログイン画面に戻る
+                </BasicButton>
+              </Center>
             </Fieldset.Root>
           </form>
         </Center>
