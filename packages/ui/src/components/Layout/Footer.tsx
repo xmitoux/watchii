@@ -5,6 +5,12 @@ import { useEffect, useState } from 'react';
 
 import { hachi_maru_pop } from '../../utils/fonts';
 
+/** フッターアイコンがアクティブか判定 */
+const isIconActive = (currentPath: string, rootPath: string) => {
+  // 現在のパスがルートパスと先頭頭一致するか('/episodes/page/[page]'など)
+  return currentPath.startsWith(rootPath);
+};
+
 export type NavigationItem = {
   path: string;
   rootPath: string;
@@ -13,19 +19,14 @@ export type NavigationItem = {
   inactiveIcon: string;
 };
 
-/** フッターアイコンがアクティブか判定 */
-const isIconActive = (currentPath: string, rootPath: string) => {
-  // 現在のパスがルートパスと先頭頭一致するか('/episodes/page/[page]'など)
-  return currentPath.startsWith(rootPath);
-};
-
 type FooterProps = {
   navigationItems: NavigationItem[];
   color: string;
+  isPWA?: boolean;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
 };
 
-export default function Footer({ navigationItems, onNavigationClick, color }: FooterProps) {
+export default function Footer({ navigationItems, onNavigationClick, color, isPWA }: FooterProps) {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -54,7 +55,7 @@ export default function Footer({ navigationItems, onNavigationClick, color }: Fo
   return (
     <Box
       backgroundColor={color}
-      height="60px"
+      height={isPWA ? '60px' : '40px'}
       position="fixed"
       bottom="0"
       left="0"
@@ -72,7 +73,7 @@ export default function Footer({ navigationItems, onNavigationClick, color }: Fo
               key={item.path}
               flexDirection="column"
               alignItems="center"
-              mb={3}
+              mb={isPWA ? 3 : 0}
               width="100px"
               position="relative"
               cursor="pointer"

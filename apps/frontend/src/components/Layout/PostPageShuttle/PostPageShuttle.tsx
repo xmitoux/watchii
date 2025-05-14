@@ -3,6 +3,8 @@ import React, { RefObject, useEffect } from 'react';
 
 import { ActionBar, Box, Flex } from '@repo/ui/chakra-ui';
 
+import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
+
 import { usePostPageShuttleScroll } from './hooks/usePostPageShuttleScroll';
 import { PostPageShuttleButton } from './PostPageShuttleButton';
 
@@ -17,6 +19,8 @@ export type PostPageShuttleProps = {
 };
 
 export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, postsTotal }: PostPageShuttleProps) {
+  const { isPWA } = useDeviceTypeStore();
+
   const {
     handleScrollTop,
     handlePrevImage,
@@ -36,7 +40,7 @@ export default function PostPageShuttle({ postsPerPage, scrollRef, pageOffset, p
 
   return (
     <ActionBar.Root open={true}>
-      <ActionBar.Positioner position="fixed" bottom="90px" zIndex={1000}>
+      <ActionBar.Positioner position="fixed" bottom={isPWA ? '90px' : '75px'} zIndex={1000}>
         <ActionBar.Content bg={{ base: 'gray.50', _dark: 'blackPrimary' }} padding={0}>
           <Flex align="center" justify="space-between" px={4} width="300px" height="48px">
             <Flex gap={4}>
