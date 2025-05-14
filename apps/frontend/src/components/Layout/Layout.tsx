@@ -9,6 +9,7 @@ import { MenuDrawer } from '@/components/Menu/MenuDrawer';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
+import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
 
 import { usePageTransition } from './hooks/usePageTransition';
@@ -72,6 +73,8 @@ export default function Layout({
   onNavigationBack,
 }: LayoutProps) {
   const router = useRouter();
+  const { isPWA } = useDeviceTypeStore();
+
   const { transitionProps } = usePageTransition();
 
   const {
@@ -167,6 +170,7 @@ export default function Layout({
         noFooter={noFooter}
         showScrollToTop={showScrollToTop}
         scrollRef={scrollRef}
+        isPWA={isPWA}
         onNavigationClick={handleNavigationClick}
         onNavigationBack={onNavigationBack}
       >

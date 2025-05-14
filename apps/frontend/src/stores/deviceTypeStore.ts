@@ -9,6 +9,7 @@ interface DeviceState {
   isTablet: boolean;
   isDesktop: boolean;
   deviceType: DeviceType;
+  isPWA: boolean;
 }
 
 // デバイス情報ストア
@@ -18,4 +19,5 @@ export const useDeviceTypeStore = create<DeviceState>()(() => ({
   isTablet: false,
   isDesktop: false,
   deviceType: 'mobile',
+  isPWA: false,
 }));

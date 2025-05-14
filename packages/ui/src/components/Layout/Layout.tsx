@@ -18,6 +18,7 @@ type LayoutProps = {
   color?: string;
   showScrollToTop?: boolean;
   scrollRef?: RefObject<HTMLDivElement | null>;
+  isPWA?: boolean;
   onNavigationClick: (item: NavigationItem, isRecursive: boolean) => void;
   onNavigationBack?: () => void;
 };
@@ -31,6 +32,7 @@ export const Layout: React.FC<LayoutProps> = ({
   noFooter,
   color = 'hachiwareBlue',
   showScrollToTop,
+  isPWA,
   scrollRef,
   onNavigationClick,
   onNavigationBack,
@@ -133,8 +135,14 @@ export const Layout: React.FC<LayoutProps> = ({
       </Box>
 
       {/* フッター */}
-      {!noFooter && <Footer navigationItems={footerNavigationItems} color={color} onNavigationClick={onNavigationClick} />}
-
+      {!noFooter && (
+        <Footer
+          navigationItems={footerNavigationItems}
+          color={color}
+          onNavigationClick={onNavigationClick}
+          isPWA={isPWA}
+        />
+      )}
       {/* トースト用 */}
       <Toaster />
     </Box>

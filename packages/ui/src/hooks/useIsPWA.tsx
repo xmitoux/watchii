@@ -1,5 +1,8 @@
-/** PWAインストールガイド表示用のカスタムフック */
-export const usePWAInstallGuide = () => {
+/**
+ * PWA判定用のカスタムフック
+ * @deprecated レイアウトコンポーネントなどでうまく動かないので非推奨
+ */
+export const useIsPWA = () => {
   /** PWA判定 */
   function isPWA() {
     if (typeof window !== 'undefined') {

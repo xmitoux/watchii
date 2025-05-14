@@ -22,8 +22,8 @@ import {
 } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
-import { usePWAInstallGuide } from '@/features/Home/hooks/usePWAInstallGuide';
 import { useToast } from '@/hooks/useToast';
+import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
 import { useFavsStore } from '@/stores/favsStore';
 import { useNavigationStore } from '@/stores/navigationStore';
 import { gotoLogoutedPageAndRestHistory } from '@/utils/gotoLogoutedPageAndRestHistory';
@@ -49,7 +49,7 @@ export function MenuDrawer() {
     router.push(favsPath);
   }
 
-  const { isPWA } = usePWAInstallGuide();
+  const { isPWA } = useDeviceTypeStore();
 
   const { toggleColorMode, colorMode } = useColorMode();
 
@@ -139,7 +139,7 @@ export function MenuDrawer() {
                   onClick={() => router.push('/about')}
                 />
 
-                {!isPWA() && (
+                {!isPWA && (
                   <MenuButton
                     icon={colorMode === 'light' ? <MdOutlineInstallMobile /> : <MdInstallMobile />}
                     label="インストールガイド"

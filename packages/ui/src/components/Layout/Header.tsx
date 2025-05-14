@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
         px={4}
         justify="space-between"
         align="center"
-        height="50px"
+        height="40px"
       >
         {/* 戻るボタン */}
         <Box width="40px">
