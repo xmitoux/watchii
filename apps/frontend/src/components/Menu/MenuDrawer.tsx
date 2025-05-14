@@ -176,7 +176,16 @@ type MenuButtonProps = {
 
 function MenuButton({ icon, label, labelColor, to, onClick }: MenuButtonProps) {
   return (
-    <BasicButton variant="ghost" width="full" color={labelColor} onClick={onClick}>
+    <BasicButton
+      variant="ghost"
+      width="full"
+      color={labelColor}
+      onClick={(e) => {
+        // メニュー選択後にヘッダータップスクロールがなぜか発火するのでstop
+        e.stopPropagation();
+        onClick?.();
+      }}
+    >
       <Icon>
         {icon}
       </Icon>
