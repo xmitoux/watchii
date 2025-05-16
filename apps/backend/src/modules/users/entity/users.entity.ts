@@ -18,3 +18,7 @@ export type GetUserFavsResponse = {
 export type SignInWithOAuthResponseEntity = {
   userExists: boolean;
 };
+
+export type VerifyAdminUserResponse = {
+  isAdmin: boolean;
+};

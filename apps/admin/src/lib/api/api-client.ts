@@ -50,14 +50,21 @@ export class ApiRoutesClient {
   }
 
   // POSTリクエスト📝
-  async post<T>(endpoint: string, data: any): Promise<T> {
+  async post<T>(endpoint: string, data: any, token?: string): Promise<T> {
     try {
       const apiUrl = this.getApiRoutesUrl(endpoint);
+
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(data),
       });
 

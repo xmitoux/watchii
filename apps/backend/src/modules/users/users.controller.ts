@@ -18,6 +18,15 @@ export class UsersController {
     return this.usersService.getUserFavs(token);
   }
 
+  @Post('/verify-admin-user')
+  async verifyAdminUser(
+    @Headers('authorization') token: string,
+  ) {
+    this.logger.log('verifyAdminUser');
+
+    return this.usersService.verifyAdminUser(token);
+  }
+
   @Post('/add-user-fav')
   async addUserFav(
     @Headers('authorization') token: string,
