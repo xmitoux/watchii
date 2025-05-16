@@ -6,7 +6,7 @@ import { SupabaseAdminService } from '@/common/services/supabase-admin.service';
 import { SupabaseService } from '@/common/services/supabase.service';
 
 import { RegisterUserRequestDto, SignInWithOAuthRequestDto, ToggleUserFavsRequestDto } from './dto/users.dto';
-import { GetUserFavsResponse, RegisterUserResponseEntity, SignInWithOAuthResponseEntity } from './entity/users.entity';
+import { GetUserFavsResponse, RegisterUserResponseEntity, SignInWithOAuthResponseEntity, VerifyAdminUserResponse } from './entity/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +17,27 @@ export class UsersService {
   ) { }
 
   private readonly logger = new Logger(UsersService.name);
+
+  async verifyAdminUser(token: string): Promise<VerifyAdminUserResponse> {
+    // トークン検証してユーザー取得
+    const user = await this.supabase.getUser(token);
+
+    if (!user) {
+      throw new Error('ユーザ取得に失敗しました😨');
+    }
+
+    // 管理者かどうかを確認
+    const isAdmin = await this.prisma.user.findUnique({
+      where: {
+        id: user.id,
+      },
+      select: {
+        userType: true,
+      },
+    });
+
+    return { isAdmin: isAdmin?.userType === 1 };
+  }
 
   async getUserFavs(token: string): Promise<GetUserFavsResponse> {
     // トークン検証してユーザー取得

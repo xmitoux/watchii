@@ -18,9 +18,10 @@ import { BasicButton } from './Button/BasicButton';
 type LoginProps = {
   homeUrl?: string;
   oAuthSigninProcessing?: boolean;
+  onVerifyAdminUser?: (token: string) => Promise<void>;
   onLoadingChange?: (loading: boolean) => void;
 };
-export function Login({ homeUrl = '/home', oAuthSigninProcessing, onLoadingChange }: LoginProps) {
+export function Login({ homeUrl = '/home', oAuthSigninProcessing, onVerifyAdminUser, onLoadingChange }: LoginProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -38,9 +39,20 @@ export function Login({ homeUrl = '/home', oAuthSigninProcessing, onLoadingChang
       onLoadingChange?.(true);
 
       // Supabaseでログイン処理
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
+      const { error, data: { session } } = await supabase.auth.signInWithPassword({ email, password });
+      if (error || !session) {
         throw error;
+      }
+
+      if (onVerifyAdminUser) {
+        try {
+          // 管理画面用のユーザ判定
+          await onVerifyAdminUser(session.access_token);
+        }
+        catch (error) {
+          supabase.auth.signOut();
+          throw error;
+        }
       }
 
       // ホーム画面にリダイレクト
