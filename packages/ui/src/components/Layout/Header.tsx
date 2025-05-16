@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { MdArrowBackIos } from 'react-icons/md';
 
@@ -46,21 +46,21 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
       zIndex="sticky"
     >
       {/* メインヘッダー部分 */}
-      <Flex
-        px={4}
-        justify="space-between"
-        align="center"
-        height="40px"
-      >
+      <Box h="40px" position="relative">
         {/* 戻るボタン */}
-        <Box width="40px">
+        <Box
+          w="60px" // 見た目より広くしてタップしやすくする
+          position="absolute"
+          left="10px"
+          top="50%"
+          transform="translateY(-50%)"
+        >
           {(onNavigationBack || canBack) && (
             <BasicButton
               variant="plain"
               color="chiiWhite"
-              w="40px"
-              paddingLeft={0}
-              tapScale={0.95}
+              w="50px"
+              tapScale={0.9}
               onClick={handleBack}
             >
               <MdArrowBackIos />
@@ -69,21 +69,38 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
         </Box>
 
         {/* タイトル（中央寄せ） */}
-        <Text
-          pb={1}
-          color="chiiWhite"
-          fontSize={isWatchiiLogo ? '2xl' : 'lg'}
-          className={isWatchiiLogo ? cherry_bomb_one.className : undefined}
+        <Box
+          position="absolute"
+          left="50%"
+          top="50%"
+          transform="translate(-50%, -50%)" // これが中央配置の鍵！🔑
+          width="70%" // 幅を制限して左右のボタンと被らないようにする
           textAlign="center"
         >
-          {title}
-        </Text>
+          <Text
+            className={isWatchiiLogo ? cherry_bomb_one.className : undefined}
+            color="chiiWhite"
+            fontSize={isWatchiiLogo ? '2xl' : 'lg'}
+            textAlign="center"
+            pb={1}
+          >
+            {title}
+          </Text>
+        </Box>
 
         {/* 右端のアクションボタン */}
-        <Box width="40px">
+        <Box
+          w="60px" // 見た目より広くしてタップしやすくする
+          display="flex"
+          justifyContent="end"
+          position="absolute"
+          right="10px"
+          top="50%"
+          transform="translateY(-50%)"
+        >
           {actionButton}
         </Box>
-      </Flex>
+      </Box>
     </Box>
   );
 };

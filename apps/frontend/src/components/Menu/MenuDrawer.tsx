@@ -90,7 +90,7 @@ export function MenuDrawer() {
           <BasicButton
             variant="plain"
             color="chiiWhite"
-            w="54px"
+            w="50px"
             tapScale={0.9}
             onClick={(e) => e.stopPropagation()} // ヘッダータップスクロールが発火しないようにする
           >
