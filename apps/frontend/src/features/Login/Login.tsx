@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { Box, Container, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Container, Flex, HStack, Separator, Text, VStack } from '@repo/ui/chakra-ui';
 import { Center, Field, Fieldset, Input, Stack } from '@repo/ui/chakra-ui';
 import { Login as BaseLogin, BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdArrowBack, MdMail } from '@repo/ui/icons';
@@ -177,13 +177,11 @@ export default function Login() {
               </VStack>
             </Center>
 
-            <Box mt={6} px="15vw">
-              <HStack>
-                <Separator flex="1" />
-                <Text fontSize="sm" color="blackPrimary">または</Text>
-                <Separator flex="1" />
-              </HStack>
-            </Box>
+            <Flex align="center" justify="center" mt={6}>
+              <Box w="100px"><Separator /></Box>
+              <Text fontSize="sm" color="blackPrimary">または</Text>
+              <Box w="100px"><Separator /></Box>
+            </Flex>
 
             <VStack mt={6} gap={4}>
               <BasicButton
