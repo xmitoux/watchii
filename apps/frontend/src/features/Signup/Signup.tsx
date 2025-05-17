@@ -1,8 +1,9 @@
 // pages/signup.tsx
 import { motion } from 'motion/react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { Box, Center, Container, Field, Fieldset, Flex, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Center, Container, Field, Fieldset, Flex, HStack, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
@@ -227,6 +228,14 @@ export default function Signup() {
                     <Text color="blackPrimary">Googleでログイン</Text>
                   </BasicButton>
                 </VStack>
+
+                <Center mt={6}>
+                  <HStack gap={2}>
+                    <TextLink text="利用規約" to="/about/terms-of-use" isLoginProcessing={isAnyLoginProcessing} />
+                    <Separator orientation="vertical" height="4" size="md" />
+                    <TextLink text="プライバシーポリシー" to="/about/privacy-policy" isLoginProcessing={isAnyLoginProcessing} />
+                  </HStack>
+                </Center>
               </motion.div>
             )}
         </Center>
@@ -235,5 +244,28 @@ export default function Signup() {
       {/* 画像プリフェッチ用の隠し要素 */}
       <PrefetchImage src="/images/signup-mail-sent.webp" width={1000} />
     </Layout>
+  );
+}
+
+type TextLinkProps = {
+  text: string;
+  to: string;
+  isLoginProcessing: boolean;
+};
+
+function TextLink({ text, to, isLoginProcessing }: TextLinkProps) {
+  return (
+    <Text
+      color="hachiwareBlue.dark"
+      fontSize="sm"
+      cursor={isLoginProcessing ? 'not-allowed' : 'pointer'}
+      opacity={isLoginProcessing ? 0.5 : 1}
+      _hover={{ textDecoration: isLoginProcessing ? 'none' : 'underline' }}
+      asChild
+    >
+      <Link href={to}>
+        {text}
+      </Link>
+    </Text>
   );
 }

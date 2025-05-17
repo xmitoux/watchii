@@ -80,7 +80,7 @@ export default function LoginWithOAuth() {
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
           style={{ width: '100%', height: '100%' }}
         >
-          <Layout title="登録確認" noFooter noMenu>
+          <Layout title="登録確認" noFooter noMenu onNavigationBack={() => router.push('/login')}>
             <Center>
               {isError ? (
                 // エラー表示

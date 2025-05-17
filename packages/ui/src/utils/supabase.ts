@@ -15,6 +15,7 @@ export type SupabaseSessionMiddlewareOptions = {
   publicPaths: string[];
   redirectUrl: string;
   homeUrl: string;
+  intermediatePaths?: string[];
 };
 
 // Supabase認証用ミドルウェア処理
@@ -54,6 +55,11 @@ export async function supabaseSessionMiddleware(request: NextRequest, options: S
   const { data: { user } } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
+
+  // パスが中間パスの場合は認証チェックをスキップ
+  if (options.intermediatePaths && isIntermediatePath(path, options.intermediatePaths)) {
+    return supabaseResponse;
+  }
 
   // 認証チェック
   if (!user && !isPublicPath(path, options.publicPaths)) {
@@ -99,4 +105,10 @@ export async function supabaseSessionMiddleware(request: NextRequest, options: S
 function isPublicPath(path: string, publicPaths: string[]) {
   return publicPaths.some((publicPath) =>
     path === publicPath || path.startsWith(`${publicPath}/`));
+}
+
+// パスが中間パス(ログイン状態にかかわらず表示可能なパス)かどうかチェック
+function isIntermediatePath(path: string, intermediatePaths: string[]) {
+  return intermediatePaths.some((intermediatePath) =>
+    path === intermediatePath || path.startsWith(`${intermediatePath}/`));
 }

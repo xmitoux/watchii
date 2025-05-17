@@ -6,12 +6,12 @@ import { CloseButton, Drawer, Flex, Icon, Portal } from '@repo/ui/chakra-ui';
 import { useColorMode } from '@repo/ui/chakra-ui/color-mode';
 import { BasicButton } from '@repo/ui/components';
 import {
+  IoDocumentText,
+  IoDocumentTextOutline,
   IoHeart,
   IoHeartOutline,
   IoReload,
   MdAccountCircle,
-  MdInfo,
-  MdInfoOutline,
   MdInstallMobile,
   MdLightMode,
   MdLogout,
@@ -19,6 +19,8 @@ import {
   MdOutlineAccountCircle,
   MdOutlineDarkMode,
   MdOutlineInstallMobile,
+  MdOutlinePrivacyTip,
+  MdPrivacyTip,
 } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
 
@@ -140,13 +142,6 @@ export function MenuDrawer() {
               </Drawer.Body>
 
               <Drawer.Footer flexDirection="column" justifyContent="center" gap={0} mb="20px">
-                <MenuButton
-                  icon={colorMode === 'light' ? <MdInfoOutline /> : <MdInfo />}
-                  label="このアプリについて"
-                  to="/about"
-                  onClick={() => setShowMenu(false)}
-                />
-
                 {!isPWA && (
                   <MenuButton
                     icon={colorMode === 'light' ? <MdOutlineInstallMobile /> : <MdInstallMobile />}
@@ -155,6 +150,20 @@ export function MenuDrawer() {
                     onClick={() => setShowMenu(false)}
                   />
                 )}
+
+                <MenuButton
+                  icon={colorMode === 'light' ? <IoDocumentTextOutline /> : <IoDocumentText />}
+                  label="利用規約"
+                  to="/about/terms-of-use"
+                  onClick={() => setShowMenu(false)}
+                />
+
+                <MenuButton
+                  icon={colorMode === 'light' ? <MdOutlinePrivacyTip /> : <MdPrivacyTip />}
+                  label="プライバシーポリシー"
+                  to="/about/privacy-policy"
+                  onClick={() => setShowMenu(false)}
+                />
 
                 <MenuButton
                   icon={<MdLogout />}

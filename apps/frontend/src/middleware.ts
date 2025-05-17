@@ -14,6 +14,10 @@ const options: SupabaseSessionMiddlewareOptions = {
   ],
   redirectUrl: '/welcome',
   homeUrl: '/home/page/1',
+  intermediatePaths: [ // ログイン状態に関わらず表示可能なパス
+    '/about/terms-of-use',
+    '/about/privacy-policy',
+  ],
 };
 
 export async function middleware(request: NextRequest) {

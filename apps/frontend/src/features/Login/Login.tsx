@@ -205,6 +205,22 @@ export default function Login() {
                 <Text color="blackPrimary">Googleでログイン</Text>
               </BasicButton>
             </VStack>
+
+            <Center mt={6}>
+              <HStack gap={2}>
+                <TextLink
+                  text="利用規約"
+                  isLoginProcessing={isAnyLoginProcessing}
+                  onClick={() => router.push('/about/terms-of-use')}
+                />
+                <Separator orientation="vertical" height="4" size="md" />
+                <TextLink
+                  text="プライバシーポリシー"
+                  isLoginProcessing={isAnyLoginProcessing}
+                  onClick={() => router.push('/about/privacy-policy')}
+                />
+              </HStack>
+            </Center>
           </>
         )}
       </Container>
@@ -225,16 +241,28 @@ function TextWithLink({ text, linkText, isLoginProcessing, onClick }: TextWithLi
       <Text color="blackPrimary" fontSize="sm">
         {text}
       </Text>
-      <Text
-        color="hachiwareBlue.dark"
-        fontSize="sm"
-        cursor={isLoginProcessing ? 'not-allowed' : 'pointer'}
-        opacity={isLoginProcessing ? 0.5 : 1}
-        _hover={{ textDecoration: isLoginProcessing ? 'none' : 'underline' }}
-        onClick={() => !isLoginProcessing && onClick()}
-      >
-        {linkText}
-      </Text>
+      <TextLink text={linkText} isLoginProcessing={isLoginProcessing} onClick={onClick} />
     </HStack>
+  );
+}
+
+type TextLinkProps = {
+  text: string;
+  isLoginProcessing: boolean;
+  onClick: () => void;
+};
+
+function TextLink({ text, isLoginProcessing, onClick }: TextLinkProps) {
+  return (
+    <Text
+      color="hachiwareBlue.dark"
+      fontSize="sm"
+      cursor={isLoginProcessing ? 'not-allowed' : 'pointer'}
+      opacity={isLoginProcessing ? 0.5 : 1}
+      _hover={{ textDecoration: isLoginProcessing ? 'none' : 'underline' }}
+      onClick={() => !isLoginProcessing && onClick()}
+    >
+      {text}
+    </Text>
   );
 }
