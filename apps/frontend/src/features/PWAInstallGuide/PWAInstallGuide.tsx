@@ -13,6 +13,7 @@ import {
 import { BasicButton } from '@repo/ui/components';
 
 import Layout from '@/components/Layout/Layout';
+import PrefetchImage from '@/components/PrefetchImage';
 
 import { PWAInstallGuideImage } from './components/PWAInstallGuideImage';
 
@@ -221,6 +222,12 @@ export default function PWAInstallGuide() {
           </motion.div>
         </Flex>
       </Flex>
+
+      {/* 画像プリフェッチ用の隠し要素 */}
+      <PrefetchImage src={steps[0].imageSrc} width={400} />
+      <PrefetchImage src={steps[1].imageSrc} width={400} />
+      <PrefetchImage src={steps[2].imageSrc} width={400} />
+      <PrefetchImage src="/images/pwa-install-guide/pwa-install-guide-step4.png" width={400} />
     </Layout>
   );
 }

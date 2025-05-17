@@ -62,7 +62,7 @@ export default function Footer({ navigationItems, onNavigationClick, color, isPW
       right="0"
       // iPhoneのホームバー対応
       paddingBottom="env(safe-area-inset-bottom)"
-      zIndex="sticky"
+      zIndex={1300}
     >
       <Flex justify="space-around" height="100%">
         {navigationItems.map((item, index) => {
@@ -86,9 +86,7 @@ export default function Footer({ navigationItems, onNavigationClick, color, isPW
                 bottom={isItemActive ? '25px' : '20px'}
                 transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
                 transform={isItemActive ? 'scale(1.1)' : 'scale(1)'}
-                style={{
-                  willChange: 'transform',
-                }}
+                willChange="transform"
               >
                 <NextImage
                   src={isItemActive ? item.activeIcon : item.inactiveIcon}

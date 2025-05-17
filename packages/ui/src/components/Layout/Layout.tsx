@@ -109,7 +109,7 @@ export const Layout: React.FC<LayoutProps> = ({
       </Box>
 
       {/* 最上部にスクロールボタン */}
-      <Box position="fixed" bottom="85px" right="20px" zIndex={9999}>
+      <Box position="fixed" bottom="85px" right="20px" zIndex={1000}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{

@@ -2,7 +2,7 @@
 import { motion } from 'motion/react';
 import React, { useState } from 'react';
 
-import { Box, Center, Container, Field, Fieldset, HStack, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
+import { Box, Center, Container, Field, Fieldset, Flex, Icon, Input, Separator, Stack, Text, VStack } from '@repo/ui/chakra-ui';
 import { BasicButton } from '@repo/ui/components';
 import { FcGoogle, IoLogoGithub, MdMail } from '@repo/ui/icons';
 import { createClient } from '@repo/ui/utils';
@@ -199,13 +199,11 @@ export default function Signup() {
                   </Fieldset.Root>
                 </form>
 
-                <Box mt={6}>
-                  <HStack>
-                    <Separator flex="1" />
-                    <Text fontSize="sm" color="blackPrimary">または</Text>
-                    <Separator flex="1" />
-                  </HStack>
-                </Box>
+                <Flex align="center" justify="center" mt={6}>
+                  <Box w="100px"><Separator /></Box>
+                  <Text fontSize="sm" color="blackPrimary">または</Text>
+                  <Box w="100px"><Separator /></Box>
+                </Flex>
 
                 <VStack mt={6} gap={4}>
                   <BasicButton
