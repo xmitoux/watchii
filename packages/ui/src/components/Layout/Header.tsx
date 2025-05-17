@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ title, actionButton, canBack, color, on
       top="0"
       left="0"
       right="0"
-      zIndex="sticky"
+      zIndex={1300} // メニュードロワー(1400)より上にする
     >
       {/* メインヘッダー部分 */}
       <Box h="40px" position="relative">

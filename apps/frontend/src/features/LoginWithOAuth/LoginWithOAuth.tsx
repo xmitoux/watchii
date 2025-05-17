@@ -99,7 +99,7 @@ export default function LoginWithOAuth() {
                 </motion.div>
               ) : (
                 // 登録中表示
-                <LoadingScreen />
+                <LoadingScreen message="登録を確認しています" />
               )}
             </Center>
           </Layout>

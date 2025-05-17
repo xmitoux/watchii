@@ -42,6 +42,8 @@ export function MenuDrawer() {
   const favsNavStoreReset = useNavigationStore('favs', (state) => state.reset);
 
   function handleGotoFavs() {
+    setShowMenu(false);
+
     // お気に入り一覧から戻るためのパスをストアに保存
     store.setPrePagePath(router.asPath);
     // お気に入り一覧のスクロール位置をリセット
@@ -61,10 +63,14 @@ export function MenuDrawer() {
 
   // リロードボタンの処理
   function handleReload() {
+    setShowMenu(false);
+
     window.location.reload();
   }
 
   async function handleLogout() {
+    setShowMenu(false);
+
     try {
       // Supabaseでログアウト処理
       const { error } = await supabase.auth.signOut();
@@ -126,6 +132,7 @@ export function MenuDrawer() {
                     icon={colorMode === 'light' ? <MdOutlineAccountCircle /> : <MdAccountCircle />}
                     label="アカウント設定"
                     to="/account-settings"
+                    onClick={() => setShowMenu(false)}
                   />
 
                   <MenuButton icon={<IoReload />} label="ページリロード" onClick={handleReload} />
@@ -136,7 +143,8 @@ export function MenuDrawer() {
                 <MenuButton
                   icon={colorMode === 'light' ? <MdInfoOutline /> : <MdInfo />}
                   label="このアプリについて"
-                  onClick={() => router.push('/about')}
+                  to="/about"
+                  onClick={() => setShowMenu(false)}
                 />
 
                 {!isPWA && (
@@ -144,6 +152,7 @@ export function MenuDrawer() {
                     icon={colorMode === 'light' ? <MdOutlineInstallMobile /> : <MdInstallMobile />}
                     label="インストールガイド"
                     to="/pwa-install-guide"
+                    onClick={() => setShowMenu(false)}
                   />
                 )}
 

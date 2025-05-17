@@ -5,6 +5,7 @@ import React, { ReactNode, RefObject, useEffect } from 'react';
 import { Center } from '@repo/ui/chakra-ui';
 import { type NavigationItem, Layout as UiLayout } from '@repo/ui/components';
 
+import LoadingScreen from '@/components/LoadingScreen';
 import { MenuDrawer } from '@/components/Menu/MenuDrawer';
 import { usePagination } from '@/components/Pagination/hooks/usePagination';
 import { Pagination } from '@/components/Pagination/Pagination';
@@ -12,6 +13,7 @@ import { DeviceTypeInitializer } from '@/providers/DeviceTypeInitializer';
 import { useDeviceTypeStore } from '@/stores/deviceTypeStore';
 import { NavigationStore, useNavigationStore } from '@/stores/navigationStore';
 
+import { usePageLoading } from './hooks/usePageLoading';
 import { usePageTransition } from './hooks/usePageTransition';
 
 const navigationItems: NavigationItem[] = [
@@ -160,6 +162,8 @@ export default function Layout({
     }
   }
 
+  const { showPageLoading } = usePageLoading();
+
   return (
     <DeviceTypeInitializer>
       <UiLayout
@@ -174,6 +178,32 @@ export default function Layout({
         onNavigationClick={handleNavigationClick}
         onNavigationBack={onNavigationBack}
       >
+        {/* ローディングオーバーレイ */}
+        <AnimatePresence>
+          {showPageLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 1200,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <LoadingScreen />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <AnimatePresence mode="wait" custom={transitionProps.custom}>
           <motion.div key={router.asPath} {...transitionProps}>
             {/* ページネーション */}
