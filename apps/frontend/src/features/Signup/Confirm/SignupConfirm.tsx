@@ -83,7 +83,7 @@ export default function SignupConfirm() {
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
           style={{ width: '100%', height: '100%' }}
         >
-          <Layout title="登録確認" noFooter noMenu>
+          <Layout title="登録確認" noFooter noMenu onNavigationBack={() => router.push('/signup')}>
             <Center>
               {isError ? (
                 // エラー表示
