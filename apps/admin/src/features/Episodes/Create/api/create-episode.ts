@@ -16,6 +16,7 @@ export default async function handler(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': process.env.API_KEY || '',
         },
         body: JSON.stringify(req.body),
       });
